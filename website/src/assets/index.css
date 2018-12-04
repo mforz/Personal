@@ -6,6 +6,7 @@ html,body{
 html,body,div,span,ul,li,a,form,input,button,h1,h2,h3,h4,h5,h6,i{
   margin:0;
   padding:0;
+  -webkit-tap-highlight-color: transparent;
 }
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
