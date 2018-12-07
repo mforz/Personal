@@ -21,7 +21,9 @@
     </div>
     <Modal :show="loading" @close="loading=false">
       <div v-for="(item,i) in list" :key="i">
-        {{item.keyword}}
+        <p>
+          <a target="_black" :href="'https://www.baidu.com/s?ie=UTF-8&wd='+item.keyword">{{item.keyword}}</a>
+        </p>
       </div>
     </Modal>
     <!-- <div class="fun">
