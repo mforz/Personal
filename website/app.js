@@ -31,7 +31,7 @@ let pathProxy = (arr)=>{
                 pathRewrite = {'^/qqmusic':'/'}
             break
             case '/weather':
-                target = 'https://interface.sina.cn/dfz/outside/';
+                target = 'https://interface.sina.cn/dfz/outside/ipdx/weather.d.html?length=1&air=1&ip=115.159.0.115&callback=';
                 pathRewrite = {'^/weather':'/'}
             break
             case '/hotword':

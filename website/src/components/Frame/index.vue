@@ -1,9 +1,17 @@
 <template>
-    <div v-if="show" class="iframe" style="width:100%;" >
-        <div style="margin:0 auto">
-            <i class="fa fa-arrow-left" aria-hidden="true" @click="back"></i>
-            <i class="fa fa-times" aria-hidden="true" @click="$emit('close')"></i>
-            <iframe :id="id" width="100%" :style="style" :height="!!height?height:'500'" :onload="$emit('onload')" :src="src" frameborder="0" >
+    <div v-if="show" class="iframe" :style="bstyle" >
+        <div style="position:relative;overflow:hidden">
+            <div >
+                <i class="fa fa-arrow-left" aria-hidden="true" @click="back"></i>
+                <i class="fa fa-times" aria-hidden="true" @click="$emit('close')"></i>
+            </div>
+           
+            <iframe :name="id" width="100%" 
+                :height="!!height?height:'500'"
+                style="overflow:hidden;"
+                @onload="$emit('onload')" 
+                :src="src" frameborder="0" 
+                scrolling="auto">
                 不支持嵌入网页，请更换或升级浏览器
             </iframe>
         </div>
@@ -18,12 +26,12 @@ export default {
         show:{type:Boolean,required:true},
         height:{type:Number,required:false},
         src:{type:String,required:true},
-        style:{type:Object,required:false},
+        bstyle:{type:Object,required:false},
     },
     methods:{
         back(){
-            let a= document.getElementById(this.id).contentWindow;
-            a.parent.history.back()
+            let a= window.frames[this.id];
+            a.parent.history.go(-1)
         },
     }
 }
@@ -32,7 +40,7 @@ export default {
 <style>
 .iframe i{
     color:red;
-    margin:0;
+    margin:0;padding:0;
 }
 
 </style>
