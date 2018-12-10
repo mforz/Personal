@@ -1,0 +1,51 @@
+
+/* 小功能 */
+.fun{
+    width:100%;
+    height:10%;
+    background: rgba(30, 30, 30, 0.1);
+    position: relative;
+  }
+  .fun .switch{
+    width:80px;
+    height:30px;
+    border-radius: 20px;
+    border:1px solid #fff;
+    display: flex;
+    overflow: hidden;
+    position: absolute;
+    right:20px;
+    top:50%;
+    transform: translate(-50%,-50%)
+  }
+  .switch span{
+    font-size: 1.2rem;
+    align-items: center;
+    justify-content:center;
+    display:flex;
+    cursor: pointer;
+    flex:1;
+  }
+  .switch .active{
+    background-color: red;
+  }
+  .fun .windmill{
+    width:50px;
+    height:50px;
+    position: absolute;
+    top:50%;right:20px;
+    transform: translate(-50%,-50%);
+  }
+  .windmill img{
+    width:100%;
+    height:100%;
+  }
+  .windmill i{
+    display:block;
+    width:5px;
+    height:30px;
+    margin:-6px auto;
+    background-color: #fff;
+  }
+  
+  

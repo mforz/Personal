@@ -1,15 +1,12 @@
 <template>
-    <div>
-        <transition name="fade">
-        <div class="modal" v-show="show">
-            <i class="fa fa-times fa-2x" aria-hidden="true" @click="close"></i>
-            <div class="dialog" :class=" !!show ? '':'hidden' ">
-                <slot>
-                    {{msg}}
-                </slot>
-            </div>
+    <div class="modal" :class=" !!show ? '':'hidden' " v-show="show">
+        <i class="fa fa-times fa-2x" aria-hidden="true" @click="$emit('close')"></i>
+        <div class="dialog" >
+            <i class="fa fa-times" aria-hidden="true" @click="$emit('close')" style="color:red;position:absolute;top:-16px;right:-12px;"></i>
+            <slot>
+                {{msg}}
+            </slot>
         </div>
-        </transition>
     </div>
 </template>
 
@@ -21,9 +18,7 @@ export default {
         msg:{type:String,required:false},
     },
     methods:{
-        close(){
-            this.$emit('close')
-        }
+        
     }
 }
 </script>
