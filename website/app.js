@@ -38,8 +38,21 @@ let pathProxy = (arr)=>{
                 target = 'http://top.baidu.com/mobile_v2/buzz/hotspot';
                 pathRewrite = {'^/hotword':'/'}
             break
+            case '/iciba-one':
+                target = 'http://open.iciba.com/dsapi/';
+                pathRewrite = {'^/iciba-one':'/'}
+            break
+            case '/iciba-trans':
+                target = 'http://dict-co.iciba.com/api/dictionary.php?type=json&key=D9559383FCE4D0AC0AFA9C1C6CBF871D&';
+                pathRewrite = {'^/iciba-trans':'/'}
+            break
+            case '/youdao':
+                target = 'http://fanyi.youdao.com/translate?&doctype=json&type=AUTO&';
+                pathRewrite = {'^/youdao':'/'}
+            break
+
             default:
-            console.log(res)
+                console.log(res)
         }
         return proxy({
             target: target,
@@ -54,14 +67,19 @@ app.use('/it120',pathProxy('/it120'))
 app.use('/qqmusic',pathProxy('/qqmusic'))
 app.use('/weather',pathProxy('/weather'))
 app.use('/hotword',pathProxy('/hotword'))
+app.use('/iciba-one',pathProxy('/iciba-one'))
+app.use('/iciba-trans',pathProxy('/iciba-trans'))
+app.use('/youdao',pathProxy('/youdao'))
 
 
 app.use(express.static("./"));
 
 // const port = process.env.PORT || 3000;
 
+
 app.listen(2233, () => {
-  console.log(`server running @ http://localhost:2233`);
+
+  console.log(`server running @ http://localhost:2233  如果端口占用 lsof -i tcp:8080 && kill pid`);
 });
 
 module.exports = app;

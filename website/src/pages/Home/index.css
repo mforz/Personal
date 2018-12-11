@@ -40,3 +40,15 @@
 .content .item:active{
   color: #fcfcfc;
 }
+
+.input{
+  width:75%;
+  height:25px;
+  border-radius: 3px;
+  border:1px solid #ddd;
+  text-indent: 8px;
+  outline:none;
+}
+input:focus{
+  /* border:none */
+}

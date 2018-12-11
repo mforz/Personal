@@ -1,6 +1,6 @@
 <template>
 <div>
-  <remoteJS :src="src" />
+  <remoteJS :src="src" @load="$emit('load')" />
 </div>
 </template>
 
@@ -9,15 +9,15 @@ export default {
   components: {
     'remoteJS': {
       render(createElement) {
-        return createElement('script', { attrs: { type: 'text/javascript', src: this.src }});
+        return createElement('script',{ attrs:{type:'text/javascript',src:this.src },on:{load:()=>{this.$emit('load')}} });
       },
-      props: { src: { type: String, required: true },},
+      props:{src:{type: String, required: true },},
     },
   },
   props:{
     src: { type: String, required: true },
   },
-  mounted() {
+  methods: {
   },
 
 }
