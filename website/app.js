@@ -30,9 +30,13 @@ let pathProxy = (arr)=>{
                 target = 'https://u.y.qq.com/';
                 pathRewrite = {'^/qqmusic':'/'}
             break
-            case '/weather':
-                target = 'https://interface.sina.cn/dfz/outside/ipdx/weather.d.html?length=1&air=1&ip=115.159.0.115&callback=';
-                pathRewrite = {'^/weather':'/'}
+            case '/sina-weather': // fetch('http://localhost:2233/sina-weather/&ip=192.168.0.0')
+                target = 'https://interface.sina.cn/dfz/outside/ipdx/weather.d.html?length=1&air=1&callback=&';
+                pathRewrite = {'^/sina-weather':'/'}
+            break
+            case '/he-weather':   // fetch('http://localhost:2233/he-weather/&location=上海/shanghai/192.168.0.0')
+                target = 'https://free-api.heweather.com/s6/weather/now?key=b1da27652f6a46589f3160080bec11fd&';
+                pathRewrite = {'^/he-weather':'/'}
             break
             case '/hotword':
                 target = 'http://top.baidu.com/mobile_v2/buzz/hotspot';
@@ -42,11 +46,11 @@ let pathProxy = (arr)=>{
                 target = 'http://open.iciba.com/dsapi/';
                 pathRewrite = {'^/iciba-one':'/'}
             break
-            case '/iciba-trans':
+            case '/iciba-trans':      // fetch('http://localhost:2233/iciba-trans/&w=端口')
                 target = 'http://dict-co.iciba.com/api/dictionary.php?type=json&key=D9559383FCE4D0AC0AFA9C1C6CBF871D&';
                 pathRewrite = {'^/iciba-trans':'/'}
             break
-            case '/youdao':
+            case '/youdao':          //fetch('http://localhost:2233/youdao/&i=端口')
                 target = 'http://fanyi.youdao.com/translate?&doctype=json&type=AUTO&';
                 pathRewrite = {'^/youdao':'/'}
             break
@@ -65,7 +69,8 @@ let pathProxy = (arr)=>{
 
 app.use('/it120',pathProxy('/it120'))
 app.use('/qqmusic',pathProxy('/qqmusic'))
-app.use('/weather',pathProxy('/weather'))
+app.use('/sina-weather',pathProxy('/sina-weather'))
+app.use('/he-weather',pathProxy('/he-weather'))
 app.use('/hotword',pathProxy('/hotword'))
 app.use('/iciba-one',pathProxy('/iciba-one'))
 app.use('/iciba-trans',pathProxy('/iciba-trans'))

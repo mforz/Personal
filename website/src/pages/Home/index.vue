@@ -1,7 +1,6 @@
 <template>
   <div class="home" :style="flag==2?style1:flag==1?style2:''">
-  
-
+  <Ip :src="'//pv.sohu.com/cityjson?ie=utf-8'" @load="getIp" />
     <Header @transBg="transBg"/>
 
     <div class="content" :style="!v?{visibility:'visible'}:{visibility:'hidden'}">
@@ -12,13 +11,13 @@
         <span class="item" @click="handleClick('翻译')">翻译</span>
         <span class="item" @click="handleClick('小说')">小说</span>
       </div>
-      <!-- <iView /> -->
     </div>
 
-    <Modal :show="loading" @close="loading=false">
+    <Modal :show="show" @close="show=false">
+
       <div v-if="model==1" v-for="(item,i) in list" :key="i">
         <p style="text-align:center;cursor:pointer">
-          <a target="_black" :data-href="'https://www.baidu.com/s?ie=UTF-8&wd='+item.keyword" @click="keyw=item.keyword,v=true,loading=!loading;">{{item.keyword}}</a>
+          <a target="_black" @click="keyw=item.keyword,v=true,show=!show;">{{item.keyword}}</a>
           <i :title="data.length>0?data[i].content.data[0].description:''" class="fa fa-free-code-camp" aria-hidden="true"></i>
         </p>
       </div>
@@ -28,19 +27,28 @@
           <input id="trans-input" class="input" type="search" placeholder="需要翻译单词/汉语"  @keyup.enter="trans">
         </p>
         <div>
-          <p  v-for="(item,i) in transfrom" :key="i" style="text-align:center">
-           <a v-show="item[0].src">{{item[0].src}}:{{item[0].tgt}} </a>
+          <p v-for="(item,i) in transfrom" :key="i" style="text-align:center">
+            <a v-show="item[0].src">{{item[0].src}}:{{item[0].tgt}} </a>
           </p>
         </div>
       </div>
 
-      <Loading :show="list.length==0 && model!==2" />
+      <div v-if="model==3" >
+        <p style="text-align:center">{{weathe.basic.cnty+"-"+weathe.basic.location}}</p>
+        <div style="padding-left:20px">
+          <p>现在天气:{{weathe.now.cond_txt}}，温度:{{weathe.now.tmp}} ℃</p>
+          <p>风向:{{weathe.now.wind_dir}}，风力:{{weathe.now.wind_sc}}，风速:{{weathe.now.wind_spd}} km/h</p>
+        </div>
+
+      </div>
+
+      <Loading :show="list.length==0 && model!==2 && !!weather.now" />
+
     </Modal>
 
     <div style="width:35%;margin:0 auto">
       <zFrame :show="v" :id="'news'" :src="'https://m.baidu.com/s?ie=UTF-8&wd='+keyw" :height="500" :bstyle="{maxWidth:'400px'}" @close="v=!v" @onload="load"/>
     </div>
-   <Ip :src="'//pv.sohu.com/cityjson?ie=utf-8'" @load="getIp" />
 
   </div>
 </template>
@@ -68,10 +76,11 @@ export default {
     return{
       data:'hello',
       t:false,
-      loading:false,
+      show:false,
       transfrom:null,
       v:false,
       keyw:'',
+      weathe:{},
       flag:2,
       model:0,
       list:[],
@@ -82,29 +91,41 @@ export default {
     }
   },
   mounted() {
-    this.init()
+    
   },
   methods:{
-    init(){
-     
-      // fetch('http://localhost:2233/iciba-trans/&w=端口').then(res=>{return res.json()})
-      fetch('http://localhost:2233/youdao/&i=端口').then(res=>{return res.json()})
-      .then(res=>{
-        console.log(res)
-      }).catch()
-    },
     handleClick(w){
       switch(w){
         case '热词':
-          this.loading = true
+          this.show = true
           this.model=1
           this.getHotWards('http://localhost:2233/hotword')
         break
         case '翻译':
-          this.loading = true
+          this.show = true
           this.model=2
         break
+        case '天气':
+          this.weather()
+          this.show = true
+          this.model=3
+        break
       }
+    },
+    weather(){
+      var arr,reg=new RegExp("(^| )weathe=([^;]*)(;|$)"); //正则匹配
+      if(arr=document.cookie.match(reg)){
+        this.weathe=JSON.parse(arr[2]);
+        return
+      }
+      fetch('http://localhost:2233/he-weather/&location='+(!!window.returnCitySN?window.returnCitySN.cip:'')).then(res=>{return res.json()})
+      .then(res=>{
+        this.weathe = res.HeWeather6[0]
+        let exp = new Date();
+        exp.setTime(exp.getTime() + 300*1000);//5分钟
+        document.cookie="weathe="+JSON.stringify(this.weathe)+";expires="+exp.toGMTString();
+        
+      }).catch()
     },
     trans(){
       this.transfrom=[]
@@ -121,9 +142,7 @@ export default {
          this.data=data.result.descs
       }).catch()
     },
-    load(){
-
-    },
+    load(){},
     getIp(){
         console.log('load success',window.returnCitySN)
     },
