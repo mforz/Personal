@@ -11,7 +11,7 @@ export default {
         show:{type:Boolean,required:true}
     },
     mounted() {
-        console.log('spinner')
+       
     },
 
 }

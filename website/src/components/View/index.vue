@@ -22,9 +22,7 @@ export default {
     },
     methods:{
         change(id){
-            console.log(id)
            let dom = document.getElementById(id)
-           console.log(dom)
            let file = dom.files[0];
            let blobUrl = window.URL.createObjectURL(file)
           this.src=blobUrl
