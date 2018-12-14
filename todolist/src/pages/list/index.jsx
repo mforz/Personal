@@ -7,7 +7,6 @@ class List extends Component {
         this.state = {
           list:[]
         }
-
     }
     click(falg,v){
         this.props.click(falg,v)
