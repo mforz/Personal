@@ -10,7 +10,7 @@
                 :height="!!height?height:'500'"
                 style="overflow:hidden;"
                 @onload="$emit('onload')" 
-                :src="src" frameborder="0" 
+                :src="src" frameborder="0"
                 scrolling="auto">
                 不支持嵌入网页，请更换或升级浏览器
             </iframe>
@@ -31,7 +31,7 @@ export default {
     methods:{
         back(){
             let a= window.frames[this.id];
-            a.parent.history.go(-1)
+            a.parent.history.back()
         },
     }
 }

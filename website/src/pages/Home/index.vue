@@ -72,13 +72,6 @@ export default {
           this.show = true
           this.getHotWards()
         break
-        case '一句':
-          this.model=4
-          this.oneWord()
-          this.data = []
-          this.show = true
-        
-        break
         case '翻译':
           this.show = true
           this.model=2
@@ -89,8 +82,19 @@ export default {
           this.data = []
            this.model=3
           this.weather()
-          
         break
+        case '一句':
+          this.model=4
+          this.oneWord()
+          this.data = []
+          this.show = true
+        break
+        case '待办':
+          this.model=5
+          this.data = []
+          this.show = true
+        break
+
       }
     },
     // 天气
@@ -124,7 +128,8 @@ export default {
     // 热词
     getHotWards(){
       fetch('http://localhost:2233/hotword').then(res=>{return res.json()}).then(data=>{
-         this.data = data.result.topwords.slice(0,9)
+          console.log(data)
+         this.data = data.result.topwords.slice(0,20)
          this.doc = data.result.descs
       }).catch()
     },

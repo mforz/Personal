@@ -3,9 +3,11 @@
         <i class="fa fa-times fa-2x" aria-hidden="true" @click="$emit('close')"></i>
         <div class="dialog" >
             <i class="fa fa-times" aria-hidden="true" @click="$emit('close')" style="color:red;position:absolute;top:-16px;right:-12px;"></i>
-            <slot>
-                {{msg}}
-            </slot>
+            <div style="height:100%;overflow:auto">
+                 <slot >
+                    {{msg}}
+                </slot>
+            </div>
         </div>
     </div>
 </template>
@@ -42,7 +44,8 @@ export default {
     width:300px;
     height:350px;
     position: absolute;
-    top:50%;
+    overflow: hidden;
+    top:47%;
     left:50%;
     transform: translate(-50%,-50%) scale(1);
     opacity: 1;
