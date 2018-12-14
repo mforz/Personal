@@ -3,14 +3,14 @@
 
     <Ip :src="'//pv.sohu.com/cityjson?ie=utf-8'" @load="getIp" />
 
-    <Header @transBg="transBg" :data="head"/>
+    <Header @transBg="transBg"/>
 
     <Panel :visible="visible" @handleClick="handleClick" />
 
     <showDialog :show="show" @close="show=!show,model=-1" :model="model" :data="data" @sEmit="sEmit" :doc="doc" />
     
-    <div style="width:35%;margin:0 auto">
-      <zFrame :show="!visible" :id="'news'" :src="'https://m.baidu.com/s?ie=UTF-8&wd='+keyw" :height="500" :bstyle="{maxWidth:'400px'}" @close="visible=!visible" />
+    <div style="width:35%;min-width:300px;margin:0 auto">
+      <zFrame :show="!visible" :id="'news'" :src="'https://m.baidu.com/s?ie=UTF-8&wd='+keyw" :height="500" :bstyle="{ maxWidth:'400px'} " @close="visible=!visible" />
     </div>
 
   </div>
@@ -38,10 +38,9 @@ export default {
     return{
       show:false,
       visible:true,
-      head:{one:{}},
       keyw:'',
       doc:'',
-      flag:7,
+      flag:2,
       model:0,
       data:[],
       class1:'',
@@ -73,6 +72,13 @@ export default {
           this.show = true
           this.getHotWards()
         break
+        case '一句':
+          this.model=4
+          this.oneWord()
+          this.data = []
+          this.show = true
+        
+        break
         case '翻译':
           this.show = true
           this.model=2
@@ -80,8 +86,8 @@ export default {
         break
         case '天气':
           this.show = true
-          this.model=3
           this.data = []
+           this.model=3
           this.weather()
           
         break
@@ -126,7 +132,7 @@ export default {
     oneWord(){
       fetch('http://localhost:2233/iciba-one').then(res=>{return res.json()}).then(data=>{
         console.log(data)
-        this.head.one=data
+        this.data = data
       }).catch()
     },
     load(){},

@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <div class="left">
-            <!-- <a href="javascript:void(0)">{{data.one?data.one.content:''}}</a> -->
+            <h6 style="margin-top:20px">{{time}}</h6>
         </div>
         <div class="right">
             <div class="windmill" @click="$emit('transBg')">
@@ -23,8 +23,23 @@ export default {
     data(){
         return{
             img: require('@/assets/img/windmill.png'),
+            time:null,
         }
-    }
+    },
+    mounted() {
+        this.getTime()
+    },
+    methods:{
+         getTime(){
+             let date = new Date(),
+             year= date.getFullYear(),
+             month= date.getMonth()+1,
+             day= date.getDate(),
+             week= date.getDay().toString().replace('0','日')
+             this.time=(`${year}年${month}月${day}日星期${week}`)
+         }
+    },
+   
 }
 </script>
 
