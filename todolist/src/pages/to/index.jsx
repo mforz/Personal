@@ -10,6 +10,9 @@ class To extends Component {
     }
     componentDidMount(){
         this.input.value=localStorage.getItem('item')
+        this.setState({
+            item:localStorage.getItem('item')
+        })
     }
     down(e){
         if(e.nativeEvent.keyCode===13){
