@@ -7,6 +7,7 @@
         <span class="item" @click="$emit('handleClick','天气')">天气</span>
         <span class="item" @click="$emit('handleClick','翻译')">翻译</span>
         <span class="item" @click="$emit('handleClick','待办')">待办</span>
+        <span class="item" @click="$emit('handleClick','壁纸')">壁纸</span>
       </div>
     </div>
 </template>

@@ -38,9 +38,13 @@ let pathProxy = (arr)=>{
                 target = 'https://free-api.heweather.com/s6/weather/now?key=b1da27652f6a46589f3160080bec11fd&';
                 pathRewrite = {'^/he-weather':'/'}
             break
-            case '/hotword':
+            case '/bd-hotword':
                 target = 'http://top.baidu.com/mobile_v2/buzz/hotspot';
-                pathRewrite = {'^/hotword':'/'}
+                pathRewrite = {'^/bd-hotword':'/'}
+            break
+            case '/sg-hotword':
+                target = 'https://m.sogou.com/web/search/hot_news.jsp';
+                pathRewrite = {'^/sg-hotword':'/'}
             break
             case '/iciba-one':
                 target = 'http://open.iciba.com/dsapi/';
@@ -53,6 +57,10 @@ let pathProxy = (arr)=>{
             case '/youdao':          //fetch('http://localhost:2233/youdao/&i=端口')
                 target = 'http://fanyi.youdao.com/translate?&doctype=json&type=AUTO&';
                 pathRewrite = {'^/youdao':'/'}
+            break
+            case '/sg-img': //fetch('http://localhost:2233/sg-img/&start=0&len=10')
+                target = 'https://pic.sogou.com/pic/action/getWapHomeFeed.jsp?key=homeFeedData&category=feed&';
+                pathRewrite = {'^/sg-img':'/'}
             break
 
             default:
@@ -71,7 +79,8 @@ app.use('/it120',pathProxy('/it120'))
 app.use('/qqmusic',pathProxy('/qqmusic'))
 app.use('/sina-weather',pathProxy('/sina-weather'))
 app.use('/he-weather',pathProxy('/he-weather'))
-app.use('/hotword',pathProxy('/hotword'))
+app.use('/bd-hotword',pathProxy('/bd-hotword'))
+app.use('/sg-hotword',pathProxy('/sg-hotword'))
 app.use('/iciba-one',pathProxy('/iciba-one'))
 app.use('/iciba-trans',pathProxy('/iciba-trans'))
 app.use('/youdao',pathProxy('/youdao'))

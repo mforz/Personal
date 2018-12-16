@@ -40,6 +40,7 @@ export default {
       visible:true,
       keyw:'',
       doc:'',
+      audio:null,
       flag:2,
       model:0,
       data:[],
@@ -58,7 +59,12 @@ export default {
           this.trans()
         break
         case 'zframe':
-          this.show=false;this.visible=!this.visible;this.keyw=v
+          this.show=false;
+          this.visible=!this.visible;
+          this.keyw=v
+        break
+        case 'oneAudio':
+          this.oneAudio(v);
         break
 
       }
@@ -97,6 +103,11 @@ export default {
 
       }
     },
+    oneAudio(url){
+        this.audio==null?this.audio=new Audio():''
+        this.audio.src=url
+        this.audio.paused?this.audio.play():this.audio.pause()
+      },
     // 天气
     weather(){
       var arr,reg=new RegExp("(^| )weathe=([^;]*)(;|$)"); //正则匹配
@@ -127,7 +138,8 @@ export default {
     },
     // 热词
     getHotWards(){
-      fetch('http://localhost:2233/hotword').then(res=>{return res.json()}).then(data=>{
+      let url=['bd-hotword','sg-hotword']
+      fetch(`http://localhost:2233/${url[0]}`).then(res=>{return res.json()}).then(data=>{
           console.log(data)
          this.data = data.result.topwords.slice(0,20)
          this.doc = data.result.descs
