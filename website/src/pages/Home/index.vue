@@ -7,10 +7,10 @@
 
     <Panel :visible="visible" @handleClick="handleClick" />
 
-    <showDialog :show="show" @close="show=!show,model=-1" :model="model" :data="data" @sEmit="sEmit" :doc="doc" />
+    <showDialog :show="show" @close="show=!show,model=-1" :model="model" :data="data" @sEmit="sEmit" :doc="doc" :flag="i" />
     
     <div style="width:35%;min-width:300px;margin:0 auto">
-      <zFrame :show="!visible" :id="'news'" :src="'https://m.baidu.com/s?ie=UTF-8&wd='+keyw" :height="500" :bstyle="{ maxWidth:'400px'} " @close="visible=!visible" />
+      <zFrame :show="!visible" :id="'news'" :src="src" :height="500" :bstyle="{ maxWidth:'400px'} " @close="visible=!visible" />
     </div>
 
   </div>
@@ -28,17 +28,18 @@ import Ip from '@/components/Remote'
 export default {
   name:'Home',
   components:{
-      showDialog,
-      zFrame,
-      Header,
-      Panel,
-      Ip,
+    showDialog,
+    zFrame,
+    Header,
+    Panel,
+    Ip,
   },
   data(){
     return{
       show:false,
       visible:true,
-      keyw:'',
+      i:0,//bd,sg
+      src:'',
       doc:'',
       audio:null,
       flag:2,
@@ -58,11 +59,26 @@ export default {
         case 'trans':
           this.trans()
         break
+        case 'bd':
+          this.data = []
+          this.i= 0
+          this.getHotWards()
+         
+        break
+        case 'sg':
+          this.data = []
+          this.i= 1
+          this.getHotWards()
+        
+        break
         case 'zframe':
           this.show=false;
           this.visible=!this.visible;
-          this.keyw=v
+          this.i==0?
+          this.src=`https://m.baidu.com/s?ie=UTF-8&wd=${v}`:
+          this.src=`https://wap.sogou.com/web/searchList.jsp?keyword=${v}`
         break
+
         case 'oneAudio':
           this.oneAudio(v);
         break
@@ -139,16 +155,15 @@ export default {
     // 热词
     getHotWards(){
       let url=['bd-hotword','sg-hotword']
-      fetch(`http://localhost:2233/${url[0]}`).then(res=>{return res.json()}).then(data=>{
-          console.log(data)
-         this.data = data.result.topwords.slice(0,20)
-         this.doc = data.result.descs
+      fetch(`http://localhost:2233/${url[this.i]}`).then(res=>{return res.json()}).then(data=>{
+         this.i==0?this.data =data.result.topwords.slice(0,20): this.data = data
+         this.i==0?this.doc =  data.result.descs:''
+
       }).catch()
     },
     //每日一句
     oneWord(){
       fetch('http://localhost:2233/iciba-one').then(res=>{return res.json()}).then(data=>{
-        console.log(data)
         this.data = data
       }).catch()
     },

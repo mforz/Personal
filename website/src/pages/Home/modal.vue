@@ -1,17 +1,30 @@
 <template>
     <Modal :show="show" @close="$emit('close'),audio=null" >
-      <p>
-        <span>百度</span>
-        <span>搜狗</span>
-      </p>
-      <div v-if="model==1" v-for="(item,i) in data" :key="i">
-        <p style="text-align:center;cursor:pointer;overflow:auto;">
-          <a target="_black" @click="$emit('sEmit','zframe',item.keyword)">{{item.keyword}}</a>
-          <i :title="i<9?doc[i].content.data[0].description:''" class="fa fa-free-code-camp" aria-hidden="true"></i>
+
+     <div v-if="model==1" >
+        <p style="width:100%;text-align:center;border-bottom:1px dashed #ccc;font-size:12px">
+          <a :style="flag==0?{color:'red'}:''" href="javascript:;" @click="$emit('sEmit','bd')">百度</a>
+          <a :style="flag==1?{color:'red'}:''" href="javascript:;" @click="$emit('sEmit','sg')">搜狗</a>
         </p>
-      </div>
+        <div v-if="flag==0" v-for="(item,i) in data" :key="i">
+          <p style="text-align:center;cursor:pointer;overflow:auto;">
+            <a target="_black" @click="$emit('sEmit','zframe',item.keyword)">{{item.keyword}}</a>
+            <i :title="i<9?doc[i].content.data[0].description:''" class="fa fa-free-code-camp" aria-hidden="true"></i>
+          </p>
+        </div>
+        <div v-if="flag==1" v-for="(item,i) in data" :key="i">
+          <p style="text-align:center;cursor:pointer;overflow:auto;">
+            <a target="_black" @click="$emit('sEmit','zframe',item.title)">{{item.title}}</a>
+            <i class="fa fa-free-code-camp" aria-hidden="true"></i>
+          </p>
+        </div>
+
+     </div>
 
       <div v-if="model==2" >
+         <p style="text-align:center">
+          lu译
+        </p>
         <p style="text-align:center">
           <input id="trans-input" class="input" type="search" placeholder="需要翻译单词/汉语" @keyup.enter="$emit('sEmit','trans')">
         </p>
@@ -58,7 +71,6 @@
                暂时没有需要做的事情，输入待办，按回车键添加
             </p>
           </div>
-          
         </div>
       </div>
 
@@ -77,6 +89,7 @@ export default {
         data:{type:[Array,Object,String],required:true,default:[]},
         model:{type:Number,required:true,},
         doc:{type:[Array,Object,String,Number,Boolean],required:false,},
+        flag:{type:[Array,Object,String,Number,Boolean],required:false,},
     },
     data(){
         return{
@@ -91,7 +104,7 @@ export default {
       }
     },
     mounted() {
-      this.list=JSON.parse(localStorage.getItem('list'))
+      this.list=JSON.parse(localStorage.getItem('list'))||[]
     },
     methods:{
       
