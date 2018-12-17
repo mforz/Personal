@@ -5,6 +5,7 @@
         <p style="width:100%;text-align:center;border-bottom:1px dashed #ccc;font-size:12px">
           <a :style="flag==0?{color:'red'}:''" href="javascript:;" @click="$emit('sEmit','bd')">百度</a>
           <a :style="flag==1?{color:'red'}:''" href="javascript:;" @click="$emit('sEmit','sg')">搜狗</a>
+          <a :style="flag==2?{color:'red'}:''" href="javascript:;" @click="$emit('sEmit','sina')">新浪</a>
         </p>
         <div v-if="flag==0" v-for="(item,i) in data" :key="i">
           <p style="text-align:center;cursor:pointer;overflow:auto;">
@@ -12,13 +13,12 @@
             <i :title="i<9?doc[i].content.data[0].description:''" class="fa fa-free-code-camp" aria-hidden="true"></i>
           </p>
         </div>
-        <div v-if="flag==1" v-for="(item,i) in data" :key="i">
+        <div v-if="flag==1||flag==2" v-for="(item,i) in data" :key="i">
           <p style="text-align:center;cursor:pointer;overflow:auto;">
             <a target="_black" @click="$emit('sEmit','zframe',item.title)">{{item.title}}</a>
             <i class="fa fa-free-code-camp" aria-hidden="true"></i>
           </p>
         </div>
-
      </div>
 
       <div v-if="model==2" >

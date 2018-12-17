@@ -46,6 +46,10 @@ let pathProxy = (arr)=>{
                 target = 'https://m.sogou.com/web/search/hot_news.jsp';
                 pathRewrite = {'^/sg-hotword':'/'}
             break
+            case '/sina-hotword':
+                target = 'https://www.sina.com.cn/api/hotword.json?';
+                pathRewrite = {'^/sina-hotword':'/'}
+            break
             case '/iciba-one':
                 target = 'http://open.iciba.com/dsapi/';
                 pathRewrite = {'^/iciba-one':'/'}
@@ -81,9 +85,11 @@ app.use('/sina-weather',pathProxy('/sina-weather'))
 app.use('/he-weather',pathProxy('/he-weather'))
 app.use('/bd-hotword',pathProxy('/bd-hotword'))
 app.use('/sg-hotword',pathProxy('/sg-hotword'))
+app.use('/sina-hotword',pathProxy('/sina-hotword'))
 app.use('/iciba-one',pathProxy('/iciba-one'))
 app.use('/iciba-trans',pathProxy('/iciba-trans'))
 app.use('/youdao',pathProxy('/youdao'))
+app.use('/sg-img',pathProxy('/sg-img'))
 
 
 app.use(express.static("./"));

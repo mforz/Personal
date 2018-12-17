@@ -63,26 +63,30 @@ export default {
           this.data = []
           this.i= 0
           this.getHotWards()
-         
         break
         case 'sg':
           this.data = []
           this.i= 1
           this.getHotWards()
-        
+        break
+        case 'sina':
+          this.data = []
+          this.i= 2
+          this.getHotWards()
         break
         case 'zframe':
           this.show=false;
           this.visible=!this.visible;
           this.i==0?
           this.src=`https://m.baidu.com/s?ie=UTF-8&wd=${v}`:
-          this.src=`https://wap.sogou.com/web/searchList.jsp?keyword=${v}`
-        break
-
-        case 'oneAudio':
-        console.log(v)
-          this.oneAudio(v);
-        break
+          this.i==1?
+          this.src=`https://wap.sogou.com/web/searchList.jsp?keyword=${v}`:
+          this.src=`https://m.weibo.cn/search?containerid=100103type=1&q=${v}`
+       break
+       case 'oneAudio':
+       console.log(v)
+        this.oneAudio(v);
+       break
 
       }
 
@@ -155,9 +159,9 @@ export default {
     },
     // 热词
     getHotWards(){
-      let url=['bd-hotword','sg-hotword']
+      let url=['bd-hotword','sg-hotword','sina-hotword']
       fetch(`http://localhost:2233/${url[this.i]}`).then(res=>{return res.json()}).then(data=>{
-         this.i==0?this.data =data.result.topwords.slice(0,20): this.data = data
+         this.i==0?this.data =data.result.topwords.slice(0,20): this.i==1?this.data = data:this.data = data.result.data
          this.i==0?this.doc =  data.result.descs:''
 
       }).catch()
