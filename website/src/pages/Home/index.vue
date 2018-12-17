@@ -80,6 +80,7 @@ export default {
         break
 
         case 'oneAudio':
+        console.log(v)
           this.oneAudio(v);
         break
 
