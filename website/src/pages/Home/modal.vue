@@ -76,13 +76,10 @@
       <!-- 电影 -->
       <div v-if="model==6" style="height:100%;overflow:hidden">
         <p style="text-align:center">电影</p>
-        <div style="padding-left:5px;height:90%;">
-          <p style="overflow:auto" v-for="(item,i) in data" :key="i">
+        <div style="padding-left:5px;height:90%;overflow:auto">
+          <p v-for="(item,i) in data" :key="i">
            <a :href="item.alt">{{item.title}}</a>
           </p>
-          <div style="width:100%;height:85%;overflow-y:auto;">
-           
-          </div>
         </div>
       </div>
       <!-- 罗辑 -->
@@ -148,5 +145,9 @@ export default {
 }
 i{
   margin:0 4px;
+}
+a{
+  text-decoration: none;
+  color:#7CCD7C;
 }
 </style>

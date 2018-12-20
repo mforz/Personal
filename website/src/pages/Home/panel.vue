@@ -7,8 +7,8 @@
         <span class="item" @click="$emit('handleClick','天气')">天气</span>
         <span class="item" @click="$emit('handleClick','翻译')">翻译</span>
         <span class="item" @click="$emit('handleClick','待办')">待办</span>
-        <span class="item" @click="$emit('handleClick','电影推荐')">电影推荐</span>
-        <span class="item" @click="$emit('handleClick','罗辑思维')">罗辑思维</span>
+        <span class="item" @click="$emit('handleClick','热影')">热影</span>
+        <span class="item" @click="$emit('handleClick','罗辑')">罗辑</span>
         <span class="item" @click="$emit('handleClick','壁纸')">壁纸</span>
       </div>
     </div>

@@ -50,7 +50,8 @@ export default {
     }
   },
   mounted() {
-    this.oneWord()
+    this.oneWord();
+    this.rdWallpaper();
   },
   methods:{
     sEmit(flag,v){
@@ -83,8 +84,7 @@ export default {
           this.src=`https://m.weibo.cn/search?containerid=100103type=1&q=${v}`
        break
        case 'oneAudio':
-       console.log(v)
-        this.oneAudio(v);
+          this.oneAudio(v);
        break
 
       }
@@ -120,13 +120,13 @@ export default {
           this.data = []
           this.show = true
         break
-        case '电影推荐':
+        case '热影':
           this.model=6
           this.data = []
           this.show = true
           this.movie250()
         break
-        case '罗辑思维':
+        case '罗辑':
           this.model=7
           this.data = []
           this.show = true
