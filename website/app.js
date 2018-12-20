@@ -11,6 +11,7 @@ app.all("*", function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
     res.header("Content-Type", "application/json;charset=utf-8");
+    res.header("Cache-Control", "no-cache");
   }
   next();
 });
@@ -66,6 +67,19 @@ let pathProxy = (arr)=>{
                 target = 'https://pic.sogou.com/pic/action/getWapHomeFeed.jsp?key=homeFeedData&category=feed&';
                 pathRewrite = {'^/sg-img':'/'}
             break
+                            // https://od.qingting.fm/m4a/587892897cb8913977b1d09d_6654123_64.m4a
+            case '/luoji': //fetch('https://i.qingting.fm/wapi/channels/82598/programs/page/1/pagesize/10')(max page 20)
+                target = 'https://i.qingting.fm/wapi/channels/82598/programs';
+                pathRewrite = {'^/luoji':'/'}
+            break
+            case '/movie250': //fetch('http://api.douban.com/v2/movie/top250')
+                target = 'https://api.douban.com/v2/movie/top250';
+                pathRewrite = {'^/movie250':''}
+            break
+            case '/rd-wallpaper': //fetch('http://localhost:2233/rd-wallpaper/')
+                target = `https://infinity-api.infinitynewtab.com/random-wallpaper`;
+                pathRewrite = {'^/rd-wallpaper':''}
+            break
 
             default:
                 console.log(res)
@@ -90,6 +104,9 @@ app.use('/iciba-one',pathProxy('/iciba-one'))
 app.use('/iciba-trans',pathProxy('/iciba-trans'))
 app.use('/youdao',pathProxy('/youdao'))
 app.use('/sg-img',pathProxy('/sg-img'))
+app.use('/luoji',pathProxy('/luoji'))
+app.use('/movie250',pathProxy('/movie250'))
+app.use('/rd-wallpaper',pathProxy('/rd-wallpaper'))
 
 
 app.use(express.static("./"));

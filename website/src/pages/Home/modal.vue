@@ -1,6 +1,6 @@
 <template>
     <Modal :show="show" @close="$emit('close'),audio=null" >
-
+      <!-- 热词 -->
      <div v-if="model==1" >
         <p style="width:100%;text-align:center;border-bottom:1px dashed #ccc;font-size:12px">
           <a :style="flag==0?{color:'red'}:''" href="javascript:;" @click="$emit('sEmit','bd')">百度</a>
@@ -20,7 +20,7 @@
           </p>
         </div>
      </div>
-
+    <!-- 翻译 -->
       <div v-if="model==2" >
          <p style="text-align:center">
           lu译
@@ -34,7 +34,7 @@
           </p>
         </div>
       </div>
-
+      <!-- 天气 -->
       <div v-if="!!data.basic && model == 3" >
         <p style="text-align:center">{{ data.basic.cnty +"-"+ data.basic.location }}</p>
         <div style="padding-left:20px">
@@ -42,7 +42,7 @@
           <p>风向:{{data.now.wind_dir}}，风力:{{data.now.wind_sc}}，风速:{{ data.now.wind_spd }} km/h</p>
         </div>
       </div>
-
+      <!-- 每日一句 -->
       <div v-if="model==4" >
         <p style="text-align:center">每日一句</p>
         <div style="padding-left:10px">
@@ -50,7 +50,7 @@
           <p>c:{{data.note}}</p>
         </div>
       </div>
-
+      <!-- 待办 -->
       <div v-if="model==5" style="height:100%;overflow:hidden">
         <p style="text-align:center">待办</p>
         <div style="padding-left:5px;height:90%;">
@@ -73,7 +73,28 @@
           </div>
         </div>
       </div>
-
+      <!-- 电影 -->
+      <div v-if="model==6" style="height:100%;overflow:hidden">
+        <p style="text-align:center">电影</p>
+        <div style="padding-left:5px;height:90%;">
+          <p style="overflow:auto" v-for="(item,i) in data" :key="i">
+           <a :href="item.alt">{{item.title}}</a>
+          </p>
+          <div style="width:100%;height:85%;overflow-y:auto;">
+           
+          </div>
+        </div>
+      </div>
+      <!-- 罗辑 -->
+       <div v-if="model==7" style="height:100%;overflow:hidden">
+        <p style="text-align:center">罗辑语音</p>
+        <div style="padding-left:5px;height:90%;overflow:auto">
+          <p v-for="(item,i) in data" :key="i">
+            <a href="javascript:;" @click="$emit('sEmit','oneAudio','https://od.qingting.fm/'+item.file_path)">{{item.name}}</a>
+          </p>
+        </div>
+      </div>
+      <!-- loading -->
     <Loading :show="data.length==0 && model!==2 && model!==5" />
     </Modal>
 </template>

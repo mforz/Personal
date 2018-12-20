@@ -31,6 +31,7 @@
     position: absolute;
     top:50%;right:0px;
     transform: translate(-50%,-50%);
+    cursor: pointer;
   }
   .windmill img{
     width:100%;
@@ -39,9 +40,16 @@
   .windmill i{
     display:block;
     width:5px;
-    height:30px;
-    margin:-6px auto;
+    height:35px;
+    margin:-17px auto;
     background-color: #fff;
   }
-  
+  .anima{
+    animation: circu 3s linear infinite;
+  }
+  @keyframes circu {
+    to {
+      transform: rotate(1turn);
+    }
+  }
   

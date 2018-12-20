@@ -1,9 +1,9 @@
 <template>
-  <div class="home" :style="flag==2?style1:flag==1?style2:''">
-
+  <div class="home" :style="{backgroundImage:styleUrl}">
+   
     <Ip :src="'//pv.sohu.com/cityjson?ie=utf-8'" @load="getIp" />
 
-    <Header @transBg="transBg"/>
+    <Header @transBg="rdWallpaper"/>
 
     <Panel :visible="visible" @handleClick="handleClick" />
 
@@ -42,12 +42,11 @@ export default {
       src:'',
       doc:'',
       audio:null,
-      flag:2,
+      page:1,
       model:0,
       data:[],
       class1:'',
-      style1:{backgroundImage:'url(http://img5.imgtn.bdimg.com/it/u=79184341,555270766&fm=200&gp=0.jpg)'},
-      style2:{backgroundImage: 'url("http://www.ruanyifeng.com/images_pub/pub_224.jpg")'},
+      styleUrl:'',
     }
   },
   mounted() {
@@ -121,6 +120,18 @@ export default {
           this.data = []
           this.show = true
         break
+        case '电影推荐':
+          this.model=6
+          this.data = []
+          this.show = true
+          this.movie250()
+        break
+        case '罗辑思维':
+          this.model=7
+          this.data = []
+          this.show = true
+          this.luoji()
+        break
 
       }
     },
@@ -129,6 +140,14 @@ export default {
         this.audio.src=url
         this.audio.paused?this.audio.play():this.audio.pause()
       },
+      //随机壁纸
+      rdWallpaper(){
+            fetch(`http://localhost:2233/rd-wallpaper`).then(res=>{ return res.json()}).then(data=>{
+                this.styleUrl= `url(${data.data[0].src.originalSrc})`
+            }).catch(error=>{
+                console.log(error)
+            })
+        },
     // 天气
     weather(){
       var arr,reg=new RegExp("(^| )weathe=([^;]*)(;|$)"); //正则匹配
@@ -172,13 +191,23 @@ export default {
         this.data = data
       }).catch()
     },
+    luoji(){
+      fetch(`http://localhost:2233/luoji/page/${this.page}/pagesize/10`).then(res=>{return res.json()}).then(data=>{
+        console.log(data)
+        this.data = data.data
+      }).catch()
+    },
+    movie250(){
+      fetch(`http://localhost:2233/movie250`).then(res=>{return res.json()}).then(data=>{
+        console.log(data)
+        this.data = data.subjects
+      }).catch()
+    },
+
     load(){},
     getIp(){
         // console.log('load success',window.returnCitySN)
     },
-    transBg(){
-      this.flag==1?this.flag=2:this.flag=1
-    }
   }
 }
 </script>

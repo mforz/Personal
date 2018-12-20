@@ -4,8 +4,8 @@
             <h6 style="margin-top:20px">{{time}}</h6>
         </div>
         <div class="right">
-            <div class="windmill" @click="$emit('transBg')">
-                <img :src="img" alt="小风车换壁纸" >
+            <div class="windmill" @click="animation">
+                <img :class="!!anima?anima:''" :src="img" alt="小风车换壁纸" >
                 <i></i>
             </div>
         </div>
@@ -24,6 +24,8 @@ export default {
         return{
             img: require('@/assets/img/windmill.png'),
             time:null,
+            timer:null,
+            anima:'',
         }
     },
     mounted() {
@@ -37,6 +39,15 @@ export default {
              day= date.getDate(),
              week= date.getDay().toString().replace('0','日')
              this.time=(`${year}年${month}月${day}日星期${week}`)
+         },
+         animation(){
+             this.anima = 'anima'
+             this.$emit('transBg')
+             this.timer==null?
+             this.timer = setTimeout(()=>{
+                 this.anima=''
+                 this.timer = null
+             },3000):''
          }
     },
    
