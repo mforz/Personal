@@ -2,7 +2,6 @@ var express = require('express');
 var proxy = require('http-proxy-middleware');
 var app = express();
 
-
 app.all("*", function(req, res, next) {
   if (req.path !== "/" && !req.path.includes(".")) {
     res.header("Access-Control-Allow-Credentials", true);
@@ -15,9 +14,6 @@ app.all("*", function(req, res, next) {
   }
   next();
 });
-
-
-
 
 let pathProxy = (arr)=>{
     // let re = arr.map(res=>{
@@ -80,7 +76,11 @@ let pathProxy = (arr)=>{
                 target = `https://infinity-api.infinitynewtab.com/random-wallpaper`;
                 pathRewrite = {'^/rd-wallpaper':''}
             break
-
+            case '/guokr-rd': //fetch('http://localhost:2233/rd-wallpaper/')
+                target = `https://www.guokr.com/apis/minisite/article.json?retrieve_type=by_subject&limit=20&offset=18`;
+                pathRewrite = {'^/guokr-rd':''}
+            break
+            
             default:
                 console.log(res)
         }
@@ -107,6 +107,7 @@ app.use('/sg-img',pathProxy('/sg-img'))
 app.use('/luoji',pathProxy('/luoji'))
 app.use('/movie250',pathProxy('/movie250'))
 app.use('/rd-wallpaper',pathProxy('/rd-wallpaper'))
+app.use('/guokr-rd',pathProxy('/guokr-rd'))
 
 
 app.use(express.static("./"));
@@ -120,3 +121,11 @@ app.listen(2233, () => {
 });
 
 module.exports = app;
+
+
+
+
+//  测速 https://fast.com/
+// 果壳
+// https://www.guokr.com/apis/minisite/article.json?retrieve_type=by_subject&limit=20&offset=18&_=1545379770842
+// https://www.guokr.com/apis/minisite/article.json?retrieve_type=by_channel&channel_key=fact&limit=20&offset=18&_=1545380512831
