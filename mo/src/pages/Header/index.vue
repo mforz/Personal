@@ -4,8 +4,8 @@
             <span v-show="!!weather.city">
                 {{weather.city}}:
                 <img :src="weather.img"/>
-                {{weather.condition}}-
-                {{weather.temp}}-
+                {{weather.condition}} 
+                {{weather.temp}} 
                 {{weather.wind}}
             </span>|
             <span class="h-clock" @click="show=!show">
@@ -16,9 +16,6 @@
             </span>
         </div>
         <div class="header-2">
-
-        </div>
-        <div class="header-3">
 
         </div>
     </div>

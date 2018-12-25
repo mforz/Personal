@@ -11,7 +11,7 @@
 <script>
 import mHeader from '@/pages/Header/'
 import Ip from '@/components/Remote/'
-import getData from '@/static/Fetch/'
+import Fetch from '@/static/Fetch/'
 import Main from '@/pages/Main/'
 
 export default {
@@ -27,7 +27,6 @@ export default {
         }
     },
     mounted() {
-
         
     },
     methods: {
@@ -44,7 +43,7 @@ export default {
                 return
             }
             
-            getData(`/bd-weather/city=${returnCitySN.cname}`).then(res=>{
+            Fetch(`/bd-weather/city=${returnCitySN.cname}`).then(res=>{
                 this.weather={
                     city:res.data.weather.content.city,
                     img:res.data.weather.content.today.img[0],
@@ -64,4 +63,8 @@ export default {
 
 <style>
 
+.home{
+    width:100%;
+    height:100%;
+}
 </style>

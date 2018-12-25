@@ -1,13 +1,14 @@
 <template>
     <div class="main">
-        <div class="bar" @click="is=!is;$router.push('/translate')">
-              <Sidebar :data="list" @changeRouter="changeRouter" />
+
+        <div class="bar">
+              <Sidebar :data="list" @isChange="is=true"/>
         </div>
         
-        <div v-show="is" :class="is?'con':''">
-            <Modal :show="is" @close="is=!is">
+        <div :class="is?'con':''">
+            <Pack :show="is" @close="is=false; $router.back(-1)">
               <router-view />
-            </Modal>
+            </Pack>
         </div>
 
     </div>
@@ -15,24 +16,24 @@
 
 <script>
 import Sidebar from '@/pages/Sidebar/'
-import Modal from '@/components/Modal/'
+import Pack from '@/components/Pack/'
 export default {
     components:{
         Sidebar,
-        Modal,
+        Pack,
     },
     data(){
         return {
             is:false,
             list:[
-                {name:'翻译',url:'/translate'}
+                {name:'翻译',url:'/translate'},
+                {name:'待办',url:'/todo'},
+                {name:'一句',url:'/onewords'},
             ]
         }
     },
     methods: {
-        changeRouter(v){
-            this.$router.replace(v)
-        }
+       
     },
 }
 </script>
@@ -41,7 +42,7 @@ export default {
 .main{
     width:100%;
     display:flex;
-    height:100px;
+    height:90%;
 }
 .main .bar{
     max-width: 300px;
@@ -56,7 +57,7 @@ export default {
 }
 .con{
     position: relative;
-    height:400px;
+    height:100%;
 }
 
 </style>
