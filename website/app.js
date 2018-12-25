@@ -23,6 +23,10 @@ let pathProxy = (arr)=>{
                 target = 'https://api.it120.cc/mforz/';
                 pathRewrite = {'^/it120':'/'}
             break
+            case '/bd-weather':
+                target = 'https://www.baidu.com/home/other/data/weatherInfo?city=%E4%B8%8A%E6%B5%B7';
+                pathRewrite = {'^/bd-weather':'/'}
+            break
             case '/qqmusic':
                 target = 'https://u.y.qq.com/';
                 pathRewrite = {'^/qqmusic':'/'}
