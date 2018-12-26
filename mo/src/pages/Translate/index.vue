@@ -5,7 +5,13 @@
         </p>
 
         <p style="text-align:center">
-          <input v-model="value" class="input" type="search" placeholder="需要翻译单词/汉语" @keyup.enter="trans">
+          <input 
+            v-model="value" 
+            class="input"
+            type="search"
+            autocomplete="off" 
+            placeholder="需要翻译单词/汉语"
+            @keyup.enter="trans">
            <i class="i">*点击翻译可语音朗读</i>
         </p>
        
@@ -33,15 +39,13 @@ export default {
     },
     methods: {
         trans(){
-
+            !!this.value?
             Fetch('/youdao/&i='+this.value).then(res=>{
-
             this.data = !!res.translateResult? res.translateResult[0]: []
-       
-            }).catch(error=>console.log(error))
+            }).catch(error=>console.log(error)):''
         },
         tt(tgt){
-           tts(tgt)
+           !!tgt?tts(tgt):''
         }
     },
 }
@@ -51,14 +55,6 @@ export default {
 .trans{
     width:100%;
     font-size: 14px;
-}
-
-input{
-    outline: none;
-    width:25%;
-    height:25px;
-    border-radius: 8px;
-    border:1px solid #d5d2d5;
 }
 .con{
     font-size: 16px;

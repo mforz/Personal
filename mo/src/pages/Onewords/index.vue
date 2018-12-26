@@ -2,13 +2,20 @@
     <div class="onewords">
         <div class="con">
             <p style="text-align:center">每日一句</p>
+
             <div class="ec">
                 <p>e:<a href="javascript:;" @click="tt(data.tts)">{{data.content}}</a></p>
                 <p>c:{{data.note}}</p>
             </div>
-        </div>
-        <div>
-            <a :href="data.fenxiang_img">分享</a>
+
+            <p style="overflow:hidden">
+               <i class="f-r i" @click="show=!show" > 图片 </i>
+            </p>
+
+            <div v-show="show" class="w-50 txt-center auto">
+                 <img :src="data.fenxiang_img" style="width:150px" />
+            </div>
+            
         </div>
     </div>
 </template>
@@ -21,6 +28,7 @@ export default {
     data(){
         return{
             data:{},
+            show:false,
         }
     },
     mounted() {
@@ -50,5 +58,14 @@ export default {
 }
 .ec{
     margin:30px 0 0 30px;
+}
+.onewords .i{
+    font-size: 12px;
+    transform: scale(1);
+    color:#ccc;
+    cursor: pointer;
+}
+.onewords i:hover{
+    text-decoration: underline;
 }
 </style>

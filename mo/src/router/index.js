@@ -34,6 +34,7 @@ export default new Router({
               name: 'Onewords',
               component: Onewords,
             },
+            
           ]
         }
       ]

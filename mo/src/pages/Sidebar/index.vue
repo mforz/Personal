@@ -24,7 +24,8 @@ export default {
     top:20%;
     left:50%;
     transform: translate(-50%,-50%);
-    border:1px solid #ccc;
+    border:1px solid #eee;
+    border-radius: 5px;
     min-height:80px;
     text-align:center; 
 }

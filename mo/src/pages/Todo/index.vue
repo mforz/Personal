@@ -4,9 +4,10 @@
         <div class="con">
           <p >
             <input
+              class="input"
               type="text"
               v-model="to"
-              @keypress.enter="add"
+              @keypress.enter="todo('add')"
             >
              <i class="i">*点击待办可语音朗读</i>
           </p>
@@ -14,7 +15,7 @@
           <div class="do">
             <p class="list" v-for="(item,i) in list" :key="i">
               <a @click="tt(item.con)" :style="item.status?'':{textDecoration:'line-through',color:'#aaa'}">{{item.con}}</a>
-              <i class="fa fa-trash pull-right" @click="list.splice(i,1)"></i>
+              <i class="fa fa-trash pull-right" @click="todo('del',i)"></i>
               <i v-show="item.status" class="fa fa-square-o pull-right" @click="list[i].status=!list[i].status"></i>
               <i v-show="!item.status" class="fa fa-check-square-o pull-right"  @click="list[i].status=!list[i].status"></i>
             </p>
@@ -30,7 +31,7 @@
 </template>
 
 <script>
-import {tts} from '@/static/Js/index.js'
+import {tts,storeSet,storeGet} from '@/static/Js/index.js'
 export default {
     name:'Todo',
     data(){
@@ -40,17 +41,20 @@ export default {
         }
     },
     mounted() {
-        
+        this.list= storeGet('todolist')||[]
     },
     methods: {
-      add(){
-          this.list.push({
-              status:true,
-              con:this.to,
-          }),this.to=''
+       
+      todo(f,i){
+        (f=='del')?this.list.splice(i,1):
+        !!this.to?
+        (this.list.push({status:true,con:this.to,}),this.to=''):''
+    
+        storeSet('todolist',this.list)
+
       },
       tt(tgt){
-          tts(tgt)
+          !!tgt?tts(tgt):''
       }
     },
 
@@ -58,13 +62,7 @@ export default {
 </script>
 
 <style scoped>
-input{
-    width:25%;
-    height:25px;
-    border-radius: 8px;
-    outline: none;
-    border:1px solid #d5d5d5;
-}
+
 .todo{
     width:100%;
     overflow: hidden;
@@ -75,8 +73,10 @@ input{
     padding:0 12px;
 }
 .con{
+    width:100%;
     text-align: center;
 }
+
 .list{
     width:100%;
     padding:8px 0;

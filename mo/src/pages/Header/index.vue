@@ -10,9 +10,16 @@
             </span>|
             <span class="h-clock" @click="show=!show">
                 时间
+            </span>|
+            <span class="h-clock" @click="is=!is">
+                当前网速
             </span>
+
             <span v-if="show">
                 <Clock  />
+            </span>
+            <span v-if="is" style="">
+                <iframe src="https://fast.com/" width="100" border="0" />
             </span>
         </div>
         <div class="header-2">
@@ -36,6 +43,7 @@ export default {
     data(){
         return{
             show:false,
+            is:false,
         }
     }
 
