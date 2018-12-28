@@ -44,7 +44,6 @@ export default {
         this.list= storeGet('todolist')||[]
     },
     methods: {
-       
       todo(f,i){
         (f=='del')?this.list.splice(i,1):
         !!this.to?

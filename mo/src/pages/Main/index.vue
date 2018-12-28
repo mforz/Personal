@@ -26,6 +26,7 @@ export default {
         return {
             is:false,
             list:[
+                {name:'热点',url:'/hot-words'},
                 {name:'翻译',url:'/translate'},
                 {name:'待办',url:'/todo'},
                 {name:'一句',url:'/onewords'},
