@@ -1,9 +1,23 @@
 <template>
     <div>
         <p style="text-align:center">热点</p>
-        <div>
-            <div v-for="(item,i) in data" :key="i">
-                <p v-if="{item.id=='bd'}"> {{item}}</p>
+        <div class="group">
+            <div class="item" v-for="(item,i) in data" :key="i">
+                <p  v-if="item.id=='bd'">
+                    <span v-for="(res,j) in item.con" :key="j">
+                        <a class="title">{{res.keyword}}</a>
+                    </span>
+                </p>
+                <p  v-if="item.id=='sg'">
+                   <span v-for="(res,j) in item.con" :key="j">
+                       <a class="title">{{res.title}}</a>
+                    </span>
+                </p>
+                <p  v-if="item.id=='sina'">
+                   <span v-for="(res,j) in item.con" :key="j">
+                       <a class="title">{{res.title}}</a>
+                    </span>
+                </p>
             </div>
         </div>
     </div>
@@ -66,5 +80,15 @@ export default {
 </script>
 
 <style>
-
+.group{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+.group .item{
+    flex:1;
+}
+.title{
+    display:block;
+}
 </style>
