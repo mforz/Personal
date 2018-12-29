@@ -80,12 +80,18 @@ let pathProxy = (arr)=>{
                 target = `https://infinity-api.infinitynewtab.com/random-wallpaper`;
                 pathRewrite = {'^/rd-wallpaper':''}
             break
+            case '/inf-wallpaper': //fetch('http://localhost:2233/rd-wallpaper/')
+                target = `https://infinity-api.infinitynewtab.com/get-wallpaper`;
+                pathRewrite = {'^/inf-wallpaper':''}
+            break
             case '/guokr-rd': //fetch('http://localhost:2233/rd-wallpaper/')
                 target = `https://www.guokr.com/apis/minisite/article.json?retrieve_type=by_subject&limit=20&offset=18`;
                 pathRewrite = {'^/guokr-rd':''}
             break
-          
-            
+            case '/db-movie-release': //fetch('http://localhost:2233/rd-wallpaper/')
+                target = `http://api.douban.com/v2/movie/in_theaters`;
+                pathRewrite = {'^/db-movie-release':''}
+            break
             default:
                 console.log(res)
         }
@@ -114,6 +120,8 @@ app.use('/luoji',pathProxy('/luoji'))
 app.use('/movie250',pathProxy('/movie250'))
 app.use('/rd-wallpaper',pathProxy('/rd-wallpaper'))
 app.use('/guokr-rd',pathProxy('/guokr-rd'))
+app.use('/inf-wallpaper',pathProxy('/inf-wallpaper'))
+app.use('/db-movie-release',pathProxy('/db-movie-release'))
 
 
 app.use(express.static("./"));

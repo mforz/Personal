@@ -30,7 +30,8 @@ export default {
                 {name:'翻译',url:'/translate'},
                 {name:'待办',url:'/todo'},
                 {name:'一句',url:'/onewords'},
-                // {name:'临时邮箱',url:'/email-temp'},
+                {name:'壁纸',url:'/wallpaper'},
+                {name:'电影',url:'/movie'},
             ]
         }
     },

@@ -15,7 +15,6 @@
             <div v-show="show" class="w-50 txt-center auto">
                  <img :src="data.fenxiang_img" style="width:150px" />
             </div>
-            
         </div>
     </div>
 </template>

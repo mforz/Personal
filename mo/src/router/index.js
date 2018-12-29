@@ -6,6 +6,8 @@ import Translate from '@/pages/Translate'
 import Todo from '@/pages/Todo'
 import Onewords from '@/pages/Onewords'
 import Hotwords from '@/pages/Hotwords'
+import Wallpaper from '@/pages/Wallpaper'
+import Movie from '@/pages/Movie'
 
 Vue.use(Router)
 
@@ -39,6 +41,16 @@ export default new Router({
               path: '/hot-words',
               name: 'Hotwords',
               component: Hotwords,
+            },
+            {
+              path: '/wallpaper',
+              name: 'Wallpaper',
+              component: Wallpaper,
+            },
+            {
+              path: '/movie',
+              name: 'Movie',
+              component: Movie,
             },
             
           ]
