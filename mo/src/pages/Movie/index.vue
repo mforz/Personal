@@ -17,6 +17,9 @@
                     </p>
                 </div>
             </div>
+            <div >
+                <Loading :show="!list.length"/>
+            </div>
         </div>
 
         <div>
@@ -27,14 +30,16 @@
 </template>
 
 <script>
+import Loading from '@/components/Loading'
 import Fetch from '@/static/Fetch/'
-let rand=[]
 export default {
     name:'Wallpaper',
+    components:{
+        Loading
+    },
     data(){
         return{
             list:[],
-            height:0,
             i:0,
         }
     },
