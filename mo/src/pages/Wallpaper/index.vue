@@ -5,14 +5,22 @@
        <div class="paper" style="width:100%;height:100%">
             <img v-for="(item,i) in list" :key="i" :src="item.src.originalSrc"  :width="random()" height="200" style="margin:0;padding:0" />
        </div>
+
+       <div class="paper" style="width:100%;height:100%">
+           <Loading :show="!list.length"/>
+       </div>
     </div>
 </template>
 
 <script>
+import Loading from '@/components/Loading'
 import Fetch from '@/static/Fetch/'
 let rand=[]
 export default {
     name:'Wallpaper',
+    components:{
+        Loading
+    },
     data(){
         return{
             list:[],

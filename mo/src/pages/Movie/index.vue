@@ -23,7 +23,13 @@
                     </p>
                 </div>
             </div>
+<<<<<<< HEAD
             <Loading :show="!list.length" />
+=======
+            <div >
+                <Loading :show="!list.length"/>
+            </div>
+>>>>>>> 5fe42f668bfca738d21aa7ef603be270d1e4037c
         </div>
 
         <div>
@@ -34,9 +40,13 @@
 </template>
 
 <script>
+import Loading from '@/components/Loading'
 import Fetch from '@/static/Fetch/'
+<<<<<<< HEAD
 import Loading from '@/components/Loading'
 let rand=[]
+=======
+>>>>>>> 5fe42f668bfca738d21aa7ef603be270d1e4037c
 export default {
     name:'Wallpaper',
     components:{
@@ -45,7 +55,6 @@ export default {
     data(){
         return{
             list:[],
-            height:0,
             i:0,
             name:1,
         }
