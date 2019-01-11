@@ -47,19 +47,10 @@ let pathProxy = (arr)=>{
                 target = 'https://m.sogou.com/web/search/hot_news.jsp';
                 pathRewrite = {'^/sg-hotword':'/'}
             break
-            case '/sgwx-hotword':
-                target = 'https://weixin.sogou.com/pcindex/pc/web/web.js';
-                pathRewrite = {'^/sgwx-hotword':'/'}
-            break
-            case '/sinaweb-hotword':
+            case '/sina-hotword':
                 target = 'https://www.sina.com.cn/api/hotword.json?';
                 pathRewrite = {'^/sina-hotword':'/'}
             break
-            case '/sinaweb-hotword':
-                target = 'https://s.weibo.com/ajax/jsonp/gettopsug';
-                pathRewrite = {'^/sina-hotword':'/'}
-            break
-
             case '/iciba-one':
                 target = 'http://open.iciba.com/dsapi/';
                 pathRewrite = {'^/iciba-one':'/'}
@@ -114,31 +105,22 @@ let pathProxy = (arr)=>{
 app.use('/it120',pathProxy('/it120'))
 app.use('/qqmusic',pathProxy('/qqmusic'))
 
-//weather
 app.use('/sina-weather',pathProxy('/sina-weather'))
 app.use('/bd-weather',pathProxy('/bd-weather'))
 app.use('/he-weather',pathProxy('/he-weather'))
-//hotword
+
 app.use('/bd-hotword',pathProxy('/bd-hotword'))
 app.use('/sg-hotword',pathProxy('/sg-hotword'))
-app.use('/sgwx-hotword',pathProxy('/sgwx-hotword'))
 app.use('/sina-hotword',pathProxy('/sina-hotword'))
-//trans
 app.use('/iciba-one',pathProxy('/iciba-one'))
 app.use('/iciba-trans',pathProxy('/iciba-trans'))
 app.use('/youdao',pathProxy('/youdao'))
-
-
-app.use('/luoji',pathProxy('/luoji'))
-
-
-app.use('/guokr-rd',pathProxy('/guokr-rd'))
-
 app.use('/sg-img',pathProxy('/sg-img'))
-app.use('/inf-wallpaper',pathProxy('/inf-wallpaper'))
-app.use('/rd-wallpaper',pathProxy('/rd-wallpaper'))
-
+app.use('/luoji',pathProxy('/luoji'))
 app.use('/movie250',pathProxy('/movie250'))
+app.use('/rd-wallpaper',pathProxy('/rd-wallpaper'))
+app.use('/guokr-rd',pathProxy('/guokr-rd'))
+app.use('/inf-wallpaper',pathProxy('/inf-wallpaper'))
 app.use('/db-movie-release',pathProxy('/db-movie-release'))
 
 
@@ -161,5 +143,3 @@ module.exports = app;
 // 果壳
 // https://www.guokr.com/apis/minisite/article.json?retrieve_type=by_subject&limit=20&offset=18&_=1545379770842
 // https://www.guokr.com/apis/minisite/article.json?retrieve_type=by_channel&channel_key=fact&limit=20&offset=18&_=1545380512831
-// https://weixin.sogou.com/pcindex/pc/web/web.js?t=1546655519664
-//https://s.weibo.com/ajax/jsonp/gettopsug?uid=&ref=PC_topsug&_cb=a
