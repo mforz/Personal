@@ -1,0 +1,30 @@
+.login{
+    width:100%;
+}
+.login .input-model{
+    position: absolute;
+    top:40%;
+    left:50%;
+    transform: translate(-50%,-50%);
+}
+.login .btn{
+    font-size: 13px;
+    text-align: right;
+    cursor: pointer;
+    margin-top:20px;
+    overflow: hidden;
+}
+.input-model p{
+    position: relative;
+}
+.login .btn > span{
+    display: inline-block;
+    margin:3px 12px;
+    padding:1px 6px;
+    border:1px solid #ccc;
+    border-radius:3px;
+    opacity: .7;
+}
+.btn span:hover{
+    opacity: 1;
+}
