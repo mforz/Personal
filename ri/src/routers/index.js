@@ -13,7 +13,6 @@ const routers = [
     }
 ]
 
-
 const route = ()=> (
     <BrowserRouter>
         <Switch>
