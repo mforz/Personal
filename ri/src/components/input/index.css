@@ -1,5 +1,6 @@
 .com-input {
     position: relative;
+    user-select: none;
 }
 .com-input label{
     opacity: .7;
@@ -10,7 +11,14 @@
     border-radius: 8px;
     text-indent: 6px;
     padding:4px;
+    position: relative;
 }
+input::-webkit-input-placeholder {
+     color: #ddd;
+ }
+ .input-group{
+     position: relative;
+ }
 .com-input .clear{
     width:12px;
     height:12px;
@@ -18,7 +26,7 @@
     border-radius: 6px;
     overflow: hidden;
     position: absolute;
-    top:50%;
+    top:55%;
     right:0;
     transform: translate(-50%,-50%);
     font-size:12px;
@@ -34,4 +42,20 @@
 }
 .input:valid + .clear {
     display: block;
+}
+.code {
+     overflow: hidden;
+     position: absolute;
+     font-size:13px;
+     padding:4px;
+     cursor: pointer;
+}
+.sms{
+    font-size: 12px;
+    text-decoration: underline;
+    color:#bbb;
+    text-align: center;
+}
+.sms:hover{
+    color:#aaa;
 }
