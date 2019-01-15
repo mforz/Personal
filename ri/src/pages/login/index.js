@@ -7,6 +7,7 @@ import {postFetch} from '@/static/fetch.js'
 import API from '@/static/api.js'
 import './index.css'
 
+/* eslint-disable */
 class Login extends React.Component{
     constructor(props){
         super(props);
@@ -18,8 +19,8 @@ class Login extends React.Component{
         }
     }
     componentDidMount(){
-        getStorage('deviceId') ? ''
-        : setStorage('deviceId', ((Math.random() + 1) * Math.pow(10, 5)).toFixed(6))
+        getStorage('deviceId') ? '': 
+        setStorage('deviceId', ((Math.random() + 1) * Math.pow(10, 5)).toFixed(6))
 
         this.codeChange()
     }
@@ -43,10 +44,12 @@ class Login extends React.Component{
             rdCode:rd
         })
     }
+    //验证图形码
     checkCode = ()=>{
+        const {code,rdCode} =this.state
         let data={
-            code: this.state.code,
-            key: this.state.rdCode
+            code: code,
+            key: rdCode
         }
 
         this.setState({code:''}
@@ -57,10 +60,11 @@ class Login extends React.Component{
     }
     //手机验证码
     smsCode=()=>{
+        const {code,rdCode,account} =this.state
         let data = {
-            picCode: this.state.code,
-            key: this.state.rdCode,
-            mobile:this.state.account
+            picCode: code,
+            key: rdCode,
+            mobile:account
         }
         this.checkCode()
         .then(res=>{
@@ -71,14 +75,14 @@ class Login extends React.Component{
                 console.log(res)
             }):''
         })
-        
     }
      //注册
      register = () => {
-        let psw = hex_md5(this.state.account)
+        const {password,account} =this.state
+        let psw = hex_md5(account)
         ,reg={
-            code:this.state.password,
-            mobile: this.state.account,
+            code:password,
+            mobile:account,
             pwd:psw,
          }
         this.checkCode()
@@ -116,7 +120,6 @@ class Login extends React.Component{
             postFetch(API.checkLogin, info)
             .then(res=>res.json())
             .then(res=>{
-                console.log('login',res)
                 res.msg='success'?(
                 setCookie('isLogin','success'),
                 setCookie('uid',res.data.uid),
@@ -136,7 +139,7 @@ class Login extends React.Component{
                     <div>
                         <Input 
                             clear
-                            label={'账户'} 
+                            label={'账户'}
                             maxlength="20"
                             value={this.state.account} 
                             placeholder = "用户名/手机号"
@@ -147,29 +150,27 @@ class Login extends React.Component{
                     <div>
                         <Input
                         clear
-                         label={'验证'}
-                         maxlength = "6"
-                         code={this.state.rdCode} 
-                         value={this.state.code}
-                         placeholder = "图形验证"
-                         onChange={this.inputChange.bind(this,'code')}
-                         style={{width:'45%'}}
-                         codeChange={this.codeChange}
-                         />
+                        label={'验证'}
+                        maxlength = "6"
+                        placeholder = "图形验证"
+                        value={this.state.code}
+                        codeChange={this.codeChange}
+                        onChange={this.inputChange.bind(this,'code')}
+                        code={'https://api.it120.cc/mforz/verification/pic/get?key='+this.state.rdCode}
+                        />
                     </div>
                     < br />
                     <div>
-                        <Input 
-                            label={'口令'} 
+                        <Input
                             clear
                             sms
+                            label={'口令'} 
                             maxlength = "20"
                             type="password"
-                            style={{width:'45%'}}
-                            value={this.state.password}
                             placeholder="密码/验证码"
+                            smsClick={ this.smsCode }
+                            value={this.state.password}
                             onChange={this.inputChange.bind(this,'password')}
-                            smsClick={this.smsCode}
                         />
                     </div>
                     < br />
@@ -183,7 +184,6 @@ class Login extends React.Component{
             </div>
         )
     }
-
 }
 
 export default Login

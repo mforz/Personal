@@ -1,0 +1,8 @@
+html,body{
+    box-sizing: border-box;
+}
+
+input{
+    width:200px;
+    box-sizing: border-box;
+}
