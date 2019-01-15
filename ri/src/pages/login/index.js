@@ -66,15 +66,11 @@ class Login extends React.Component{
             key: rdCode,
             mobile:account
         }
-        this.checkCode()
-        .then(res=>{
-            res.msg=='success'
-            ?postFetch(API.smsCode, data)
+        postFetch(API.smsCode, data)
             .then(res => res.json())
             .then(res => {
                 console.log(res)
-            }):''
-        })
+            })
     }
      //注册
      register = () => {
@@ -120,7 +116,7 @@ class Login extends React.Component{
             postFetch(API.checkLogin, info)
             .then(res=>res.json())
             .then(res=>{
-                res.msg='success'?(
+                res.msg=='success'?(
                 setCookie('isLogin','success'),
                 setCookie('uid',res.data.uid),
                 setCookie('token',res.data.token)
