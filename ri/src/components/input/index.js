@@ -39,14 +39,18 @@ class Input extends React.Component{
    
     render(){
         const { width,code,sms,label,size,
-                type,value,onChange,maxlength,
+                type,value,onChange,maxlength,onKeyPress,
                 placeholder,style,clear,codeChange,smsStyle} = this.props
         return (
             <div className="com-input" style={width?{width:width}:{}}>
                 <span className="input-group">
-                    <label className={(code||sms) ?'pd-right':''}>
-                        {label}：
-                    </label>
+                    {
+                        label ?
+                        <label className={(code||sms) ?'pd-right':''}>
+                            { label}:
+                        </label>
+                        :''
+                    }
                     <input
                         className={size? size==='small'?'sm':'lg' :''}
                         type={type?type:'text'}
@@ -56,10 +60,11 @@ class Input extends React.Component{
                         maxLength = {maxlength}
                         placeholder={placeholder}
                         style={style? style: {} }
+                        onKeyPress={onKeyPress}
                     />
           
                     {   /* 清除 */
-                        clear ?
+                        clear && !!this.props.onChange ?
                          <span 
                             className={code?'clear clear-code':sms?'clear clear-sms':'clear'}
                             onClick= {() => this.props.onChange('')}>

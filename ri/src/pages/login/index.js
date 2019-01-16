@@ -1,11 +1,12 @@
 
 import React from 'react';
-import Input from '@/components/input/'
+import Input from '@/components/Input/'
 import {hex_md5} from '@/static/md5.js'
 import {setCookie,goTo,getStorage,setStorage} from '@/static/public.js'
 import {postFetch} from '@/static/fetch.js'
 import API from '@/static/api.js'
 import './index.css'
+import Message from '../../components/Message';
 
 /* eslint-disable */
 class Login extends React.Component{
@@ -51,7 +52,6 @@ class Login extends React.Component{
             code: code,
             key: rdCode
         }
-
         this.setState({code:''}
         ,()=>this.codeChange())
 
@@ -74,6 +74,7 @@ class Login extends React.Component{
     }
      //注册
      register = () => {
+         
         const {password,account} =this.state
         let psw = hex_md5(account)
         ,reg={
@@ -102,6 +103,7 @@ class Login extends React.Component{
     send=()=>{
         const {account,code,password} = this.state
         if (!code || !password) {
+            Message.show('error','请输入账户、密码、验证码')
             return
         }
         this.checkCode()

@@ -17,7 +17,9 @@ const setCookie =(name,value,day=0)=>{
     }
 }
 const delCookie = (name)=> {
+
     let keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+    
     if(name)
         setCookie(name, ' ', -1);
     else

@@ -1,37 +1,76 @@
+
+// mask.js
 import React from 'react';
+import ReactDOM from 'react-dom';
+ 
+const styles = {
+    warp:{
+        position:'fixed',
+        top: '80px',
+        maxWidth:'280px',
+        left:'50%',
+        transform:'translate(-50%)',
+        boxShadow:'0px 0px 8px 5px #eee',
+        borderRadius: 4,
+    },
+    group:{
+        padding:'8px 10px',
+        margin:'2px 8px',
+        overflow:'hideen',
+        display:'flex',
+        alignItems:'center',
+        fontSize:'1.3rem'
+    },
+    ico:{
+        width:'15px',
+        height:'15px',
+        display:'inline-block',
+        borderRadius: 7.5,
+    },
+    con:{
+        margin:'0 15px',
+        padding:'0',
+        display:'inline-block'
+    }
+};
+ 
+export default {
+    timer: null,
+    dom: null, //被append的元素
+    info (type,con) {
+        this.close();
+        this.dom = document.createElement('div');
+        // JSX代码
+        const JSXdom = (
+            <div style={styles.warp}>
+                <div style={styles.group}>
+                    <span><i className={type} style={styles.ico}></i></span>
+                    <p style={styles.con}>{con}</p>
+                </div>
+            </div>
+        );
+        ReactDOM.render(JSXdom, this.dom);
+        document.body.appendChild(this.dom);
+    },
+ 
+    close () {
+        this.dom && this.dom.remove();
+        this.timer=null;
+    },
 
-const HOC = (InnerComponent) => class extends React.Component {
-  render() {
-    return ( < InnerComponent { ...this.props}/>)
-    ,document.getElementById('root')
+    show( type, con, time ){
+        if(!time){
+            time= 3000
+        }
+        if(!this.timer){
+            clearTimeout(this.timer)
+            this.timer = null
+        }
+        this.info(type,con)
+
+        this.timer = setTimeout(()=>{
+            this.close()
+        },time)
+
+    }
   }
-}
-
-class Mess extends React.Component {
-  render(){
-    return ( 
-      <div className = "msg" >
-        <div>
-          {
-            this.props.type == 'success'?
-            <i className="success"> </i>:
-            this.props.type == 'warn'?
-            <i className = "warn" > </i>:
-            this.props.type == 'error'?
-            <i className = "error" > </i>:
-            this.props.type == 'none'?
-            <i className = "none" > </i>:
-            <i>none</i>
-          }
-          <span className="con">{this.props.con}</span>
-        </div>
-      </div>
-    )
-  }
-}
-
-const msg = ()=> HOC(Mess)
-
-export {
-  msg,
-}

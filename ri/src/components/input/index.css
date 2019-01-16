@@ -4,8 +4,9 @@
 .input-group{
     position: relative;
     display: flex;
-    vertical-align: middle;
+    /* vertical-align: middle; */
     align-items: center;
+    justify-content: center;
 }
 .com-input label{
     min-width:50px;

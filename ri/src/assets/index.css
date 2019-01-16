@@ -1,8 +1,60 @@
 html,body{
     box-sizing: border-box;
+    font-size: 10px;
+}
+div,span,ul,li,i,a,h1,h2,h3,h4,h5,h6,p{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+#root{
+    font-size:1.6rem;
 }
 
 input{
     width:200px;
     box-sizing: border-box;
+}
+.success{
+    font-size:12px;
+    font-style:normal;
+    background-color:#2ac845;
+    position: relative;
+}
+
+.error{
+    font-size:12px;
+    font-style:normal;
+    background-color:#f5222d;
+    position: relative;
+}
+.warn{
+    font-size:12px;
+    font-style:normal;
+    background-color:#faad14;;
+    position: relative;
+}
+.success::before{
+    content:'✓';
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%)
+}
+.error::before{
+    content:'×';
+    color:#fff;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%)
+    
+}
+.warn::before{
+    content:'☂';
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%)
+    
 }
