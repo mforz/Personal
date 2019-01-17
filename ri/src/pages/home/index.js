@@ -3,6 +3,8 @@ import React from 'react';
 // import Input from '@/components/Input/'
 import {getCookie,goTo,setStorage,getStorage} from '@/static/public.js'
 import Message from '@/components/Message/'
+import Modal from '@/components/Modal/'
+
 /* eslint-disable */
 
 class Home extends React.Component{
@@ -20,6 +22,20 @@ class Home extends React.Component{
     }
     init=()=>{
         Message.show('success','hello! welcome to home')
+        Modal.success({
+            title:'hello',
+            content: (
+                    <div>
+                        hello
+                    </div>
+                ),
+            onOk:()=>{
+                console.log('ok')
+            },
+            onCancel:()=>{
+                console.log('cancel')
+            }
+        })
     }
     render(){
         return (

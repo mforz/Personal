@@ -3,15 +3,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
  
-const styles = {
+let styles = {
     warp:{
         position:'fixed',
-        top: '80px',
+        top: '15px',
         maxWidth:'280px',
         left:'50%',
         transform:'translate(-50%)',
         boxShadow:'0px 0px 8px 5px #eee',
         borderRadius: 4,
+        backgroundColor:'#fff',
     },
     group:{
         padding:'8px 10px',
@@ -37,12 +38,12 @@ const styles = {
 export default {
     timer: null,
     dom: null, //被append的元素
-    info (type,con) {
+    info ( type, con ) {
         this.close();
         this.dom = document.createElement('div');
         // JSX代码
-        const JSXdom = (
-            <div style={styles.warp}>
+        let JSXdom = (
+            <div style={styles.warp} >
                 <div style={styles.group}>
                     <span><i className={type} style={styles.ico}></i></span>
                     <p style={styles.con}>{con}</p>
@@ -55,21 +56,20 @@ export default {
  
     close () {
         this.dom && this.dom.remove();
-        this.timer=null;
+        this.timer = null;
     },
 
-    show( type, con, time ){
-        if(!time){
-            time= 3000
+    show( type, con, time=3000 ){
+
+        if( this.timer ) {
+            return
         }
-        if(!this.timer){
-            clearTimeout(this.timer)
-            this.timer = null
-        }
+        
         this.info(type,con)
 
         this.timer = setTimeout(()=>{
             this.close()
+            this.timer = null
         },time)
 
     }
