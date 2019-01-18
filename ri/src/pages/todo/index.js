@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Input from '@/components/Input/'
-import {getCookie,goTo,setStorage,getStorage} from '@/static/public.js'
+import {tts,goTo,setStorage,getStorage} from '@/static/public.js'
 import Message from '@/components/Message/'
 import './index.css'
 /* eslint-disable */
@@ -31,7 +31,7 @@ class Todo extends React.Component{
         let {list,value} = this.state
 
         e.nativeEvent.keyCode==13&&
-        value&&
+        value.trim()&&
         list.push({
             con: value,
             status: false,
@@ -53,7 +53,10 @@ class Todo extends React.Component{
     clear=( all )=>{
 
         let arr = getStorage('todolist')
-        if(all=='all') {
+        if( !arr.length ){
+            return
+        }
+        if( all=='all' ) {
               setStorage('todolist',[])
         } else {
             let list = arr.filter(item => {
@@ -61,25 +64,22 @@ class Todo extends React.Component{
                     return true
                 }
             })
-            
             setStorage('todolist',list)
-
         }
         this.init()
     }
     //上下页
     changePage=(flag)=>{
+
         let { i,list } =this.state
 
         flag=='top'? i = i-12 : i = i + 12
 
-        i > list.length ? i=list.length-list.length%12 : ''
+        i > list.length ? i= list.length - (list.length % 12) : ''
 
-        i <= 0 ? i=0 : ''
+        i <= 0 ? i = 0 : ''
 
-        this.setState({
-            i
-        })
+        this.setState( { i } )
     }
     //改变状态
     changeStatus=(flag,index)=>{
@@ -88,11 +88,14 @@ class Todo extends React.Component{
             list.splice(i+index,1)
         }
         if(flag=='0'||flag=='1'){
-            list[index].status=!list[index].status
+            list[index+i].status= !list[index+i].status
         }
         this.setState({
             list
-        },()=>{setStorage('todolist',list)})
+        },()=>{ setStorage('todolist',list) } )
+    }
+    play=(v)=>{
+        tts(v)
     }
 
     render(){
@@ -107,25 +110,26 @@ class Todo extends React.Component{
                             clear
                             size="lager"
                             width="350px"
-                            style={{width:'300px'}}
+                            style={{width:'300px',margin:'0 auto'}}
                             value={value}
                             placeholder="请输入待办"
                             onKeyPress={this.keyPress}
                             onChange={this.change}
                         />
                    </header>
+                   <i style={styles.tag}>*点击可播放</i>
                    <div style={styles.list}>
-
-                    <i style={styles.clear} onClick={this.clear.bind(this,'all')}>清空</i>
-                    <i style={styles.clear} onClick={this.clear.bind(this)}>清除已完成</i>
-                    
+                   <span style={styles.clear}>
+                        <i style={{margin:'0 12px'}} onClick={this.clear.bind(this)}> 清除已完成  </i>
+                        <i onClick={this.clear.bind(this,'all')}> 清空 </i>
+                    </span>
                        {
                            arr.map((res,index)=>{
                                if(index < 12 ){
                                     return(
                                         <div key={index} className="todo-item" style={styles.header}>
                                             <i className="todo-index">{i+index+1} .</i>
-                                            <p className={res.status?"p todo-dis":"p"} style={styles.con}>
+                                            <p className={res.status?"p todo-dis":"p"} style={styles.con} onClick={()=>tts(res.con)}>
                                                 {res.con}
                                             </p>
                                             {
@@ -169,27 +173,29 @@ const styles = {
         margin:'80px auto 0',
     },
     group:{
-        width:'80%',
+        width:'90%',
         margin:'0 auto',
     },
     header:{
-        width:'100%',
+        width:'80%',
+        margin: '0 auto',
         display:'flex',
         alignItems:'center',
         justifyContent: 'center',
     },
     clear:{
+        width:'60%',
         display:'block',
         float:'right',
         fontSize:'12px',
         transform:'scale(.85)',
         color:'#555',
-        cursor:'pointer',
-        margin:'0 5px'
+        textAlign:'right',
+        padding:'0 18px',
     },
     list:{
-        width:'95%',
-        maxWidth:'500px',
+        width:'100%',
+        maxWidth:'600px',
         padding:'30px 10px 0',
         margin:'0 auto',
     },
@@ -215,6 +221,14 @@ const styles = {
     btn:{
         fontSize:'13px',
         margin:'0 20px'
+    },
+    tag:{
+        fontSize:'12px',
+        color:'#bfbbbb',
+        transform:'scale(.8)',
+        width:'60%',
+        textAlign:'right',
+        margin:'0 auto',
+        display:'block',
     }
-
 }

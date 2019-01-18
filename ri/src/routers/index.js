@@ -4,6 +4,7 @@ import { BrowserRouter,Switch,Route } from 'react-router-dom';
 import Login from '@/pages/login/'
 import Home from '@/pages/home/'
 import Todo from '@/pages/todo/'
+import Weather from '@/pages/weather/'
 
 const routers = [
     {
@@ -16,6 +17,9 @@ const routers = [
     },{
         path:'/todo',
         component:Todo,
+    },{
+        path:'/weather',
+        component:Weather,
     }
 ]
 

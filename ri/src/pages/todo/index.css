@@ -9,9 +9,11 @@
     overflow: hidden;
     user-select: none;
     transition: all .4s;
+    color:#FFEC8B;
 }
 .todo-item:hover > .todo-index{
-    transform: scale(1.2)
+    transform: scale(1.2);
+    color:#FFE4C4;
 }
 .todo-item >.fa{
     opacity: 0;

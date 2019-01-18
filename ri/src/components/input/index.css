@@ -1,5 +1,6 @@
 .com-input{
     width:250px;
+    margin:0 auto;
 }
 .input-group{
     position: relative;
@@ -89,3 +90,6 @@ input:valid + .clear {
     padding-right:90px;
 }
 
+.city:hover{
+    color:#d9d9d9;
+}

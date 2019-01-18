@@ -3,12 +3,12 @@
 const getFetch =(url)=>{
   try {
     let result = fetch(url, {
-      credentials: "include",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        Accept: "application/json, text/plain, */*"
-      },
-      mode: "cors"    // 设置允许cors跨域
+      // credentials: "omit",
+      // headers: {
+      //   "Access-Control-Allow-Origin": "*",
+      //   Accept: "application/json, text/plain, */*"
+      // },
+      // mode: "cors"    // 设置允许cors跨域
     });
     return result;
   }catch(err){

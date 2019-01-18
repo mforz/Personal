@@ -17,8 +17,9 @@ class Input extends React.Component{
     }
     smsClick = () => {
         let {num,timer} = this.state;
-        if (num === '') {
-            num = 30
+        const {time} =this.props
+        if (!num) {
+            num = time || 30
             this.props.smsClick()
         }
         if (timer === null) {
@@ -38,7 +39,7 @@ class Input extends React.Component{
     }
    
     render(){
-        const { width,code,sms,label,size,
+        const { width,code,sms,label,size,codeLabel,
                 type,value,onChange,maxlength,onKeyPress,
                 placeholder,style,clear,codeChange,smsStyle} = this.props
         return (
@@ -57,6 +58,7 @@ class Input extends React.Component{
                         required
                         value={value} 
                         onChange={onChange}
+                        autofocus="autofocus"
                         maxLength = {maxlength}
                         placeholder={placeholder}
                         style={style? style: {} }
@@ -92,7 +94,7 @@ class Input extends React.Component{
                                 style={smsStyle}
                                 onClick={this.smsClick}
                             >
-                            获取验证码{this.state.num?`(${this.state.num})`:''}
+                            {codeLabel?codeLabel:'获取验证码'} {!!this.state.num ?`(${this.state.num})`:''}
                             </span>
                         :''
                     }
