@@ -2,7 +2,7 @@
 import React from 'react';
 import Input from '@/components/Input/'
 import CityCom from '@/components/City/'
-import {getCookie,goTo,setStorage,getStorage} from '@/static/public.js'
+import {getLocation,goTo,setStorage,getStorage} from '@/static/public.js'
 import {getFetch} from '@/static/fetch.js'
 import city from '@/static/city.js'
 import API from '@/static/api.js'
@@ -20,7 +20,8 @@ class Weather extends React.Component{
         }
     }
     componentDidMount(){
-        this.init()
+        this.init();
+        getLocation()
     }
     init=()=>{
         getStorage('weather')?
@@ -95,7 +96,7 @@ class Weather extends React.Component{
                                 time={-1}
                                 codeLabel="获取省市区"
                                 value={list.city} 
-                                width="300px"
+                                comStyle={{width:"300px"}}
                                 placeholder="Enter保存"
                                 style={{width:'100%'}} 
                                 onChange={this.changeCity.bind(this,'null')}
@@ -132,12 +133,11 @@ export default Weather
 
 const styles = {
    weather:{
-       width:'80%',
+       width:'100%',
        margin:'0 auto',
    },
    con:{
        width:'100%',
-       marginTop:'50px',
        textAlign:'center',
    },
    header:{

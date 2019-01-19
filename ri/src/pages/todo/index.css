@@ -1,6 +1,7 @@
-/* .todo-item{
+.todo-item{
     user-select: none;
-} */
+    position: relative;
+}
 .todo-item > .todo-index{
     width:55px;
     margin:0 8px;
@@ -17,13 +18,31 @@
 }
 .todo-item >.fa{
     opacity: 0;
+    display:none;
     transition: all .2s;
 }
 .todo-item:hover >.fa{
     opacity: 1;
+    display: inline-block;
     cursor: pointer;
+}
+.time{
+    position:absolute;
+    right:0;
+    bottom:0;
+    font-size: 12px;
+    transform: scale(.9);
+    color:#d5d5d5;
+}
+.todo-item:hover > .time{
+    display: none;
 }
 .todo-dis{
     color:#d5d5d5;
     text-decoration:line-through;
+}
+.todo-item > .fa-unlock,
+.todo-item > .fa-lock{
+    opacity: 1;
+    display: inline-block;
 }

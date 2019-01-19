@@ -39,11 +39,11 @@ class Input extends React.Component{
     }
    
     render(){
-        const { width,code,sms,label,size,codeLabel,
-                type,value,onChange,maxlength,onKeyPress,
+        const { code,sms,label,size,codeLabel,onBlur,textarea,
+                type,value,onChange,maxlength,onKeyPress,comStyle,
                 placeholder,style,clear,codeChange,smsStyle} = this.props
         return (
-            <div className="com-input" style={width?{width:width}:{}}>
+            <div className="com-input" style={comStyle?comStyle:{}}>
                 <span className="input-group">
                     {
                         label ?
@@ -52,18 +52,35 @@ class Input extends React.Component{
                         </label>
                         :''
                     }
-                    <input
-                        className={size? size==='small'?'sm':'lg' :''}
-                        type={type?type:'text'}
-                        required
-                        value={value} 
-                        onChange={onChange}
-                        autofocus="autofocus"
-                        maxLength = {maxlength}
-                        placeholder={placeholder}
-                        style={style? style: {} }
-                        onKeyPress={onKeyPress}
-                    />
+                    {
+                        textarea ?
+                        <textarea
+                            className={size? size==='small'?'sm':'lg' :''}
+                            style={style? style: {resize:'none'}} 
+                            value={value}
+                            onBlur={onBlur}
+                            onChange={onChange}
+                            onKeyPress={onKeyPress}
+                            placeholder={placeholder}
+
+                        >
+                        </textarea>
+                        :<input
+                            className={size? size==='small'?'sm':'lg' :''}
+                            type={type?type:'text'}
+                            required
+                            value={value} 
+                            onChange={onChange}
+                            autoFocus="autofocus"
+                            maxLength = {maxlength}
+                            placeholder={placeholder}
+                            style={style? style: {} }
+                            onKeyPress={onKeyPress}
+                            onBlur={onBlur}
+                        />
+
+                    }
+                    
           
                     {   /* 清除 */
                         clear && !!this.props.onChange ?

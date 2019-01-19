@@ -10,9 +10,7 @@ class CityCom extends React.Component{
             show:false
         }
     }
-    componentWillUnmount(){
-       
-    }
+  
     showCity=(index)=>{
         const {show} = this.state
         index===show ? index=false : ''

@@ -27,7 +27,7 @@ const styles = {
         padding: 20,
         width: '90%',
         maxWidth:520,
-        height: 200,
+        minHeight: 200,
         margin: '100px auto 0',
         backgroundColor: '#fff',
         borderRadius: 4,

@@ -1,11 +1,10 @@
 
 import React from 'react';
 import Input from '@/components/Input/'
-import {tts,goTo,setStorage,getStorage} from '@/static/public.js'
+import {tts,getTime,setStorage,getStorage} from '@/static/public.js'
 import Message from '@/components/Message/'
 import './index.css'
 /* eslint-disable */
-
 
 class Todo extends React.Component{
     constructor(props){
@@ -14,14 +13,17 @@ class Todo extends React.Component{
             value:'',
             list:[],
             i:0,
+            edit:null,
+            con:null,
         }
     }
     componentDidMount(){
         this.init()
+        getTime()
     }
     init=()=>{
         let { list } = this.state
-        list = getStorage('todolist')
+        list = getStorage('todolist')||[]
         this.setState({
             list,
             i:0,
@@ -29,12 +31,14 @@ class Todo extends React.Component{
     }
     keyPress=(e)=>{
         let {list,value} = this.state
-
+        const time = getTime()
         e.nativeEvent.keyCode==13&&
         value.trim()&&
         list.push({
             con: value,
             status: false,
+            lock:false,
+            time:`${time.year}-${time.month}-${time.day} ${time.hours}:${time.minutes}:${time.seconds}`
         })&&
         this.setState({
             list,
@@ -52,7 +56,8 @@ class Todo extends React.Component{
     //清空
     clear=( all )=>{
 
-        let arr = getStorage('todolist')
+        let arr = getStorage('todolist')||[]
+
         if( !arr.length ){
             return
         }
@@ -60,7 +65,7 @@ class Todo extends React.Component{
               setStorage('todolist',[])
         } else {
             let list = arr.filter(item => {
-                if(!item.status) {
+                if(!item.status ) {
                     return true
                 }
             })
@@ -82,16 +87,56 @@ class Todo extends React.Component{
         this.setState( { i } )
     }
     //改变状态
-    changeStatus=(flag,index)=>{
-        let { i ,list } = this.state
-        if(flag=='del'){
-            list.splice(i+index,1)
-        }
-        if(flag=='0'||flag=='1'){
-            list[index+i].status= !list[index+i].status
+    changeStatus=(flag,index,value)=>{
+
+        let { i ,list,edit,con } = this.state
+
+        switch(flag){
+            case 'del':
+                !list[index+i].lock ? list.splice(i+index,1):''
+            break
+            case 'status':
+                list[index+i].status= !list[index+i].status
+            break
+            case 'edit':
+                edit= edit==index ? null:index
+                list[index+i].con.trim()?'': list.splice(i+index,1)
+            break
+            case 'value':
+                list[index+i].con = value.target.value
+            break
+            case 'enter':
+                edit = value.nativeEvent.keyCode==13 ? null: edit
+                list[index+i].con.trim()?'': list.splice(i+index,1)
+            break
+            case 'lock':
+                list[index+i].lock=!list[index+i].lock
+            break
+            case 'showCon':
+                con = con==index? index:index
+            break
+            case 'clear':
+                list=list.filter(item => {
+                    if(!item.status || item.lock) {
+                        return true
+                    }
+                })
+            break
+            case 'clearAll':
+                list=list.filter(item => {
+                    if(item.lock) {
+                        return true
+                    }
+                })
+            break
+
+            default:
+            break
         }
         this.setState({
-            list
+            edit,
+            list,
+            con
         },()=>{ setStorage('todolist',list) } )
     }
     play=(v)=>{
@@ -99,7 +144,7 @@ class Todo extends React.Component{
     }
 
     render(){
-        const { list,value,i } = this.state
+        const { list,value,i,edit,con } = this.state
         let arr = JSON.parse(JSON.stringify(list))
         arr = arr.splice(i,12)
         return (
@@ -109,7 +154,7 @@ class Todo extends React.Component{
                         <Input
                             clear
                             size="lager"
-                            width="350px"
+                            comStyle={{width:"350px"}}
                             style={{width:'300px',margin:'0 auto'}}
                             value={value}
                             placeholder="请输入待办"
@@ -117,27 +162,55 @@ class Todo extends React.Component{
                             onChange={this.change}
                         />
                    </header>
-                   <i style={styles.tag}>*点击可播放</i>
+                   {/* <i style={styles.tag}>*点击可播放</i> */}
                    <div style={styles.list}>
                    <span style={styles.clear}>
-                        <i style={{margin:'0 12px'}} onClick={this.clear.bind(this)}> 清除已完成  </i>
-                        <i onClick={this.clear.bind(this,'all')}> 清空 </i>
+                        <i style={{margin:'0 12px'}} onClick={this.changeStatus.bind(this,'clear')}> 清除已完成  </i>
+                        <i onClick={this.changeStatus.bind(this,'clearAll')}> 清空 </i>
                     </span>
                        {
                            arr.map((res,index)=>{
                                if(index < 12 ){
                                     return(
-                                        <div key={index} className="todo-item" style={styles.header}>
-                                            <i className="todo-index">{i+index+1} .</i>
-                                            <p className={res.status?"p todo-dis":"p"} style={styles.con} onClick={()=>tts(res.con)}>
-                                                {res.con}
-                                            </p>
+                                        <div key={index} className="todo-item" style={styles.todoGroup}>
+                                            {/* <i className="todo-index">{i+index+1} .</i> */}
+                                            {
+                                                res.lock?
+                                                 <i className="fa fa-lock pull-left" onClick={this.changeStatus.bind(this,'lock',index)}></i>
+                                                 :
+                                                 <i className="fa fa-unlock pull-left" onClick={this.changeStatus.bind(this,'lock',index)}></i>
+                                            }
+                                           
+                                            {
+                                                edit==index?
+                                                <div className={res.status?"p todo-dis":"p"} style={styles.con}>
+                                                   <Input
+                                                        style={styles.edit} value={res.con}
+                                                        comStyle={{marginLeft:'0',width:'90%'}}
+                                                        onChange={this.changeStatus.bind(this,'value',index)}
+                                                        onKeyPress={this.changeStatus.bind(this,'enter',index)}
+                                                        onBlur={this.changeStatus.bind(this,'edit',index)} />
+                                                          {/* {res.con} */}
+                                                </div>:
+                                                <p className={con==index?'':res.status?"p todo-dis":"p" } 
+                                                    style={styles.con} 
+                                                    onClick={this.changeStatus.bind(this,'showCon',index)}
+                                                    // contentEditable={con==index?true:false}
+                                                    >
+                                                    {res.con}
+                                                </p>
+                                            }
+
                                             {
                                                 res.status?
-                                                <i className="fa fa-check-square-o pull-right" onClick={this.changeStatus.bind(this,'1',index)}></i>
-                                                :<i className="fa fa-square-o pull-right" onClick={this.changeStatus.bind(this,'0',index)}></i>
+                                                <i className="fa fa-check-square-o pull-right" onClick={this.changeStatus.bind(this,'status',index)}></i>
+                                                :<i className="fa fa-square-o pull-right" onClick={this.changeStatus.bind(this,'status',index)}></i>
                                             }
+                                            
+                                            <i className="fa fa-pencil-square-o pull-right" onClick={this.changeStatus.bind(this,'edit',index)}></i>
                                             <i className="fa fa-trash pull-right" onClick={this.changeStatus.bind(this,'del',index)}></i>
+                                            <i className="fa fa-headphones pull-right" onClick={()=>tts(res.con)}></i>
+                                            <i className="time">{res.time}</i>
                                         </div>
                                     )
                                }
@@ -183,6 +256,12 @@ const styles = {
         alignItems:'center',
         justifyContent: 'center',
     },
+    todoGroup:{
+        width:'100%',
+        display:'flex',
+        alignItems:'center',
+        // justifyContent: 'center',
+    },
     clear:{
         width:'60%',
         display:'block',
@@ -198,13 +277,15 @@ const styles = {
         maxWidth:'600px',
         padding:'30px 10px 0',
         margin:'0 auto',
+        position:'relative',
     },
     con:{
         width:'90%',
-        padding:'8px 5px',
+        padding:'15px 5px',
         fontSize:'13px',
         textAlign: 'left',
         borderBottom:'1px dashed #eee',
+        cursor:'pointer',
     },
     notItem:{
         margin:'40px auto 0',
@@ -222,13 +303,30 @@ const styles = {
         fontSize:'13px',
         margin:'0 20px'
     },
-    tag:{
-        fontSize:'12px',
-        color:'#bfbbbb',
-        transform:'scale(.8)',
-        width:'60%',
-        textAlign:'right',
-        margin:'0 auto',
+    // tag:{
+    //     fontSize:'12px',
+    //     color:'#bfbbbb',
+    //     transform:'scale(.8)',
+    //     width:'60%',
+    //     textAlign:'right',
+    //     margin:'0 auto',
+    //     display:'block',
+    // },
+    edit:{
+        flex:1,
+        height:20,
+        padding:0,
+        border:'none',
+        borderRadius:0,
+        borderBottom:'1px solid #CD6839',
+    },
+    show:{
         display:'block',
+        position:'absolute',
+        left:0,
+        top:0,
+        bottom:0,
+        right:0,
+        backgroundColor:'#fff',
     }
 }
