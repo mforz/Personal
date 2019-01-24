@@ -7,7 +7,7 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet,Image, Text, View} from 'react-native';
+import {Platform, StyleSheet,Image, ActivityIndicator, Text,View} from 'react-native';
 
 import Input from '../../components/Input'
 import Button from '../../components/Button'
@@ -23,7 +23,7 @@ const instructions = Platform.select({
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = {account: '',password:'',idCode:'',rdNum:''};
+    this.state = {account: '',password:'',idCode:'',rdNum:'',loading:false,active:false};
   }
   componentDidMount(){
     this.changeIdCode()
@@ -36,9 +36,9 @@ class Login extends Component {
     })
   }
 
-  inputChange=(flag,value)=>{
+  onChange=(flag,value)=>{
 
-    let {account,password,rePassword,idCode} =this.state
+    let {account,password,rePassword,idCode,active} =this.state
 
     switch(flag){
       case 'account':
@@ -53,75 +53,50 @@ class Login extends Component {
       case 'idCode':
         idCode=value
       break;
+      case 'active':
+        active=!active
+      break;
     }
     this.setState({
       account,
       password,
       rePassword,
-      idCode
+      idCode,
+      active
     })
   }
-  onPress=()=>{
-    alert('smjdh')
-  }
+  
   render() {
 
-    const {account,password,idCode,rdNum} =this.state
+    const {account,password,idCode,rdNum,loading,active} =this.state
 
     return (
-      <View style={{width:'100%',height:'100%',marginTop:150,alignItems:'center',}}>
+      <View style={styles.login}>
+        <View style={styles.top}></View>
+        {/* 注册登录switch */}
+        <View style={styles.switch}>
+          <View style={styles.switchBtn}>
+             <Button style={[styles.btnSwitch,active?styles.active:{}]} title="注册" onPress={()=>this.onChange('active')} />
+          </View>
+          <View style={styles.switchBtn}>
+             <Button style={[styles.btnSwitch,!active?styles.active:{}]} title="登录" onPress={()=>this.onChange('active')} />
+          </View>
+        </View>
+        {/* 输入处理 */}
+        <View style={styles.inputBar}>
           <View style={styles.col}>
-            <Input
-              value={account}
-              maxLength={12}
-              placeholder="请输入账号"
-              onChangeText={(v)=>this.inputChange('account',v)}
-            />
+            <Input value={account} placeholder="请输入账户" />
           </View>
           <View style={styles.col}>
-            <Input
-              value={password}
-              maxLength={24}
-              placeholder="请输入密码"
-              onChangeText={(v)=>this.inputChange('password',v)}
-              secureTextEntry={true}
-            />
+            <Input value={password} secureTextEntry={true} placeholder="请输入密码"/>
           </View>
-
-          <View style={[styles.col,{alignItems:'center', flexDirection: 'row'}]}>
-
-            <View style={{flex:0.6}}>
-              <Input
-                value={idCode}
-                maxLength={6}
-                placeholder="请输入验证码"
-                onChangeText={(v)=>this.inputChange('idCode',v)}
-              />
-            </View>
-
-            <View style={{flex:0.4,alignItems:'flex-end'}}>
-              <Button style={{justifyContent:'center'}} 
-                      onPress={this.changeIdCode}
-                      activeOpacity={1}
-                      >
-                  <Image source={{uri: API.idCode + rdNum}}
-                        style={{width:60,height: 20}} />
-              </Button>
-            </View>
-           
+          <View style={styles.col}>
+            <Input />
           </View>
+        </View>
 
-          <View style={{marginTop:20}}>
-            <View style={{width:150,height:10,justifyContent:'center',alignItems:'center',margin:10}}>
-              <Button title="登录" style={{backgroundColor:'#8FBC8F',alignItems:'center',color:'#fff',borderRadius:5}} onPress={()=>alert('sjh')}/>
-            </View>
-
-            <View style={{width:150,height:10,justifyContent:'center',alignItems:'center',margin:10}}>
-              <Button title="注册®️" style={{width:100,backgroundColor:'#EEE5DE',alignItems:'center',color:'#fff',borderRadius:5}} onPress={()=>alert('sjh')}/>
-            </View>
-            
-          </View>
-
+        <View>
+        </View>
       </View>
     );
   }
@@ -129,8 +104,54 @@ class Login extends Component {
 
 export default Login
 const styles = StyleSheet.create({
+
+  active:{
+    backgroundColor:'#7CCD7C',
+  },
+  login:{
+    flex:1,
+    alignItems:'center',
+  },
+  top:{
+    width:'100%',
+    height:150,
+    // marginTop:50,
+    backgroundColor:'#ff4835',
+    // transform:[{rotate:'8deg'}],
+  },
+  switch:{
+    width:200,
+    height:40,
+    paddingLeft:8,
+    paddingRight:8,
+    marginTop:-42,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',
+  },
+  switchBtn:{
+    flex:1,
+    height:30,
+    backgroundColor:'#ddd',
+  },
+  btnSwitch:{
+    width:'100%',
+    height:'100%',
+    alignItems:'center',
+    justifyContent:'center',
+  },
+  inputBar:{
+    marginTop:3,
+    width:250,
+    height:300,
+    borderWidth:1,
+    borderColor:'#ccc',
+    borderRadius:5,
+
+  },
   col:{
     width:200,
+    height:40,
     marginTop:10,
     justifyContent:'center',
   },
@@ -139,5 +160,5 @@ const styles = StyleSheet.create({
     alignItems:'center',
     color:'#fff',
     borderRadius:5
-  }
+  },
 });
