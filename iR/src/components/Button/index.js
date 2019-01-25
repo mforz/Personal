@@ -23,7 +23,7 @@ class Button extends Component {
       <View>
             <TouchableOpacity
                 activeOpacity={activeOpacity||0.8}
-                style={style||styles.button}
+                style={style?[styles.button,style]:styles}
                 onPress={onPress}>
                 {
                     title?<Text style={{color: style&&style.color? style.color :'#fff'}}>{title}</Text>
@@ -39,11 +39,11 @@ export default Button
 const styles = StyleSheet.create({
    
     button:{
-        backgroundColor: '#fff',
         fontSize: 14,
         padding:0,
         paddingLeft:10,
         height:30,
-        width:'100%'
+        width:'100%',
+        color:'#fff'
     }
 });

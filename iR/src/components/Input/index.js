@@ -17,17 +17,17 @@ class Input extends Component {
   }
   render() {
     //   const {} =this.state
-    const {value,placeholder,style,onChangeText,textContentType,secureTextEntry,maxLength} = this.props
+    const {value,placeholder,style,onChange,textContentType,secureTextEntry,maxLength} = this.props
 
     return (
       <View style={styles.inputView}>
        <TextInput
           maxLength={maxLength}
-          style={style||styles.input}
+          style={style?[styles.input,style]:styles.input}
           value={value}
           placeholder={placeholder}
           underlineColorAndroid='transparent'
-          onChangeText={(text) => onChangeText(text)}
+          onChangeText={(text) => onChange(text)}
           textContentType={textContentType}
           secureTextEntry={secureTextEntry}
         />

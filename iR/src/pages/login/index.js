@@ -38,7 +38,7 @@ class Login extends Component {
 
   onChange=(flag,value)=>{
 
-    let {account,password,rePassword,idCode,active} =this.state
+    let {account,password,rePassword,idCode,active,rdNum} =this.state
 
     switch(flag){
       case 'account':
@@ -55,6 +55,14 @@ class Login extends Component {
       break;
       case 'active':
         active=!active
+        account='',
+        password='',
+        rePassword='',
+        idCode=''
+      break;
+      case 'rdNum':
+        rdNum = (new Date()).getTime() + Math.random()
+        idCode=''
       break;
     }
     this.setState({
@@ -62,14 +70,15 @@ class Login extends Component {
       password,
       rePassword,
       idCode,
-      active
+      active,
+      rdNum,
     })
   }
-  
+  onPress=()=>{
+    alert('you click me')
+  }
   render() {
-
-    const {account,password,idCode,rdNum,loading,active} =this.state
-
+    const {account,password,rePassword,idCode,rdNum,loading,active} =this.state
     return (
       <View style={styles.login}>
         <View style={styles.top}></View>
@@ -84,19 +93,63 @@ class Login extends Component {
         </View>
         {/* 输入处理 */}
         <View style={styles.inputBar}>
-          <View style={styles.col}>
-            <Input value={account} placeholder="请输入账户" />
-          </View>
-          <View style={styles.col}>
-            <Input value={password} secureTextEntry={true} placeholder="请输入密码"/>
-          </View>
-          <View style={styles.col}>
-            <Input />
-          </View>
-        </View>
 
-        <View>
+          <View style={styles.col}>
+            <Input 
+              value={account} 
+              onChange={(v)=>this.onChange('account',v)} 
+              placeholder="请输入账户"
+              maxLength={20}
+            />
+          </View>
+
+          <View style={styles.col}>
+            <Input 
+              value={password} 
+              secureTextEntry={true} 
+              onChange={(v)=>this.onChange('password',v)} 
+              placeholder="请输入密码"
+              maxLength={16}
+            />
+          </View>
+
+          {
+            active?(
+               <View style={styles.col}>
+                  <Input 
+                    value={rePassword} 
+                    secureTextEntry={true} 
+                    onChange={(v)=>this.onChange('rePassword',v)} 
+                    placeholder="请再次输入密码"
+                    maxLength={16}
+                  />
+                </View>
+            ):null
+          }
+          <View style={[styles.col,{flexDirection:'row',alignItems:'center'}]}>
+            <View style={{flex:0.65}} >
+              <Input 
+                style={{width:'100%',}} 
+                value={idCode} 
+                onChange={(v)=>this.onChange('idCode',v)} 
+                placeholder="请输入验证码"
+                maxLength={6}
+              />
+            </View>
+            <View style={{flex:0.35}}>
+              <Button onPress={()=>this.onChange('rdNum')} activeOpacity={1} style={{justifyContent:'center'}}>
+                <Image style={{width:'100%',height:25}} source={{uri:API.idCode+rdNum}}/>
+              </Button>
+            </View>
+          </View>
+
+          <View style={styles.col}>
+            <Button style={[styles.btnSwitch,{height:30},active?{backgroundColor:'#ff4835'}:{backgroundColor:'#7CCD7C'}]} 
+                  title={active?'注册':'登录'} 
+                  onPress={this.onPress}/>
+          </View>
         </View>
+        
       </View>
     );
   }
@@ -147,7 +200,7 @@ const styles = StyleSheet.create({
     borderWidth:1,
     borderColor:'#ccc',
     borderRadius:5,
-
+    alignItems:'center',
   },
   col:{
     width:200,
@@ -157,8 +210,9 @@ const styles = StyleSheet.create({
   },
   button:{
     width:100,
+    height:30,
     alignItems:'center',
-    color:'#fff',
+    color:'#000',
     borderRadius:5
   },
 });
