@@ -16,7 +16,7 @@ class Home extends React.Component{
         
         ! getStorage('id') && setStorage('id', ((Math.random() + 1) * Math.pow(10, 5)).toFixed(6) )
         
-        ['success','ok'].indexOf(String(getCookie('isLogin')))===-1 && goTo('/login')
+        !(['success','ok'].includes(getCookie('isLogin'))) && goTo('/login')
 
         this.init()
     }

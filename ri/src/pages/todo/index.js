@@ -89,7 +89,7 @@ class Todo extends React.Component{
     //改变状态
     changeStatus=(flag,index,value)=>{
 
-        let { i ,list,edit,con } = this.state
+        let { i ,list, edit, con } = this.state
 
         switch(flag){
             case 'del':
@@ -113,7 +113,7 @@ class Todo extends React.Component{
                 list[index+i].lock=!list[index+i].lock
             break
             case 'showCon':
-                con = con==index? index:index
+                con = con==index?null:index
             break
             case 'clear':
                 list=list.filter(item => {
@@ -139,9 +139,6 @@ class Todo extends React.Component{
             con
         },()=>{ setStorage('todolist',list) } )
     }
-    play=(v)=>{
-        tts(v)
-    }
 
     render(){
         const { list,value,i,edit,con } = this.state
@@ -163,7 +160,7 @@ class Todo extends React.Component{
                         />
                    </header>
                    {/* <i style={styles.tag}>*点击可播放</i> */}
-                   <div style={styles.list}>
+                   <span style={styles.list}>
                    <span style={styles.clear}>
                         <i style={{margin:'0 12px'}} onClick={this.changeStatus.bind(this,'clear')}> 清除已完成  </i>
                         <i onClick={this.changeStatus.bind(this,'clearAll')}> 清空 </i>
@@ -172,7 +169,7 @@ class Todo extends React.Component{
                            arr.map((res,index)=>{
                                if(index < 12 ){
                                     return(
-                                        <div key={index} className="todo-item" style={styles.todoGroup}>
+                                        <span key={index} className="todo-item" style={styles.todoGroup}>
                                             {/* <i className="todo-index">{i+index+1} .</i> */}
                                             {
                                                 res.lock?
@@ -180,7 +177,6 @@ class Todo extends React.Component{
                                                  :
                                                  <i className="fa fa-unlock pull-left" onClick={this.changeStatus.bind(this,'lock',index)}></i>
                                             }
-                                           
                                             {
                                                 edit==index?
                                                 <div className={res.status?"p todo-dis":"p"} style={styles.con}>
@@ -192,7 +188,7 @@ class Todo extends React.Component{
                                                         onBlur={this.changeStatus.bind(this,'edit',index)} />
                                                           {/* {res.con} */}
                                                 </div>:
-                                                <p className={con==index?'':res.status?"p todo-dis":"p" } 
+                                                <p className={con==index?res.status?"todo-dis":"":res.status?"p todo-dis":"p" } 
                                                     style={styles.con} 
                                                     onClick={this.changeStatus.bind(this,'showCon',index)}
                                                     // contentEditable={con==index?true:false}
@@ -200,18 +196,16 @@ class Todo extends React.Component{
                                                     {res.con}
                                                 </p>
                                             }
-
                                             {
                                                 res.status?
                                                 <i className="fa fa-check-square-o pull-right" onClick={this.changeStatus.bind(this,'status',index)}></i>
                                                 :<i className="fa fa-square-o pull-right" onClick={this.changeStatus.bind(this,'status',index)}></i>
                                             }
-                                            
                                             <i className="fa fa-pencil-square-o pull-right" onClick={this.changeStatus.bind(this,'edit',index)}></i>
                                             <i className="fa fa-trash pull-right" onClick={this.changeStatus.bind(this,'del',index)}></i>
                                             <i className="fa fa-headphones pull-right" onClick={()=>tts(res.con)}></i>
                                             <i className="time">{res.time}</i>
-                                        </div>
+                                        </span>
                                     )
                                }
                            })
@@ -227,7 +221,7 @@ class Todo extends React.Component{
                             </div>
                             :''
                        }
-                   </div>
+                   </span>
                   <footer>
 
                   </footer>

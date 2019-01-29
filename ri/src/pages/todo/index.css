@@ -45,4 +45,5 @@
 .todo-item > .fa-lock{
     opacity: 1;
     display: inline-block;
+    z-index:100;
 }

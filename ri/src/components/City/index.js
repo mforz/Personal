@@ -51,7 +51,7 @@ const styles ={
         maxWidth:'300px',
         margin:'0 auto',
         textAlign:'left',
-        height:'500px',
+        height:'300px',
         overflow:'hidden',
         fontSize:'13px',
     },
