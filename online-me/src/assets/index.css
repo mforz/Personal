@@ -1,0 +1,20 @@
+html,body,#root{
+    width:100%;
+    height:100%;
+    box-sizing: border-box;
+    padding:0;
+    margin:0;
+}
+
+.music .ellipsis{
+    overflow:hidden;
+    text-overflow:ellipsis; 
+    white-space:nowrap;
+    cursor: pointer;
+    color:#BDBDBD;
+    /* transition: all 1 ease 1; */
+    
+}
+.music .ellipsis:hover{
+    color:#EEE8CD;
+}
