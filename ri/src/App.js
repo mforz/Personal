@@ -5,7 +5,7 @@ import '@/assets/index.css'
 class App extends Component {
   render() {
     return (
-      <div>
+      <div id="app">
          <Route />
       </div>
     );

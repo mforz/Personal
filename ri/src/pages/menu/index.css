@@ -1,0 +1,14 @@
+
+
+
+
+p[class^='menu-item-']{
+    color:rgba(255,255,255,.8);
+    opacity: 0.75;
+    cursor: pointer;
+}
+
+p[class^='menu-item-']:hover{
+    /* color:rgba(255,255,255,.75) */
+    opacity: 0.95;
+}

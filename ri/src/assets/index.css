@@ -1,13 +1,17 @@
 html,body{
     box-sizing: border-box;
     font-size: 10px;
+    width:100%;
+    height:100%;
 }
-div,span,ul,li,i,a,h1,h2,h3,h4,h5,h6,p{
+body,div,span,ul,li,i,a,h1,h2,h3,h4,h5,h6,p{
     margin:0;
     padding:0;
     box-sizing: border-box;
 }
-#root{
+#root,#app{
+    width:100%;
+    height:100%;
     font-size:1.6rem;
 }
 i{
