@@ -1,125 +1,95 @@
 
 import React from 'react';
 import './index.css'
+const clear = require('@/assets/img/clear.png')
 
+
+ /* eslint-disable */
 class Input extends React.Component{
     constructor(props){
         super(props)
         this.state={
-            num:'',
-            timer:null,
+            value:''
         }
     }
     componentWillUnmount(){
-        this.setState({
-            timer:null
-        })
+       
     }
-    smsClick = () => {
-        let {num,timer} = this.state;
-        const {time} =this.props
-        if (!num) {
-            num = time || 30
-            this.props.smsClick()
+    // smsClick = () => {
+    //     let {num,timer} = this.state;
+    //     const {time} =this.props
+    //     if (!num) {
+    //         num = time || 30
+    //         this.props.smsClick()
+    //     }
+    //     if (timer === null) {
+    //         timer = setInterval(() => {
+    //             num = num - 1
+    //             if (num <= 0) {
+    //                 num = ''
+    //                 timer = null
+    //                 clearInterval(this.state.timer)
+    //             }
+    //             this.setState({
+    //                 num,
+    //                 timer
+    //             })
+    //         }, 1000)
+    //     }
+    // }
+
+    onChange=(i,v)=>{
+        let { value } = this.state
+        switch(i){
+            case 'input':
+                value = v.target.value
+            break;
+
+            case 'clear':
+                value = ''
+            break;
+
+            case 'key':
+                v.nativeEvent.keyCode===13
+                &&(this.props.enter(value),value='')
+
+            break;
+
+            default:
+            break;
         }
-        if (timer === null) {
-            timer = setInterval(() => {
-                num = num - 1
-                if (num <= 0) {
-                    num = ''
-                    timer = null
-                    clearInterval(this.state.timer)
-                }
-                this.setState({
-                    num,
-                    timer
-                })
-            }, 1000)
-        }
+        this.setState({
+            value
+        })
     }
    
     render(){
-        const { code,sms,label,size,codeLabel,onBlur,textarea,
-                type,value,onChange,maxlength,onKeyPress,comStyle,
-                placeholder,style,clear,codeChange,smsStyle} = this.props
+        const { placeholder,type,style,children} = this.props
+        const { value } = this.state
         return (
-            <div className="com-input" style={comStyle?comStyle:{}}>
-                <span className="input-group">
-                    {
-                        label ?
-                        <label className={(code||sms) ?'pd-right':''}>
-                            { label}:
-                        </label>
-                        :''
-                    }
-                    {
-                        textarea ?
-                        <textarea
-                            className={size? size==='small'?'sm':'lg' :''}
-                            style={style? style: {resize:'none'}} 
-                            value={value}
-                            onBlur={onBlur}
-                            onChange={onChange}
-                            onKeyPress={onKeyPress}
-                            placeholder={placeholder}
-
-                        >
-                        </textarea>
-                        :<input
-                            className={size? size==='small'?'sm':'lg' :''}
-                            type={type?type:'text'}
-                            required
-                            value={value} 
-                            onChange={onChange}
-                            autoFocus="autofocus"
-                            maxLength = {maxlength}
-                            placeholder={placeholder}
-                            style={style? style: {} }
-                            onKeyPress={onKeyPress}
-                            onBlur={onBlur}
-                        />
-
-                    }
-                    
-          
-                    {   /* 清除 */
-                        clear && !!this.props.onChange ?
-                         <span 
-                            className={code?'clear clear-code':sms?'clear clear-sms':'clear'}
-                            onClick= {() => this.props.onChange('')}>
-                         </span>
-                        : ''
-                    }
-
-                    { /* 图形验证码 */
-                        code ?
-                            <span className ="code img">
-                                <img
-                                    title="看不清？点击换一个吧"
-                                    alt = "error？点击试试"
-                                    style={{width:'100%',height:'100%'}}
-                                    src={code}
-                                    onClick={codeChange}
-                                />
-                            </span>
-                        : ''
-                    }
-
-                    { /* 手机验证码 */
-                        this.props.sms?
-                            <span className = {this.state.num?'code sms disabled':'code sms'}
-                                style={smsStyle}
-                                onClick={this.smsClick}
-                            >
-                            {codeLabel?codeLabel:'获取验证码'} {!!this.state.num ?`(${this.state.num})`:''}
-                            </span>
-                        :''
-                    }
-                </span>
+            <div className="comp-input" >
+                <div className="input-bar" style={style||{}}>
+                   <input
+                    required
+                    type={type||'text'}
+                    value={value}
+                    placeholder={placeholder}
+                    onChange={this.onChange.bind(this,'input')}
+                    onKeyPress={this.onChange.bind(this,'key')}
+                   />
+                    { children }
+                    <i className="fa fa-times-circle clear" onClick={this.onChange.bind(this,'clear')}></i>
+                </div>
             </div>
         )
     }
 
+}
+
+const styles = {
+    input:{
+        border:'none',
+    }
 }
 
 export default Input

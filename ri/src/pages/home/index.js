@@ -9,24 +9,22 @@ class Home extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            word:'',
+            word:'人生百态',
         }
     }
     componentDidMount(){
-        
        
     }
     init=()=>{
         
     }
     render(){
+        const { word } = this.state
         return (
             <div className="home">
 
-                <div>
-                    
-                    人生百态
-                    
+                <div style={styles.wordBar}>
+                    <p>{ word }</p>
                 </div>
 
             </div>
@@ -35,6 +33,15 @@ class Home extends React.Component{
 
 }
 const styles ={
+    wordBar:{
+        width:'50%',
+        height:'10px',
+        fontSize:'15px',
+        color:'#000',
+        textAlign:'center',
+        margin:'0 auto',
+        marginTop:80,
+    }
     
 }
 

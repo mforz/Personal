@@ -4,7 +4,7 @@ html,body{
     width:100%;
     height:100%;
 }
-body,div,span,ul,li,i,a,h1,h2,h3,h4,h5,h6,p{
+body,div,span,ul,li,i,a,h1,h2,h3,h4,h5,h6,p,input{
     margin:0;
     padding:0;
     box-sizing: border-box;
@@ -18,17 +18,13 @@ i{
     cursor: pointer;
 }
 
-input{
-    width:200px;
-    box-sizing: border-box;
-}
+/* 
 .success{
     font-size:12px;
     font-style:normal;
     background-color:#2ac845;
     position: relative;
 }
-
 .error{
     font-size:12px;
     font-style:normal;
@@ -64,16 +60,17 @@ input{
     left:50%;
     transform: translate(-50%,-50%)
     
-}
+} */
 #loading{
     display: inline-block;
     width: 20px;
     height: 40px;
     border-radius: 0 20px 20px 0;
+    transition: all 1s ease-in-out;
     z-index: 10;
-    perspective: 200px;
+    perspective: 200px; 
     transform: rotateY(0);
-    animation: bgColor1 3s step-end infinite both,rotate 3s step-start infinite both;
+    animation: bgColor1 3s step-end infinite both;
     transform-origin: 0 50%;
 }
 #loading::before{
@@ -95,21 +92,12 @@ input{
     position: absolute;
     top: 0;
     height: 40px;
-
     z-index: 10;
     left: -20px;
     width: 20px;
     border-radius: 20px 0 0 20px;
     background: #ccc;
     animation: bgColor2 3s step-end infinite both;
-}
-@keyframes bgColor1{
-    0% {
-        background: #ffd539;
-    }
-    100%, 50% {
-        background: #3a71f8;
-    }
 }
 @keyframes bgColor1{
     0%{background:#ffd539}
@@ -133,6 +121,10 @@ input{
     87.5%{-webkit-transform:rotateY(90deg)}
     100%{-webkit-transform:rotateY(0)}
 } */
+
+#bg{
+    animation: flipColor 30s ease infinite both;
+}
 @keyframes flipColor{
     0%{background:#f52d27}
     12.5%{background:#7d0906}
@@ -144,7 +136,8 @@ input{
     87.5%{background:#052e94}
     100%{background:#f52d27}
 }
-.btn{
+
+/* .btn{
     display: inline-block;
     cursor: pointer;
     margin:2px 5px;
@@ -152,7 +145,7 @@ input{
     color:#b5b6b7;
     border:1px solid #eee;
     border-radius: 5px;
-}
+} */
 /* .p {
     position: relative;
     line-height: 1.2em;       
@@ -173,3 +166,17 @@ input{
     background:#fff;         
     box-shadow: 0 0 10px #fff; 
 } */
+.f-r{
+    float: right;
+}
+.f-l{
+    float: left;
+}
+
+.todo .fa{
+    font-size: 14px;
+}
+
+.home {
+    width:100%;
+}

@@ -18,7 +18,7 @@ class Menu extends React.Component{
        let menu = []
        menu=[
            {path:'/',title:'首页'},
-           {path:'/login',title:'待办'},
+           {path:'/todo',title:'待办'},
            {path:'/',title:'天气'},
            {path:'/login',title:'登录'},
        ]
@@ -29,14 +29,12 @@ class Menu extends React.Component{
     init=()=>{
         
     }
-    changeRoute=(path)=>{
-        (path)
-    }
+    
     changeHeight=()=>{
         const { isH } = this.state
 
         let menu = JSON.parse(JSON.stringify(styles.menu))
-        isH==false
+        isH===false
         ?menu.height="50px"
         :menu.height="200px"
         styles.menu=menu
@@ -47,13 +45,19 @@ class Menu extends React.Component{
     }
     render(){
         const { menu,isH } = this.state
+        const fa = [ "fa fa-angle-double-down","fa fa-angle-double-up" ]
         return (
-            <div className="menu" style={styles.menu}>
+            <div id="bg" style={styles.menu}>
+
+
+
+                {/* menu - start*/}
                 <div style={styles.list}>
                     <div style={styles.itemBar}>
                     {
                         menu.map((item,index)=>(
-                            <p key={index} className={'menu-item-'+index} style={styles.item} onClick={()=>this.props.rou(item.path)}>
+                            <p  className={'menu-item-'+index} style={styles.item}
+                                key={index} onClick={()=>this.props.rou(item.path)}>
                                 <span>
                                     {item.title}
                                 </span>
@@ -65,11 +69,12 @@ class Menu extends React.Component{
                             ...
                         </span>
                         <span style={{flex:1}} onClick={this.changeHeight}>
-                            <i className={isH?"fa fa-angle-double-down":"fa fa-angle-double-up"}></i>
+                            <i className={isH ? fa[0] : fa[1] }></i>
                         </span>
                     </p>
                     </div>
                 </div>
+                {/* menu - end*/}
 
             </div>
         )
@@ -81,8 +86,8 @@ let styles={
     menu:{
         width:'100%',
         height:'200px',
-        transition:'all .5s',
-        backgroundColor:'#9BCD9B',
+        transition:'height .5s ease-in',
+        // backgroundColor:'#9BCD9B',
         position:'relative'
     },
     list:{

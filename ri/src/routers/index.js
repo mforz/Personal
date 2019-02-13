@@ -10,14 +10,15 @@ import Menu from '@/pages/menu/'
 
 
 const routers = [
-   
     {
         path:'/login',
         component:Login,
-    },{
+    },
+    {
         path:'/todo',
         component:Todo,
-    },{
+    },
+    {
         path:'/weather',
         component:Weather,
     }
@@ -40,9 +41,7 @@ const rou=(path)=>{
 
 const route = ()=> (
     <div style={{width:'100%',height:'100%',margin:0,padding:0}}>
-
         <Menu rou={rou}/>
-
         <HashRouter>
             <Switch>
                 <Route path="/" exact component={Home} />

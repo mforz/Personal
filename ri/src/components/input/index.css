@@ -1,92 +1,46 @@
-.com-input{
-    width:250px;
-    margin:0 auto;
+.comp-input{
+    font-size: 14px;
 }
-.input-group{
-    position: relative;
-    display: flex;
-    /* vertical-align: middle; */
-    align-items: center;
-    justify-content: center;
-}
-.com-input label{
-    min-width:50px;
-}
-
-.com-input input{
+.comp-input .input-bar{
     width:200px;
     height:32px;
-    font-size: 14px;
-    text-indent: 6px;
-    padding:4px 11px;
+    overflow: hidden;
+    position: relative;
+}
+.comp-input .input-bar input{
+    width:100%;
+    height:100%;
+    font-size: 1em;
+    text-indent: 2px;
+    padding:4px;
+    padding-right:20px;
     outline: none;
     border:1px solid #d9d9d9;
     border-radius: 4px;
     display: inline-block;
-    position: relative;
 }
-.com-input .sm{
-    height:24px;
-    padding:1px 5px;
-}
-.com-input .lg{
-    height:40px;
-    font-size: 16px;
-    padding:6px 10px;
-}
-.com-input .code{
-    position: absolute;
-    top:50%;
-    transform: translateY(-50%);
-    right:5px;
-    color:#bbb;
-    font-size: 13px;
-    overflow: hidden;
-    cursor: pointer;
-}
-.com-input .img{
-    width:80px;
-}
-.com-input .sms{
-    right:6px;
-}
-.com-input .sms:hover{
-    color:#aaa;
-}
-.com-input .disabled{
-    color:#ccc;
-}
-.com-input .clear{
-    width:12px;
-    height:12px;
-    background: #bbb;
-    border-radius: 6px;
-    overflow: hidden;
-    position: absolute;
-    top:50%;
-    right:0;
-    transform: translate(-50%,-50%);
-    font-size:12px;
+.comp-input .clear{
     display: none;
+    position: absolute; 
+    overflow:hidden;
+    width: 15px; 
+    height: 15px;
+    font-size: 14px;
+    right:5px;
+    top:50%;
+    transform: translateY(-50%)
 }
-.clear::before{
-    content: 'x';
-    position: absolute;
-    top:40%;
-    left:55%;
-    color:#fff;
-    transform: translate(-50%,-50%);
+.comp-input input:valid +  .clear {
+    display: inline;
 }
-input:valid + .clear {
-    display: block;
-}
-.input-group input:valid + .clear-code{
-    right:90px;
-}
-.input-group input:valid + .clear-sms{
-    right:90px;
-}
-.pd-right + input:valid{
-    padding-right:90px;
-}
+
+.comp-input input::-webkit-input-placeholder {
+    /* placeholder颜色  */
+    color: #aab2bd;
+    opacity: .3;
+    /* placeholder字体大小  */
+    /* font-size: 12px; */
+    /* placeholder位置  */
+    /* text-align: right; */
+ }
 
