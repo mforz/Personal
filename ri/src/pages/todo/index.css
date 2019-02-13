@@ -1,0 +1,14 @@
+.todo .fa{
+  margin: 0 5px;
+}
+.todo [class*='fa-angle-']{
+  margin:0 9px;
+}
+.todo .color{
+  color:red;
+}
+.todo .detail{
+  white-space: normal;
+  word-break: break-all;
+  overflow: hidden;
+}

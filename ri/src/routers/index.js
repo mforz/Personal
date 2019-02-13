@@ -5,7 +5,7 @@ import { BrowserRouter,HashRouter,Switch,Route } from 'react-router-dom';
 import Login from '@/pages/login/'
 import Home from '@/pages/home/'
 import Todo from '@/pages/todo/'
-import Weather from '@/pages/weather/'
+import Color from '@/pages/color/'
 import Menu from '@/pages/menu/'
 
 
@@ -19,8 +19,8 @@ const routers = [
         component:Todo,
     },
     {
-        path:'/weather',
-        component:Weather,
+        path:'/color',
+        component:Color,
     }
 ]
 

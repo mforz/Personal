@@ -1,7 +1,6 @@
 
 import React from 'react';
 import './index.css'
-const clear = require('@/assets/img/clear.png')
 
 
  /* eslint-disable */

@@ -40,7 +40,7 @@ const setStorage =(name,value)=>{
         localStorage.setItem(name, JSON.stringify(value))
     else
         setCookie(name,value)
-    
+    return true
 }
 
 //获取localstorage
@@ -136,7 +136,7 @@ const getTime = () => {
     }
     return time
 }
-
+import color from './color'
 
 export {
     getCookie,
@@ -152,4 +152,5 @@ export {
     isPhone,
     getLocation,
     getTime,
+    color
 }
