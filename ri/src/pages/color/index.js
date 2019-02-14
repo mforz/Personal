@@ -23,8 +23,8 @@ class Color extends React.Component{
             {
                color.map((res,i)=>(
                    <div style={styles.list}>
-                        <div>
-                            <span style={{display:'inline-block',width:'25px',height:'25px',margin:'0 10px',backgroundColor:res}}></span>
+                        <div style={styles.divBar}>
+                            <span style={Object.assign({backgroundColor:res},styles.div)}></span>
                             <code>{res}</code>
                        </div>
                     </div>
@@ -45,7 +45,19 @@ const styles={
         display:'flex',
         alignItems:'center',
         justifyContent:'center'
+    },
+    divBar:{
+        display: 'flex',
+        margin: '5px auto',
+        alignItems: 'center'
+    },
+    div:{
+        display: 'inline-block',
+        width: '25px',
+        height: '25px',
+        margin: '0 10px'
     }
+
 }
 
 export default Color
