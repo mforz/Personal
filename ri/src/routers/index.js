@@ -6,6 +6,7 @@ import Login from '@/pages/login/'
 import Home from '@/pages/home/'
 import Todo from '@/pages/todo/'
 import Color from '@/pages/color/'
+import HotWords from '@/pages/hotwords/'
 import Menu from '@/pages/menu/'
 
 
@@ -21,6 +22,10 @@ const routers = [
     {
         path:'/color',
         component:Color,
+    },
+    {
+        path:'/hotwords',
+        component:HotWords,
     }
 ]
 

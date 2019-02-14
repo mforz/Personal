@@ -7,6 +7,11 @@ const API = {
   register: `${host}/it120/user/m/register`,
   smsCode: `${host}/it120/verification/sms/get`,
   bdWeather: `${host}/bd-weather/`,
+  bdHot:`${host}/bd-hotword/`,
+  sgHot:`${host}/sg-hotword/`,
+  sinaHot:`${host}/sina-hotword/`,
+  // qqHotWord:`${host}/qq-hotword/4`
+  
 }
 
 export default API

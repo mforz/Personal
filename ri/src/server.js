@@ -92,6 +92,11 @@ let pathProxy = (arr)=>{
                 target = `http://api.douban.com/v2/movie/in_theaters`;
                 pathRewrite = {'^/db-movie-release':''}
             break
+            case '/migu-music': //fetch('http://localhost:2233/rd-wallpaper/')
+                target = `http://music.migu.cn`;
+                pathRewrite = {'^/migu-music':'/'}
+            break
+
             default:
                 console.log(arr)
         }
@@ -102,27 +107,31 @@ let pathProxy = (arr)=>{
         })
 }
 
-app.use('/it120',pathProxy('/it120'))
-app.use('/qqmusic',pathProxy('/qqmusic'))
+const arr =[
+    'migu-music',
+    'it120',
+    'qqmusic',
+    'sina-weather',
+    'bd-weather',
+    'sg-hotword',
+    'sina-hotword',
+    'bd-hotword',
+    // 'qq-hotword',
+    'iciba-one',
+    'iciba-trans',
+    'youdao',
+    'sg-img',
+    'luoji',
+    'movie250',
+    'rd-wallpaper',
+    'guokr-rd',
+    'inf-wallpaper',
+    'db-movie-release',
+]
 
-app.use('/sina-weather',pathProxy('/sina-weather'))
-app.use('/bd-weather',pathProxy('/bd-weather'))
-app.use('/he-weather',pathProxy('/he-weather'))
-
-app.use('/bd-hotword',pathProxy('/bd-hotword'))
-app.use('/sg-hotword',pathProxy('/sg-hotword'))
-app.use('/sina-hotword',pathProxy('/sina-hotword'))
-app.use('/iciba-one',pathProxy('/iciba-one'))
-app.use('/iciba-trans',pathProxy('/iciba-trans'))
-app.use('/youdao',pathProxy('/youdao'))
-app.use('/sg-img',pathProxy('/sg-img'))
-app.use('/luoji',pathProxy('/luoji'))
-app.use('/movie250',pathProxy('/movie250'))
-app.use('/rd-wallpaper',pathProxy('/rd-wallpaper'))
-app.use('/guokr-rd',pathProxy('/guokr-rd'))
-app.use('/inf-wallpaper',pathProxy('/inf-wallpaper'))
-app.use('/db-movie-release',pathProxy('/db-movie-release'))
-
+arr.forEach(res=>{
+    app.use('/'+res,pathProxy('/'+res))
+})
 
 app.use(express.static("./"));
 

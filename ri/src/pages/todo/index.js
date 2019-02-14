@@ -92,7 +92,7 @@ class Todo extends React.Component{
                             <div key={index} style={{width:'100%',margin:'20px auto'}}> 
                                 <p className={i==index?'detail':'p'} style={styles.detail}>
                                     <i style={{userSelect:'none',marginRight:'4px',fontSize:'13px',color:'#ff7f50'}}>{start+index+1}. </i>
-                                    <span onClick={this.handleClick.bind(this,'click',index)}>
+                                    <span style={res.status?styles.had:{}} onClick={this.handleClick.bind(this,'click',index)}>
                                     { res.detail }
                                     </span>
                                     <span style={styles.option}>
@@ -126,7 +126,6 @@ class Todo extends React.Component{
                             {
                                 <i>...</i>
                             }
-                           
                             <i className="fa fa-angle-right"></i>
                             <i className="fa fa-angle-double-right"></i>
                         </div>
@@ -184,7 +183,11 @@ const styles={
     },
     pageNum:{
         fontSize:'12px',
-        margin:'0 3px'
+        margin:'0 5px'
+    },
+    had:{
+        textDecoration:'line-through',
+        color:'#ccc'
     }
 }
 

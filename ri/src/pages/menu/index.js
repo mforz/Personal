@@ -20,7 +20,7 @@ class Menu extends React.Component{
            {path:'/',title:'首页'},
            {path:'/todo',title:'待办'},
            {path:'/color',title:'颜色'},
-           {path:'/login',title:'登录'},
+           {path:'/hotwords',title:'热点'},
        ]
        this.setState({
            menu

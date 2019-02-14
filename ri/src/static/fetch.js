@@ -10,7 +10,7 @@ const getFetch =(url)=>{
       // },
       // mode: "cors"    // 设置允许cors跨域
     });
-    return result;
+    return result.then((res)=>res.json());
   }catch(err){
     console.error(err)
   }
@@ -38,7 +38,7 @@ const postFetch =(url,data)=> {
       },
       body: obj2params(data)
     });
-    return result;
+    return result.then((res)=>res.json());
   }catch(err) {
     console.error(err);
   }

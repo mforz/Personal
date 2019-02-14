@@ -19,20 +19,33 @@ class Color extends React.Component{
     }
     render(){
         return (
-            <div className="color">
+            <div className="color" style={styles.color}>
             {
                color.map((res,i)=>(
-                   <span style={{display:'inline-block',width:'33.333%',textAlign:'center'}}>
-                       <span style={{display:'inline-block',width:'20px',height:'20px',backgroundColor:res}}></span>
-                       <a>{res}</a>
-                    </span>
+                   <div style={styles.list}>
+                        <div>
+                            <span style={{display:'inline-block',width:'25px',height:'25px',margin:'0 10px',backgroundColor:res}}></span>
+                            <code>{res}</code>
+                       </div>
+                    </div>
                ))
             }
-               
             </div>
         )
     }
-
+}
+const styles={
+    color:{
+        padding:'10%',
+        overflow:'auto'
+    },
+    list:{
+        width:'25%',
+        float:'left',
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center'
+    }
 }
 
 export default Color
