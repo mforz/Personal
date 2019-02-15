@@ -17,6 +17,9 @@ body,div,span,ul,li,i,a,h1,h2,h3,h4,h5,h6,p,input{
 i{
     cursor: pointer;
 }
+code{
+    font-size: 13px;
+}
 
 /* 
 .success{
@@ -136,36 +139,11 @@ i{
     87.5%{background:#052e94}
     100%{background:#f52d27}
 }
-
-/* .btn{
-    display: inline-block;
-    cursor: pointer;
-    margin:2px 5px;
-    padding: 2px 3px;
-    color:#b5b6b7;
-    border:1px solid #eee;
-    border-radius: 5px;
-} */
-/* .p {
-    position: relative;
-    line-height: 1.2em;       
-    height: 4.2em;
-    overflow: hidden;
-} */
 .p {
     overflow:hidden;
     text-overflow:ellipsis; 
     white-space:nowrap;
 }
-/* .p::after{        
-    content: "...";          
-    position: absolute;
-    bottom: 2px;
-    right:5px;
-    padding: 0 3px;
-    background:#fff;         
-    box-shadow: 0 0 10px #fff; 
-} */
 .f-r{
     float: right;
 }
@@ -180,3 +158,6 @@ i{
 .home {
     width:100%;
 }
+.hot-words a:link,
+.hot-words a:visited{color:#9f7d00;}
+.hot-word a[class^=top3]{color:red;}

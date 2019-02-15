@@ -154,7 +154,7 @@ const styles={
         margin:'0 auto'
     },
     listBar:{
-        width:'100%',
+        width:'90%',
         maxWidth:'400px',
         textAlign:'left',
         margin:'30px auto'

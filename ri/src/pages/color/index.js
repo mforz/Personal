@@ -55,7 +55,7 @@ const styles={
         display: 'inline-block',
         width: '25px',
         height: '25px',
-        margin: '0 10px'
+        marginRight:'2px'
     }
 
 }

@@ -1,6 +1,6 @@
 
 
-const getFetch =(url)=>{
+const getFetch =(url,obj)=>{
   try {
     let result = fetch(url, {
       // credentials: "omit",
@@ -10,7 +10,9 @@ const getFetch =(url)=>{
       // },
       // mode: "cors"    // 设置允许cors跨域
     });
-    return result.then((res)=>res.json());
+
+    return obj&&obj.type==='text'?result.then((res)=>res.text()):result.then((res)=>res.json())
+
   }catch(err){
     console.error(err)
   }

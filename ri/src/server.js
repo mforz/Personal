@@ -43,6 +43,10 @@ let pathProxy = (arr)=>{
                 target = 'http://top.baidu.com/mobile_v2/buzz/hotspot';
                 pathRewrite = {'^/bd-hotword':'/'}
             break
+            case '/wb-hotword':
+                target = 'https://s.weibo.com/ajax/jsonp/gettopsug';
+                pathRewrite = {'^/wb-hotword':''}
+            break
             case '/sg-hotword':
                 target = 'https://m.sogou.com/web/search/hot_news.jsp';
                 pathRewrite = {'^/sg-hotword':'/'}
@@ -96,6 +100,10 @@ let pathProxy = (arr)=>{
                 target = `http://music.migu.cn`;
                 pathRewrite = {'^/migu-music':'/'}
             break
+            case '/toutiao-news': //fetch('http://localhost:2233/rd-wallpaper/')
+                target = `https://www.toutiao.com/api/pc/feed`;
+                pathRewrite = {'^/toutiao-news':''}
+            break
 
             default:
                 console.log(arr)
@@ -116,7 +124,8 @@ const arr =[
     'sg-hotword',
     'sina-hotword',
     'bd-hotword',
-    // 'qq-hotword',
+    'wb-hotword',
+    'toutiao-news',
     'iciba-one',
     'iciba-trans',
     'youdao',
