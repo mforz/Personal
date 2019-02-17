@@ -14,7 +14,7 @@ class Menu extends React.Component{
         }
     }
     componentDidMount(){
-
+        window.menuHeight = '200px'
        let menu = []
        menu=[
            {path:'/',title:'首页'},
@@ -32,7 +32,6 @@ class Menu extends React.Component{
     
     changeHeight=()=>{
         const { isH } = this.state
-
         let menu = JSON.parse(JSON.stringify(styles.menu))
         isH===false
         ?menu.height="50px"
@@ -41,6 +40,8 @@ class Menu extends React.Component{
 
         this.setState({
             isH:!isH
+        },()=>{
+            window.menuHeight=menu.height
         })
     }
     render(){

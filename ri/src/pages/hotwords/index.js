@@ -1,7 +1,7 @@
 
 import React from 'react';
 // import Input from '@/components/Input/'
-import {getCookie,goTo,setStorage,getStorage} from '@/static/public.js'
+import {getCookie,goTo,setStorage,isPhone} from '@/static/public.js'
 import API from '@/static/api.js'
 import {getFetch} from '@/static/fetch.js'
 
@@ -11,10 +11,22 @@ class HotWords extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            list:[]
+            list:[],
+            active:'百度',
+            close:false,
+            tag:[],
+            behotTime:0,
+            news:[],
+            clickNum:0,
+            category: 'news_tech',
+            height:window.menuHeight||'400px'
         }
     }
     componentDidMount(){
+        let dom = document.getElementById('bg')
+        console.log(dom.clientHeight)
+        console.log(window)
+        console.log(this.props)
         let path=['bdHot','sgHot','sinaHot','wbHot']
         const tag=[
             {name:'科技',category:'news_tech'},
@@ -36,8 +48,13 @@ class HotWords extends React.Component{
             {name:'探索',category:'news_discovery'},
             {name:'育儿',category:'news_baby'},
         ]
-        this.init(path)
-        this.news(tag)
+        this.setState({
+            tag
+        },()=>{
+            this.init(path)
+            this.getNews(tag[0].category)
+        })
+       
     }
     init=(path)=>{
         let list =[],
@@ -54,16 +71,16 @@ class HotWords extends React.Component{
                 console.log(item,res)
 
                 let arrEach= null, name='',arr=[]
-                //数据清洗构造
-                item==='bdHot' ? (name='百度热搜♨️', arrEach=res.result.topwords.slice(0,10)||[]) : ''
-                item==='sgHot' ? (name='搜狗热搜♨️', arrEach=res||[]) : ''
-                item=='sinaHot'? (name='新浪热搜♨️', arrEach=res.result.data||[]) : ''
-                item==='wbHot' ? (name='微博热搜♨️', arrEach=JSON.parse(res.match(/\[(.*)\]/)[0])||[]) : ''
+                //数据清洗构造热搜♨️
+                item==='bdHot' ? (name='百度', arrEach=res.result.topwords.slice(0,10)||[]) : ''
+                item==='sgHot' ? (name='搜狗', arrEach=res||[]) : ''
+                item=='sinaHot'? (name='新浪', arrEach=res.result.data||[]) : ''
+                item==='wbHot' ? (name='微博', arrEach=JSON.parse(res.match(/\[(.*)\]/)[0])||[]) : ''
                 //遍历数据，构造object
                 arrEach.forEach((res)=>{
                     arr.push({
-                        title: res.keyword || res.title || res.word,
-                        url: serach[item] + (res.keyword||res.title||res.word.replace('#',''))
+                        title: res.keyword || res.title || res.word.replace(/#/g, ''),
+                        url: serach[item] + (res.keyword||res.title||res.word.replace(/#/g,''))
                     })
                 })
                 //存入list
@@ -75,7 +92,7 @@ class HotWords extends React.Component{
                 list.length===path.length
                 &&this.setState({
                     list
-                })
+                },()=>console.log(list))
             }).catch(err=>{
                 // console.log(err,list)
                 //请求失败 存入state
@@ -86,54 +103,167 @@ class HotWords extends React.Component{
         });
     }
 
-    news=(tag)=>{
-        getFetch(API.ttNews+`?category=${tag[9].category}&max_behot_time=0`).then((res)=>{
+    getNews = (category) => {
+        const {behotTime} = this.state
+        getFetch(API.ttNews + `?category=${category}&max_behot_time=${behotTime}`).then((res) => {
             console.log(res)
+            this.setState({
+                news:res.data
+            })
+        }).catch(err=>{
+            this.setState({
+                news:[]
+            })
         })
     }
-    render(){
-        const {list} =this.state
-        return (
-            <div className="hot-words">
-               <div style={{marginTop:'30px'}}>
-                   {
-                       list.map((res,i)=>(
-                           <div key={i} style={styles.list}>
-                                <div style={styles.item}>
-                                    <p style={{textAlign:'center'}}> 
-                                        {res.name}
-                                    </p>
-                                    {
-                                        res.data.map((item,j)=>(
-                                            <p key={j} style={styles.title}>
-                                                <a className={j<=3&&'top3-'+j} target="_block" href={item.url}>{item.title}</a>
-                                            </p>
 
+    changeActive=(flag,name)=>{
+        let {close} =this.state
+        flag=='close'?close=true:''
+        this.setState({
+            active:name,
+            close
+        })
+    }
+    newClick=(f,i)=>{
+        let {category,clickNum} =this.state
+        f=='tag'? (category=i,this.getNews(i)):''
+        f == 'title' ? clickNum!=i ? clickNum = i:clickNum=null : ''
+
+        this.setState({
+            category,
+            clickNum
+        })
+    }
+    handleScroll=()=>{
+        console.log('111')
+        if (this.scrollDom.scrollTop + this.scrollDom.clientHeight >= this.scrollDom.scrollHeight) {
+            // this.fetchData()
+            console.log('222')
+        }
+    }
+    render(){
+        const {list,active,close,tag,news,clickNum,category,height} =this.state
+        return (
+            <div className="hot-words" style={{height:height}}>
+                {/* 热搜模块 */}
+                {
+                    (!close&&!isPhone())&&
+                    <div style={styles.hotListBar}>
+                        <div className="hot-list">
+                            {/* 热搜来源名 */}
+                            <h3 style={styles.hotListName}>
+                                {
+                                    list.map((res,i)=>(
+                                        <nav key={i} 
+                                            className={active==res.name?'active':null} 
+                                            style={{fontSize:'13px'}}
+                                            onClick={this.changeActive.bind(this,'name',res.name)} >
+                                            {res.name}
+                                        </nav>
+                                    ))
+                                }
+                                {
+                                    list.length&&
+                                    <i style={{fontSize:'12px'}} className="fa fa-times"
+                                        onClick={this.changeActive.bind(this,'close')}>
+                                    </i>
+                                }
+                            </h3>
+                            {/* 热搜标题内容 */}
+                            <div style={{marginTop:'25px'}}>
+                                {
+                                        list.map((res, i) => (
+                                            res.name==active
+                                            &&res.data.map((item,j)=>(
+                                                <p key={j} style={styles.hotItem}>
+                                                    {
+                                                        j<3&&<code>♨️</code>
+                                                    }
+                                                    <a className={ j<3?('top3-'+j):'indent' } 
+                                                    target="_block" href={item.url}>
+                                                        {item.title}
+                                                    </a>
+                                                </p>
+                                            ))
                                         ))
-                                    }
-                                </div>
-                           </div>
-                       ))
-                   }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                {/* 内容展示模块 */}
+                <div style={{overflow:'hidden'}}>
+                    <div>
+                        <h3 style={{display:'flex',padding:'10px', justifyContent: 'space-around'}}>
+                            {
+                                tag.map((res,i)=>(
+                                    <nav key={i}
+                                        className={category==res.category?"active":null}
+                                        onClick={this.newClick.bind(this,'tag',res.category)}
+                                    >
+                                        {res.name}
+                                    </nav>
+                                ))
+                            }
+                        </h3>
+                        <div style={{width:'90%',maxWidth:'800px',margin:'0 auto',overflow:'auto'}} 
+                            onScroll={this.handleScroll.bind(this)} 
+                            ref={body=>this.scrollDom = body} >
+                            {
+                                news.map((res,i)=>(
+                                    res.label !== '广告' &&
+                                    <div key={i} style={{display:'flex',marginTop:'10px'}}>
+                                        <div style={{width:'100px',height:'80px'}}>
+                                            <img style={{width:'100%'}} src={res.middle_image} />
+                                        </div>
+                                        <div style={{marginLeft:'20px'}}>
+                                            <h4 style={{color:'#218868',margin:'0',cursor:'pointer'}} 
+                                            onClick={this.newClick.bind(this,'title',i)}>
+                                            {
+                                                !res.abstract?
+                                                <a target="_block" href={'https://www.toutiao.com'+res.source_url}>{res.title}</a>:
+                                                res.title
+                                            }
+                                            </h4>
+                                            {
+                                                // clickNum==i&&
+                                                <article style={{width:'100%',maxWidth:'500px',fontSize:'14px'}}>
+                                                    {res.abstract}
+                                                    {res.abstract&&<a target="_block" href={'https://www.toutiao.com'+res.source_url}>详情</a>}
+                                                </article>
+                                            }
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         )
     }
 }
 const styles={
-    list:{
-        width:'25%',
-        float:'left',
+    hotListBar:{
+        width: '40%', 
+        maxWidth: '250px', 
+        marginTop: '3%', 
+        marginRight: '10px', 
+        float: 'right', 
+        border: '1px solid #dedede',
+        borderRadius:'5px'
     },
-    item:{
-        width:'90%',
-        maxWidth:'150px',
-        margin:'0 auto',
-       
+    hotListName:{
+        display: 'flex', 
+        margin: '15px 0', 
+        alignItems: 'center', 
+        justifyContent: 'space-around'
     },
-    title:{
-        margin:'8px auto',
-        fontSize:'14px',
+    hotItem:{
+        margin: '10px 2px', 
+        paddingLeft: '10px', 
+        textAlign: 'left'
     }
 }
 export default HotWords

@@ -49,7 +49,8 @@ let pathProxy = (arr)=>{
             break
             case '/sg-hotword':
                 target = 'https://m.sogou.com/web/search/hot_news.jsp';
-                pathRewrite = {'^/sg-hotword':'/'}
+                // target = 'https: //www.sogou.com/suggnew/hotwords';
+                pathRewrite = {'^/sg-hotword':''}
             break
             case '/sina-hotword':
                 target = 'https://www.sina.com.cn/api/hotword.json?';

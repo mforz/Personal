@@ -46,13 +46,13 @@ const rou=(path)=>{
 
 const route = ()=> (
     <div style={{width:'100%',height:'100%',margin:0,padding:0}}>
-        <Menu rou={rou}/>
+        <Menu rou={rou} />
         <HashRouter>
             <Switch>
                 <Route path="/" exact component={Home} />
                 {
                     routers.map((route,i)=>(
-                        <Route key={i} {...route}/>
+                        <Route key={i} {...route} aa='aa' />
                     ))
                 }
                 <Route component={NotFound} />
