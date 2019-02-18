@@ -35,13 +35,13 @@ const NotFound = () => (
         <h1>404</h1>
         <h2>页面不存在</h2>
         <p>
-            <a href="/">回到首页</a>
+            {/* <a href="/">回到首页</a> */}
         </p>
     </div>
 )
 const rou=(path)=>{
     console.log(path)
-    window.location.href=window.location.origin+'#'+path
+    window.location.href = window.location.origin+'#'+path
 }
 
 const route = ()=> (
@@ -52,7 +52,7 @@ const route = ()=> (
                 <Route path="/" exact component={Home} />
                 {
                     routers.map((route,i)=>(
-                        <Route key={i} {...route} aa='aa' />
+                        <Route key={i} {...route} />
                     ))
                 }
                 <Route component={NotFound} />

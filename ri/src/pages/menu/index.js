@@ -40,8 +40,6 @@ class Menu extends React.Component{
 
         this.setState({
             isH:!isH
-        },()=>{
-            window.menuHeight=menu.height
         })
     }
     render(){
@@ -49,8 +47,6 @@ class Menu extends React.Component{
         const fa = [ "fa fa-angle-double-down","fa fa-angle-double-up" ]
         return (
             <div id="bg" style={styles.menu}>
-
-
 
                 {/* menu - start*/}
                 <div style={styles.list}>

@@ -19,14 +19,17 @@ class HotWords extends React.Component{
             news:[],
             clickNum:0,
             category: 'news_tech',
-            height:window.menuHeight||'400px'
+            height:'500px',
+            count:1,
         }
     }
     componentDidMount(){
         let dom = document.getElementById('bg')
-        console.log(dom.clientHeight)
-        console.log(window)
-        console.log(this.props)
+        let height= document.body.clientHeight-dom.clientHeight
+        this.setState({
+            height
+        })
+
         let path=['bdHot','sgHot','sinaHot','wbHot']
         const tag=[
             {name:'科技',category:'news_tech'},
@@ -68,8 +71,7 @@ class HotWords extends React.Component{
             const obj = {}
             item=='wbHot'?obj.type='text':null
             getFetch(API[item],obj).then((res)=>{
-                console.log(item,res)
-
+                
                 let arrEach= null, name='',arr=[]
                 //数据清洗构造热搜♨️
                 item==='bdHot' ? (name='百度', arrEach=res.result.topwords.slice(0,10)||[]) : ''
@@ -104,11 +106,20 @@ class HotWords extends React.Component{
     }
 
     getNews = (category) => {
-        const {behotTime} = this.state
-        getFetch(API.ttNews + `?category=${category}&max_behot_time=${behotTime}`).then((res) => {
-            console.log(res)
+        const {behotTime,count} = this.state
+
+        let time= (new Date()).getTime()
+
+        getFetch(API.ttNews + `?category=${category}&count=${20}&refer=1&min_behot_time=${behotTime}&last_refresh_sub_entrance_interval=${time}`).then((res) => {
+            let data= []
+            res.data.forEach((item)=>{
+                data.push(JSON.parse(item.content))
+            })
+            console.log(data)
             this.setState({
-                news:res.data
+                news:data,
+                behotTime:time,
+                category:category
             })
         }).catch(err=>{
             this.setState({
@@ -136,16 +147,22 @@ class HotWords extends React.Component{
         })
     }
     handleScroll=()=>{
-        console.log('111')
         if (this.scrollDom.scrollTop + this.scrollDom.clientHeight >= this.scrollDom.scrollHeight) {
             // this.fetchData()
-            console.log('222')
+            // console.log('222')
+            let {count} =this.state
+            count=count+1
+            this.setState({
+                count
+            })
+            // ()=> this.getNews(this.state.category)
+           
         }
     }
     render(){
         const {list,active,close,tag,news,clickNum,category,height} =this.state
         return (
-            <div className="hot-words" style={{height:height}}>
+            <div className="hot-words" style={{overflow:'hidden',height:height}}>
                 {/* 热搜模块 */}
                 {
                     (!close&&!isPhone())&&
@@ -173,41 +190,44 @@ class HotWords extends React.Component{
                             {/* 热搜标题内容 */}
                             <div style={{marginTop:'25px'}}>
                                 {
-                                        list.map((res, i) => (
-                                            res.name==active
-                                            &&res.data.map((item,j)=>(
-                                                <p key={j} style={styles.hotItem}>
-                                                    {
-                                                        j<3&&<code>♨️</code>
-                                                    }
-                                                    <a className={ j<3?('top3-'+j):'indent' } 
-                                                    target="_block" href={item.url}>
-                                                        {item.title}
-                                                    </a>
-                                                </p>
-                                            ))
+                                    list.map((res, i) => (
+                                        res.name==active
+                                        &&res.data.map((item,j)=>(
+                                            <p key={j} style={styles.hotItem}>
+                                                {
+                                                    j<3&&<code>♨️</code>
+                                                }
+                                                <a className={ j<3?('top3-'+j):'indent' } 
+                                                target="_block" href={item.url}>
+                                                    {item.title}
+                                                </a>
+                                            </p>
                                         ))
+                                    ))
                                 }
                             </div>
                         </div>
                     </div>
                 }
                 {/* 内容展示模块 */}
-                <div style={{overflow:'hidden'}}>
-                    <div>
-                        <h3 style={{display:'flex',padding:'10px', justifyContent: 'space-around'}}>
+                <div style={{overflow:'hidden',height:'100%'}}>
+                    <div style={{width:'100px',float:'left',textAlign:'center',}}>
+                        <div style={{width:'100%',marginTop:'100px'}}>
                             {
                                 tag.map((res,i)=>(
                                     <nav key={i}
-                                        className={category==res.category?"active":null}
+                                        className={category==res.category ? "active" : null}
                                         onClick={this.newClick.bind(this,'tag',res.category)}
                                     >
-                                        {res.name}
+                                        { res.name }
                                     </nav>
                                 ))
                             }
-                        </h3>
-                        <div style={{width:'90%',maxWidth:'800px',margin:'0 auto',overflow:'auto'}} 
+                        </div>
+                    </div>
+
+                    <div style={{overflow:'hidden',height:'100%'}}>
+                        <div style={{overflow:'auto',height:'100%'}}
                             onScroll={this.handleScroll.bind(this)} 
                             ref={body=>this.scrollDom = body} >
                             {
@@ -215,7 +235,7 @@ class HotWords extends React.Component{
                                     res.label !== '广告' &&
                                     <div key={i} style={{display:'flex',marginTop:'10px'}}>
                                         <div style={{width:'100px',height:'80px'}}>
-                                            <img style={{width:'100%'}} src={res.middle_image} />
+                                            <img style={{width:'100%'}} src={(res.middle_image&&res.middle_image.url)||res.media_info.avatar_url} />
                                         </div>
                                         <div style={{marginLeft:'20px'}}>
                                             <h4 style={{color:'#218868',margin:'0',cursor:'pointer'}} 
@@ -230,7 +250,7 @@ class HotWords extends React.Component{
                                                 // clickNum==i&&
                                                 <article style={{width:'100%',maxWidth:'500px',fontSize:'14px'}}>
                                                     {res.abstract}
-                                                    {res.abstract&&<a target="_block" href={'https://www.toutiao.com'+res.source_url}>详情</a>}
+                                                    {res.abstract&&<a target="_block" href={res.display_url}>详情</a>}
                                                 </article>
                                             }
                                         </div>

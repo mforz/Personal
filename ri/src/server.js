@@ -102,7 +102,8 @@ let pathProxy = (arr)=>{
                 pathRewrite = {'^/migu-music':'/'}
             break
             case '/toutiao-news': //fetch('http://localhost:2233/rd-wallpaper/')
-                target = `https://www.toutiao.com/api/pc/feed`;
+                // target = `https://www.toutiao.com/api/pc/feed`;
+                target = `http://is.snssdk.com/api/news/feed/v51`;
                 pathRewrite = {'^/toutiao-news':''}
             break
 

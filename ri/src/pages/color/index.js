@@ -22,7 +22,7 @@ class Color extends React.Component{
             <div className="color" style={styles.color}>
             {
                color.map((res,i)=>(
-                   <div style={styles.list}>
+                   <div key={i} style={styles.list}>
                         <div style={styles.divBar}>
                             <span style={Object.assign({backgroundColor:res},styles.div)}></span>
                             <code>{res}</code>
