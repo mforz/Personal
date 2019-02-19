@@ -8,6 +8,8 @@ import Todo from '@/pages/todo/'
 import Color from '@/pages/color/'
 import HotWords from '@/pages/hotwords/'
 import Menu from '@/pages/menu/'
+import Essay from '@/pages/essay/'
+import Picture from '@/pages/picture/'
 
 
 const routers = [
@@ -26,6 +28,14 @@ const routers = [
     {
         path:'/hotwords',
         component:HotWords,
+    },
+    {
+        path:'/essay',
+        component:Essay,
+    },
+    {
+        path:'/picture',
+        component:Picture,
     }
 ]
 

@@ -170,3 +170,8 @@ code{
 .hot-list a[class*=top3-2]{color: #EE9572;}
 .hot-words .active{color:red;}
 .hot-list p> .indent{margin-left:18px}
+
+.essay p{
+    margin:16;
+    margin-bottom: 30px;
+}

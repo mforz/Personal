@@ -12,6 +12,8 @@ const API = {
   sinaHot   : `${host}/sina-hotword`,
   wbHot     : `${host}/wb-hotword/`,
   ttNews    : `${host}/toutiao-news/`,
+  article    : `${host}/article/`,
+  tuchong    : `${host}/tuchong`,
   
 }
 

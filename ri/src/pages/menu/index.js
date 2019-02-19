@@ -21,6 +21,8 @@ class Menu extends React.Component{
            {path:'/todo',title:'待办'},
            {path:'/color',title:'颜色'},
            {path:'/hotwords',title:'热点'},
+           {path:'/essay',title:'美文'},
+           {path:'/picture',title:'美图'},
        ]
        this.setState({
            menu

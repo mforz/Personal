@@ -106,6 +106,14 @@ let pathProxy = (arr)=>{
                 target = `http://is.snssdk.com/api/news/feed/v51`;
                 pathRewrite = {'^/toutiao-news':''}
             break
+            case '/article': //fetch('http://localhost:2233/rd-wallpaper/')
+                target = `https://interface.meiriyiwen.com/article`;
+                pathRewrite = {'^/article':''}
+            break
+            case '/tuchong':
+                target = `https://api.tuchong.com/feed-app`;
+                pathRewrite = {'^/tuchong':''}
+            break
 
             default:
                 console.log(arr)
@@ -138,6 +146,8 @@ const arr =[
     'guokr-rd',
     'inf-wallpaper',
     'db-movie-release',
+    'article',
+    'tuchong'
 ]
 
 arr.forEach(res=>{

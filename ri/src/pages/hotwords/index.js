@@ -148,15 +148,12 @@ class HotWords extends React.Component{
     }
     handleScroll=()=>{
         if (this.scrollDom.scrollTop + this.scrollDom.clientHeight >= this.scrollDom.scrollHeight) {
-            // this.fetchData()
-            // console.log('222')
             let {count} =this.state
             count=count+1
             this.setState({
                 count
             })
             // ()=> this.getNews(this.state.category)
-           
         }
     }
     render(){
@@ -228,16 +225,19 @@ class HotWords extends React.Component{
 
                     <div style={{overflow:'hidden',height:'100%'}}>
                         <div style={{overflow:'auto',height:'100%'}}
-                            onScroll={this.handleScroll.bind(this)} 
-                            ref={body=>this.scrollDom = body} >
+                            // onScroll={this.handleScroll.bind(this)} 
+                            // ref={body=>this.scrollDom = body}
+                        >
                             {
                                 news.map((res,i)=>(
-                                    res.label !== '广告' &&
+                                    // res.label !== '广告' &&
                                     <div key={i} style={{display:'flex',marginTop:'10px'}}>
-                                        <div style={{width:'100px',height:'80px'}}>
-                                            <img style={{width:'100%'}} src={(res.middle_image&&res.middle_image.url)||res.media_info.avatar_url} />
+                                        <div style={{flex:1}}>
                                         </div>
-                                        <div style={{marginLeft:'20px'}}>
+                                        <div style={{flex:1,height:'80px',margin:'20px'}}>
+                                            <img style={{width:'100%',height:'100%'}} src={(res.middle_image&&res.middle_image.url)||res.media_info&&res.media_info.avatar_url} />
+                                        </div>
+                                        <div style={{flex:5,margin:'20px'}}>
                                             <h4 style={{color:'#218868',margin:'0',cursor:'pointer'}} 
                                             onClick={this.newClick.bind(this,'title',i)}>
                                             {
@@ -248,11 +248,14 @@ class HotWords extends React.Component{
                                             </h4>
                                             {
                                                 // clickNum==i&&
-                                                <article style={{width:'100%',maxWidth:'500px',fontSize:'14px'}}>
+                                                <article style={{width:'100%',fontSize:'14px'}}>
                                                     {res.abstract}
                                                     {res.abstract&&<a target="_block" href={res.display_url}>详情</a>}
                                                 </article>
                                             }
+                                        </div>
+
+                                        <div style={{flex:1}}>
                                         </div>
                                     </div>
                                 ))

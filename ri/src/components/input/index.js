@@ -12,7 +12,11 @@ class Input extends React.Component{
         }
     }
     componentWillUnmount(){
-       
+       const { defaultValue }= this.props
+       defaultValue?
+       this.setState({
+           value:defaultValue
+       }):''
     }
     // smsClick = () => {
     //     let {num,timer} = this.state;
@@ -49,8 +53,9 @@ class Input extends React.Component{
             break;
 
             case 'key':
+                const {enter} =this.props
                 v.nativeEvent.keyCode===13
-                &&(this.props.enter(value),value='')
+                &&(enter&&enter(value),value='')
 
             break;
 
@@ -63,21 +68,30 @@ class Input extends React.Component{
     }
    
     render(){
-        const { placeholder,type,style,children} = this.props
+        const { placeholder,type,style,children,inputStyle,clear=true,maxLength,onBlur} = this.props
         const { value } = this.state
         return (
             <div className="comp-input" >
                 <div className="input-bar" style={style||{}}>
                    <input
                     required
+                    autoFocus
+                    style={inputStyle||{}}
                     type={type||'text'}
                     value={value}
                     placeholder={placeholder}
+                    maxLength={maxLength}
                     onChange={this.onChange.bind(this,'input')}
                     onKeyPress={this.onChange.bind(this,'key')}
+                    onBlur={onBlur}
                    />
                     { children }
-                    <i className="fa fa-times-circle clear" onClick={this.onChange.bind(this,'clear')}></i>
+                    {
+                        clear?
+                        <i className="fa fa-times-circle clear" onClick={this.onChange.bind(this,'clear')}></i>
+                        :''
+                    }
+                    
                 </div>
             </div>
         )
