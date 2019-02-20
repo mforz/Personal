@@ -14,7 +14,11 @@ class Essay extends React.Component{
             data:{},
             height:0,
             date:true,
-            list:[]
+            list:[],
+            menu:[],
+            timer:null,
+            txt:null,
+            excerpt:[]
         }
     }
     componentDidMount(){
@@ -24,19 +28,70 @@ class Essay extends React.Component{
             height
         })
         this.setArticle()
+
+    }
+    
+    handleMouseUp=(e)=>{
+        let txt= window.getSelection ? e.view.getSelection()+'': document.selection.createRange().text
+        let menu = []
+        if(txt.match(/[\u4E00-\u9FA5A-Za-z0-9_]/)){
+            menu=[e.pageX,e.pageY]
+        }
+        this.setState({
+            menu,
+            txt
+        })
     }
 
+    opMenu=(f,v)=>{
+        if(f=='menu') {
+
+            const {txt,data} =this.state
+            let { excerpt} = this.state
+            const {year,month,day,hours,minutes,seconds} = getTime()
+
+            switch(v){
+                case 1:
+                    let json= {
+                        title:data.title,
+                        author:data.author,
+                        text:txt,
+                        time:`${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+                    }
+                    excerpt.push(json)
+
+                    this.setState({
+                        excerpt,
+                    },()=>{
+                        setStorage('excerpt',excerpt)
+                    })
+                break;
+                case 2:
+                break;
+                default:
+
+                break;
+            }
+        }
+        this.setState({
+            menu:[]
+        })
+    }
     setArticle=(data)=>{
+
         let article = getStorage('article')||[]
+       
         article.length>10?article.shift():''
 
         if(!!data){
             article.push(data)
             setStorage('article',article)
         }else{
+            let excerpt = getStorage('excerpt')||[]
             article.length?
             this.setState({
-                data:article[article.length-1]
+                data:article[article.length-1],
+                excerpt:excerpt
             }):this.init()
         }
     }
@@ -81,7 +136,6 @@ class Essay extends React.Component{
                     time:res.date&&(res.date.curr||'')
                 })
             }
-            
         });
         this.setState({
             list,
@@ -90,11 +144,21 @@ class Essay extends React.Component{
 
     }
     render(){
-        const {data,height,date,list} =this.state
+        const {data,height,date,list,menu} =this.state
         return (
-            <div className="essay" style={{height:height,overflow:'hidden'}}>
+            <div className="essay" style={{height:height,overflow:'hidden',}}>
                 <div style={styles.articleBar}>
-
+                    {//菜单
+                        !!menu.length&&
+                        <div style={styles.mask} onClick={this.opMenu.bind(this,'hidden')}>
+                            <aside style={Object.assign({top:menu[1], left:menu[0]},styles.menuBar)}>
+                                <p style={styles.menuItem} onClick={this.opMenu.bind(this,'menu',1)}>
+                                    <a style={styles.menu}>摘抄</a>
+                                </p>
+                            </aside>
+                        </div>
+                    }
+                   {/* 头部 标题、作者 */}
                     <header style={{textAlign:'center',position:'relative'}}>
                         <div style={{position:'absolute',right:'20px',fontSize:'12px'}}>
                             <a style={styles.tip} onClick={this.init.bind(this,'random')}>随机文章</a>
@@ -112,7 +176,11 @@ class Essay extends React.Component{
                                 />
                             }
                             <br /><br />
-                            <a style={styles.tip} onClick={this.history.bind(this,null)}>历史记录</a>
+                            <a style={Object.assign({marginRight:'10px'},styles.tip)} onClick={this.init.bind(this,'random')}>摘抄</a>
+                            {
+                                !list.length&&
+                                <a style={styles.tip} onClick={this.history.bind(this,null)}>历史记录</a>
+                            }
                         </div>
                         <h3>
                             {data.title}
@@ -121,9 +189,10 @@ class Essay extends React.Component{
                             {data.author}
                         </p>
                     </header>
-
-                    <article dangerouslySetInnerHTML={{ __html:data.content?data.content:'' }}>
+                    {/* 内容文章 */}
+                    <article dangerouslySetInnerHTML={{ __html:data.content?data.content:'' }} onMouseUp={this.handleMouseUp}>
                     </article>
+                    {/* 历史记录 */}
                     <div style={{paddingBottom:'80px'}}>
                         {
                             !!list.length&&
@@ -141,7 +210,6 @@ class Essay extends React.Component{
                     </div>
 
                 </div>
-
             </div>
         )
     }
@@ -153,13 +221,12 @@ const styles={
         margin:'0 auto',
         marginTop:'60px',
         maxWidth:'800px',
-        overflow:'auto'
+        overflow:'auto',
     },
     tip:{
         color:'#ccc',
         textDecoration:'underline',
         cursor:'pointer',
-        margin:'10px'
     },
     inputStyle:{
         border:'none',
@@ -168,6 +235,32 @@ const styles={
         fontSize:'12px',
         borderRadius:0,
         borderBottom:'1px solid #ccc'
+    },
+    mask:{
+        position:'fixed',
+        opacity:1,
+        top:0,left:0,
+        right:0,bottom:0,
+    },
+    menuBar:{
+        width:'50px',
+        height:'auto',
+        backgroundColor:'#ccc',
+        position:'absolute',
+        overflow:'hidden',
+        textAlign:'center',
+        borderRadius:5,
+    },
+    menuItem:{
+        margin:'3px 0',
+        cursor:'pointer',
+        color:'#ccc',
+        textDecoration:'underline',
+    },
+    menu:{
+        width:'100%',
+        fontSize:'12px',
+        color:'#fff'
     }
 }
 
