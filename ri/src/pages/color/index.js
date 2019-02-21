@@ -11,15 +11,20 @@ class Color extends React.Component{
         this.state={}
     }
     componentDidMount(){
-        console.log(color)
+        let dom = document.getElementById('bg')
+        let height= document.body.clientHeight-dom.clientHeight
+        this.setState({
+            height
+        })
        
     }
     init=()=>{
         
     }
     render(){
+        const {height} =this.state
         return (
-            <div className="color" style={styles.color}>
+            <div className="color" style={{height:height,overflow:'auto',padding:'10%'}}>
             {
                color.map((res,i)=>(
                    <div key={i} style={styles.list}>
@@ -35,10 +40,6 @@ class Color extends React.Component{
     }
 }
 const styles={
-    color:{
-        padding:'10%',
-        overflow:'auto'
-    },
     list:{
         width:'25%',
         float:'left',

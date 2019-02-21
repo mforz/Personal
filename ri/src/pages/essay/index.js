@@ -48,7 +48,7 @@ class Essay extends React.Component{
         })
     }
     //menu
-    opMenu=(f,v)=>{
+    opMenu=(f,v,param)=>{
         if(f=='menu') {
             const {txt,data} =this.state
             let { excerpt} = this.state
@@ -71,6 +71,19 @@ class Essay extends React.Component{
                         res.id==json.id?(res.text.push(json.text[0]),json={}):''
                     }))
                     !!json.id&&excerpt.push(json)
+                    this.setState({
+                        excerpt,
+                    },()=>{
+                        setStorage('excerpt',excerpt)
+                    })
+                break;
+                case 'del':
+                    excerpt.forEach((res,i)=>{
+                        res.id==param.id?res.text.splice(param.num, 1):''
+                        if(!res.text.length){
+                            excerpt.splice(i,1)
+                        }
+                    })
                     this.setState({
                         excerpt,
                     },()=>{
@@ -246,15 +259,15 @@ class Essay extends React.Component{
                                                     onClick={this.history.bind(this,res.id)}>{res.title}</h3>
                                                 <p style= {{textAlign:'center'}}>{res.author}</p>
                                                 <p style= {{textAlign:'center'}}>{res.id}</p>
-                                            
                                             </div>
                                         </div>
                                         <div style={{overflow:'hidden'}}>
                                             {
-                                                res.text.map((item)=>(
+                                                res.text.map((item,j)=>(
                                                     <p>
                                                         <span>{item.txt}</span>
-                                                        <a style={{color:'red',fontSize:'12px'}}>{item.time}</a>
+                                                        <a style={{color:'red',fontSize:'12px',margin:'0 10px'}}>{item.time}</a>
+                                                        <i className="fa fa-trash-o" onClick={this.opMenu.bind(this,'menu','del',{id:res.id,num:j})}></i>
                                                     </p>
                                                 ))
                                             }

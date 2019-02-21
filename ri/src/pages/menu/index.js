@@ -22,7 +22,7 @@ class Menu extends React.Component{
            {path:'/color',title:'颜色'},
            {path:'/hotwords',title:'热点'},
            {path:'/essay',title:'美文'},
-           {path:'/picture',title:'美图'},
+           {path:'/novel',title:'小说'},
        ]
        this.setState({
            menu
@@ -55,12 +55,12 @@ class Menu extends React.Component{
                     <div style={styles.itemBar}>
                     {
                         menu.map((item,index)=>(
-                            <p  className={'menu-item-'+index} style={styles.item}
-                                key={index} onClick={()=>this.props.rou(item.path)}>
-                                <span>
-                                    {item.title}
-                                </span>
-                            </p>
+                                <p  className={'menu-item-'+index} style={styles.item}
+                                    key={index} onClick={()=>this.props.rou(item.path)}>
+                                    <span>
+                                        {item.title}
+                                    </span>
+                                </p>
                         ))
                     }
                     <p className='menu-item-more' style={styles.more}> 

@@ -10,6 +10,7 @@ import HotWords from '@/pages/hotwords/'
 import Menu from '@/pages/menu/'
 import Essay from '@/pages/essay/'
 import Picture from '@/pages/picture/'
+import Novel from '@/pages/novel/'
 
 
 const routers = [
@@ -36,6 +37,10 @@ const routers = [
     {
         path:'/picture',
         component:Picture,
+    },
+    {
+        path:'/novel',
+        component:Novel,
     }
 ]
 
