@@ -18,7 +18,8 @@ class Essay extends React.Component{
             menu:[],
             timer:null,
             txt:null,
-            excerpt:[]
+            excerpt:[],
+            isExcerpt:false
         }
     }
     componentDidMount(){
@@ -29,8 +30,12 @@ class Essay extends React.Component{
         })
         this.setArticle()
 
+        getFetch(API.test,{type:'text'}).then((res)=>{
+            console.log(res)
+        }).catch()
+
     }
-    
+    //展示menu，存选中文字
     handleMouseUp=(e)=>{
         let txt= window.getSelection ? e.view.getSelection()+'': document.selection.createRange().text
         let menu = []
@@ -42,10 +47,9 @@ class Essay extends React.Component{
             txt
         })
     }
-
+    //menu
     opMenu=(f,v)=>{
         if(f=='menu') {
-
             const {txt,data} =this.state
             let { excerpt} = this.state
             const {year,month,day,hours,minutes,seconds} = getTime()
@@ -55,38 +59,41 @@ class Essay extends React.Component{
                     let json= {
                         title:data.title,
                         author:data.author,
-                        text:txt,
-                        time:`${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+                        id:data.date.curr,
+                        text:[
+                            {
+                                txt:txt,
+                                time:`${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+                            }
+                        ],
                     }
-                    excerpt.push(json)
-
+                    excerpt.forEach((res=>{
+                        res.id==json.id?(res.text.push(json.text[0]),json={}):''
+                    }))
+                    !!json.id&&excerpt.push(json)
                     this.setState({
                         excerpt,
                     },()=>{
                         setStorage('excerpt',excerpt)
                     })
                 break;
-                case 2:
-                break;
                 default:
-
                 break;
             }
         }
         this.setState({
-            menu:[]
+            menu:[] //重置menu坐标
         })
     }
     setArticle=(data)=>{
-
         let article = getStorage('article')||[]
        
         article.length>10?article.shift():''
 
-        if(!!data){
+        if(!!data){ //存历史记录
             article.push(data)
             setStorage('article',article)
-        }else{
+        }else{ //初始化
             let excerpt = getStorage('excerpt')||[]
             article.length?
             this.setState({
@@ -95,6 +102,7 @@ class Essay extends React.Component{
             }):this.init()
         }
     }
+    //获取 在线文章
     init=( i,v )=>{
         let day='today',time=''
         if(i=='random'){
@@ -106,7 +114,8 @@ class Essay extends React.Component{
         }
         getFetch(API.article+`${day}?dev=1&date=${time}`).then(res=>{
             this.setState({
-                list:[],
+                list:[], //清空历史记录
+                isExcerpt:false, //重置 摘抄标志
                 data:res.data,
             },()=>this.setArticle(res.data))
 
@@ -118,18 +127,28 @@ class Essay extends React.Component{
             })
         })
     }
+    //改变展示，输入时间 框
     changeDate=()=>{
         const date =this.state.date
         this.setState({
             date:!date
         })
     }
+    // 展示摘抄
+    excerptShow =()=>{
+        this.setState({
+            isExcerpt:true,
+            list:[],
+            data:{}
+        })
+    }
+    //历史记录
     history =(time)=>{
-        let article = getStorage('article')||[],list=[],data={}
+        let article = getStorage('article')||[],list=[],data={},isExcerpt=false
         article.forEach(res => {
-            if(!!time){
+            if(!!time){//点击历史记录title展示文章
                 res.date&&(res.date.curr==time)?data=res:''
-            }else{
+            }else{ //点击历史记录展示历史记录
                 list.push({
                     title:res.title,
                     author:res.author,
@@ -139,12 +158,13 @@ class Essay extends React.Component{
         });
         this.setState({
             list,
-            data
+            data,
+            isExcerpt
         })
 
     }
     render(){
-        const {data,height,date,list,menu} =this.state
+        const {data,height,date,list,menu,isExcerpt,excerpt} =this.state
         return (
             <div className="essay" style={{height:height,overflow:'hidden',}}>
                 <div style={styles.articleBar}>
@@ -176,7 +196,10 @@ class Essay extends React.Component{
                                 />
                             }
                             <br /><br />
-                            <a style={Object.assign({marginRight:'10px'},styles.tip)} onClick={this.init.bind(this,'random')}>摘抄</a>
+                            {
+                                !isExcerpt&&
+                                <a style={Object.assign({marginRight:'10px'},styles.tip)} onClick={this.excerptShow}>摘抄</a>
+                            }
                             {
                                 !list.length&&
                                 <a style={styles.tip} onClick={this.history.bind(this,null)}>历史记录</a>
@@ -192,8 +215,9 @@ class Essay extends React.Component{
                     {/* 内容文章 */}
                     <article dangerouslySetInnerHTML={{ __html:data.content?data.content:'' }} onMouseUp={this.handleMouseUp}>
                     </article>
-                    {/* 历史记录 */}
+                   
                     <div style={{paddingBottom:'80px'}}>
+                    {/* 历史记录 */}
                         {
                             !!list.length&&
                             list.map((res,i)=>(
@@ -201,14 +225,46 @@ class Essay extends React.Component{
                                     <h3 style={{flex:1,textAlign:'left'}} className="p">
                                         <a style={styles.tip} onClick={this.history.bind(this,res.time)}>{res.title}</a>
                                     </h3>
-                                    <p style={{flex:2.5,textAlign:'left'}}>
+                                    <p style={{flex:0.6,textAlign:'left'}}>
                                         {res.author}
+                                    </p>
+                                    <p style={{flex:1,textAlign:'left'}}>
+                                        {res.time}
                                     </p>
                                 </div>
                             ))
                         }
+                    {/* 摘抄 */}
+                        {
+                            isExcerpt&&
+                            excerpt.map((res,i)=>(
+                                <div key={i} style={{display:'flex'}}>
+                                    <div style={{flex:9,borderBottom:'1px solid #000',marginBottom:'15px'}}>
+                                        <div style={{float:'left',width:'18%',marginRight:'10px'}}>
+                                            <div style={{width:'100%',border:'1px solid #ccc',padding:'6px',borderRadius:'6px'}}>
+                                                <h3 style={Object.assign({textAlign:'center',marginBottom:'15px'},styles.tip)} 
+                                                    onClick={this.history.bind(this,res.id)}>{res.title}</h3>
+                                                <p style= {{textAlign:'center'}}>{res.author}</p>
+                                                <p style= {{textAlign:'center'}}>{res.id}</p>
+                                            
+                                            </div>
+                                        </div>
+                                        <div style={{overflow:'hidden'}}>
+                                            {
+                                                res.text.map((item)=>(
+                                                    <p>
+                                                        <span>{item.txt}</span>
+                                                        <a style={{color:'red',fontSize:'12px'}}>{item.time}</a>
+                                                    </p>
+                                                ))
+                                            }
+                                        </div>
+                                  </div>
+                                  <div style={{flex:1}}></div>
+                                </div>
+                            ))
+                        }
                     </div>
-
                 </div>
             </div>
         )
@@ -224,7 +280,7 @@ const styles={
         overflow:'auto',
     },
     tip:{
-        color:'#ccc',
+        color:'#FF7F24',
         textDecoration:'underline',
         cursor:'pointer',
     },

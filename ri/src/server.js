@@ -114,6 +114,10 @@ let pathProxy = (arr)=>{
                 target = `https://api.tuchong.com/feed-app`;
                 pathRewrite = {'^/tuchong':''}
             break
+            case '/test':
+                target = `http://www.xbiquge.la/`;
+                pathRewrite = {'^/test':''}
+            break
 
             default:
                 console.log(arr)
@@ -147,7 +151,8 @@ const arr =[
     'inf-wallpaper',
     'db-movie-release',
     'article',
-    'tuchong'
+    'tuchong',
+    'test',
 ]
 
 arr.forEach(res=>{

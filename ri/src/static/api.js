@@ -14,7 +14,7 @@ const API = {
   ttNews    : `${host}/toutiao-news/`,
   article    : `${host}/article/`,
   tuchong    : `${host}/tuchong`,
-  
+  test    : `${host}/test`,
 }
 
 export default API

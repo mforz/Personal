@@ -26,9 +26,7 @@ class HotWords extends React.Component{
     componentDidMount(){
         let dom = document.getElementById('bg')
         let height= document.body.clientHeight-dom.clientHeight
-        this.setState({
-            height
-        })
+        this.setState({height})
 
         let path=['bdHot','sgHot','sinaHot','wbHot']
         const tag=[
