@@ -121,7 +121,7 @@ class Essay extends React.Component{
         if(i=='random'){
             day = i
         }
-        if(i=='date'){
+        if(i=='date' && Number(v)){
             day = 'day';
             time = v
         }
@@ -201,14 +201,15 @@ class Essay extends React.Component{
                                 ?<a style={styles.tip} onClick={this.changeDate}>
                                     {data.date&&data.date.curr}
                                 </a>
-                                :<Input  clear={false} maxLength={8} style={{width:'70px'}} 
+                                :<Input  clear={false} maxLength={8} style={{width:'80px'}} 
                                     placeholder="请输入日期" 
-                                    onBlur={this.changeDate} 
+                                    onBlur={this.changeDate}
                                     enter={this.init.bind(this,'date')}
                                     inputStyle={styles.inputStyle}
                                 />
                             }
-                            <br /><br />
+                            {date?<br />:''}
+                            <br />
                             {
                                 !isExcerpt&&
                                 <a style={Object.assign({marginRight:'10px'},styles.tip)} onClick={this.excerptShow}>摘抄</a>
@@ -265,7 +266,7 @@ class Essay extends React.Component{
                                             {
                                                 res.text.map((item,j)=>(
                                                     <p>
-                                                        <span>{item.txt}</span>
+                                                        <span style={{fontSize:'13px'}}>{item.txt}</span>
                                                         <a style={{color:'red',fontSize:'12px',margin:'0 10px'}}>{item.time}</a>
                                                         <i className="fa fa-trash-o" onClick={this.opMenu.bind(this,'menu','del',{id:res.id,num:j})}></i>
                                                     </p>

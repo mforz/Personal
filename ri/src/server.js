@@ -3,7 +3,8 @@ var proxy = require('http-proxy-middleware');
 var app = express();
 
 app.all("*", function(req, res, next) {
-  if (req.path !== "/" && !req.path.includes(".")) {
+  if (req.path !== "/" ) {
+    // && !req.path.includes(".")
     res.header("Access-Control-Allow-Credentials", true);
     // 这里获取 origin 请求头 而不是用 *
     res.header("Access-Control-Allow-Origin", req.headers["origin"] || "*");
@@ -115,7 +116,7 @@ let pathProxy = (arr)=>{
                 pathRewrite = {'^/tuchong':''}
             break
             case '/test':
-                target = `http://www.xbiquge.la/`;
+                target = `https://www.bimo.cc`;
                 pathRewrite = {'^/test':''}
             break
 
