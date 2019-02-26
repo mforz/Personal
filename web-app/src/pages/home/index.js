@@ -5,7 +5,7 @@ import Route from '../../routers/'
 
 import Menu from '../menu/'
 
-import {isPhone} from '../../static/public.js'
+import {isPhone, setStorage} from '../../static/public.js'
 
 
 /* eslint-disable */
@@ -19,6 +19,8 @@ class Home extends React.Component{
     }
     componentDidMount(){
        console.log(isPhone())
+
+       setStorage('state',JSON.stringify({}))
     }
     init=()=>{
         
