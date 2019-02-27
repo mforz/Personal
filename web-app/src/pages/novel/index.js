@@ -15,6 +15,7 @@ class Novel extends React.Component{
           newest:{},
           classify:[],
           data:[],
+          chapter:{},
         }
     }
     componentDidMount(){
@@ -64,7 +65,7 @@ class Novel extends React.Component{
 
     getNovel =(url,name)=>{
         const host = "https://www.80txt.com"
-        getFetch(API.zys+host+url,{type:'text'}).then((res)=>{
+        getFetch(API.zys+host+url, {type:'text'}).then((res)=>{
             let data =[{
                 name : res.match(/(?<="\>)(.*?)(?=TXT下载<)/g),
                 introduce: res.match(/(?<=book_jj"\>\n)(.*)/g),
@@ -83,7 +84,6 @@ class Novel extends React.Component{
     getChapter=(url)=>{
         let newUrl =url.replace(/xz\//,'ml_')
         getFetch(API.zys+newUrl,{type:'text'}).then((res)=>{
-
             let chapter ={
                 url : res.match(/(?<=rel="nofollow" href=")(.*?html)(?=">)/g),
                 name : res.match(/(?<=html">)(.*?)(?=<\/a><\/li>)/g)
@@ -91,14 +91,27 @@ class Novel extends React.Component{
             this.setState({
                 chapter
             })
+            console.log(chapter)
+        })
+    }
+    getContent=(url)=>{
+        console.log(url)
+        getFetch(API.zys+url,{type:'text'}).then((res)=>{
+            console.log(res)
+            // let title = res.match(/(?<=<h1>)(.*?)(?=<\/h1>)/g)
+            // console.log(title)
+            let title = res.match(/(&nbsp;&nbsp;&nbsp;&nbsp;")(.*?)(?=<div class="con_l">)/g)
+            console.log(title)
         })
     }
    
     render(){
-        const {nav,data,name} = this.state
+        const {nav,data,name,chapter} = this.state
         const mainName =!!data.length?name:'推荐'
         let novel = !!data.length ? data : nav.length?nav.slice(2,3):[]
-
+        if(chapter.name&&chapter.name.length){
+            novel=[]
+        }
         return (
             <div className="novel" style={{overflow:'auto'}}>
                 <div className="classify">
@@ -190,8 +203,19 @@ class Novel extends React.Component{
                          </div>
                          :null
                     }
+                    {
+                        chapter.name&&
+                        <div>
+                            {
+                                chapter.name.map((res,i)=>(
+                                    <p style={{float:'left',width:'25%'}} key={i}>
+                                        <a href="javascript:;" onClick={()=>{this.getContent(chapter.url[i])}}>{res}</a>
+                                    </p>
+                                ))
+                            }
+                        </div>
+                    }
                 </div>
-
             </div>
         )
     }
