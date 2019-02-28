@@ -9,7 +9,7 @@ app.all("*", function(req, res, next) {
     // && !req.path.includes(".")
     if(req.path.includes("/zys")){
         let url=req.path.replace(/\/zys\//,'')
-        let origin =url.match(/(^http(s)?:\/\/)[a-zA-Z\.0-9]+(?=.*)/)[0]
+        let origin = url.match(/(^http(s)?:\/\/)[a-zA-Z\.0-9]+(?=.*)/)[0]
         app._router.stack.forEach((res,i)=>{
             if(str==JSON.stringify(res)){
                 app._router.stack.splice(i,1)
@@ -20,7 +20,7 @@ app.all("*", function(req, res, next) {
             changeOrigin: true,
             pathRewrite : {'^/zys/':''}
         }))
-
+        // console.log(app._router.stack)
         str= JSON.stringify(app._router.stack[app._router.stack.length-1])
 
     }

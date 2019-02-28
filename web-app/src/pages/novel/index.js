@@ -16,6 +16,7 @@ class Novel extends React.Component{
           classify:[],
           data:[],
           chapter:{},
+          content:{},
         }
     }
     componentDidMount(){
@@ -35,7 +36,6 @@ class Novel extends React.Component{
         let host ="https://www.80txt.com"
         getFetch(API.zys+host,{type:'text'}).then((res)=>{
             let ul = res.match(/<ul(([\s\S])*?)<\/ul>/g)
-           
             let mNav ={
                 name:ul[0].match(/(?<=title=")(.*?)(?=")/g),
                 url:ul[0].match(/(?<=href=")(.*?)(?=")/g),
@@ -44,6 +44,7 @@ class Novel extends React.Component{
                 name:ul[1].match(/(?<=title=")(.*?)(?=")/g),
                 url:ul[1].match(/(?<=href=")(.*?)(?=")/g),
             }
+
             let advise={
                 name:ul[ul.length-2].match(/(?<=html"\>)[\u4E00-\u9FA5]{1,12}/g),
                 url:ul[ul.length-2].match(/(?<=href=")(.*?html)(?=")/g),
@@ -75,7 +76,11 @@ class Novel extends React.Component{
                 img : res.match(/(?<=\<img src=")(.*?)(?=" title="(.*)" ><\/a\>)/g),
             }]
             this.setState({
-                data,name
+                data,
+                name,
+                chapter:{},
+                content:{},
+                novel:[]
             })
         }).catch(err=>{
             console.log(err)
@@ -89,27 +94,32 @@ class Novel extends React.Component{
                 name : res.match(/(?<=html">)(.*?)(?=<\/a><\/li>)/g)
             }
             this.setState({
-                chapter
+                chapter,
+                content:{},
+                novel:[]
+
             })
-            console.log(chapter)
         })
     }
     getContent=(url)=>{
-        console.log(url)
         getFetch(API.zys+url,{type:'text'}).then((res)=>{
-            console.log(res)
-            // let title = res.match(/(?<=<h1>)(.*?)(?=<\/h1>)/g)
-            // console.log(title)
-            let title = res.match(/(&nbsp;&nbsp;&nbsp;&nbsp;")(.*?)(?=<div class="con_l">)/g)
-            console.log(title)
+            let content={
+                title :res.match(/(?<=<h1>)(.*?)(?=<\/h1>)/g)[0],
+                con :res.replace(/\n|\s|&nbsp;/g,'').match(/(?<=id="content">)(.*)(?=<divclass="con_l")/g)[0]
+            }
+            this.setState({
+                content,
+                chapter:{},
+                novel:[]
+            })
         })
     }
    
     render(){
-        const {nav,data,name,chapter} = this.state
+        const {nav,data,name,chapter,content} = this.state
         const mainName =!!data.length?name:'推荐'
         let novel = !!data.length ? data : nav.length?nav.slice(2,3):[]
-        if(chapter.name&&chapter.name.length){
+        if(chapter.name&&chapter.name.length||content.con){
             novel=[]
         }
         return (
@@ -204,7 +214,7 @@ class Novel extends React.Component{
                          :null
                     }
                     {
-                        chapter.name&&
+                        chapter.name?
                         <div>
                             {
                                 chapter.name.map((res,i)=>(
@@ -213,6 +223,11 @@ class Novel extends React.Component{
                                     </p>
                                 ))
                             }
+                        </div>:
+                        <div>
+                            <article dangerouslySetInnerHTML={{ __html:content.con?content.con:'' }}>
+
+                            </article>
                         </div>
                     }
                 </div>

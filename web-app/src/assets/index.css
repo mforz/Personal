@@ -1,6 +1,8 @@
 html,body{
   margin:0;
   padding:0;
+  width:100%;
+  height:100%;
 }
 div,header,main,footer,ul,li,h1,h2,h3,h4,h5,h6,p{
   margin:0;
@@ -27,6 +29,11 @@ div,header,main,footer,ul,li,h1,h2,h3,h4,h5,h6,p{
 }
 .button:hover { /* 鼠标移入按钮范围时改变颜色 */
 	background: #5599FF;
+}
+
+#root,#app{
+  width:100%;
+  height:100%;
 }
 
 .novel [class*=novel-classify-0]{

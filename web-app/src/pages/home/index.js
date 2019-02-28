@@ -66,6 +66,7 @@ const styles ={
     header:{
         width:'20%',
         height:'100%',
+        border:'1px solid #ccc'
     },
     phoneM:{
         width:'90%',
