@@ -45,8 +45,7 @@ const routers = [
 ]
 
 const home =()=>(
-    <div style={{textAlign:'center',marginTop:'100px'}}>
-       
+    <div style={{textAlign:'center'}}>
         <p>
             欢迎
         </p>

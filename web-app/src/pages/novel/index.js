@@ -5,18 +5,18 @@ import {getFetch} from '../../static/fetch.js'
 import { setStorage,getStorage } from '../../static/public';
 
 /* eslint-disable */
+const _404 =require('../../assets/404.jpg')
 
 class Novel extends React.Component{
     constructor(props){
         super(props);
         this.state={
           ul:[],
-          nav:{},
-          newest:{},
-          classify:[],
-          data:[],
+          nav:[],
+          classify:{},
           chapter:{},
           content:{},
+          i:0,
         }
     }
     componentDidMount(){
@@ -46,13 +46,13 @@ class Novel extends React.Component{
             }
 
             let advise={
-                name:ul[ul.length-2].match(/(?<=html"\>)[\u4E00-\u9FA5]{1,12}/g),
+                title:ul[ul.length-2].match(/(?<=html"\>)[\u4E00-\u9FA5]{1,12}/g),
                 url:ul[ul.length-2].match(/(?<=href=")(.*?html)(?=")/g),
             }
             let nav =[ mNav, wmNav, advise]
 
             this.setState({
-                nav
+                nav,
             },()=> {
                 !!novel? novel.nav = nav:novel={nav:nav}
                 setStorage('novel',novel)
@@ -64,23 +64,22 @@ class Novel extends React.Component{
         })
     }
 
-    getNovel =(url,name)=>{
+
+    getClassify =(url,name)=>{
         const host = "https://www.80txt.com"
         getFetch(API.zys+host+url, {type:'text'}).then((res)=>{
-            let data =[{
-                name : res.match(/(?<="\>)(.*?)(?=TXT下载<)/g),
+            let classify ={
+                name:name,
+                title : res.match(/(?<="\>)(.*?)(?=TXT下载<)/g),
                 introduce: res.match(/(?<=book_jj"\>\n)(.*)/g),
                 author: res.match(/(?<=author(.*)"\>)(.*?)(?=<\/a>)/g),
                 url : res.match(/(?<=\<a href=")(.*?html)(?="\><img src=")/g),
                 status: res.match(/(?<=strong (green|blue)"\>)(.*?)(?=<\/span>)/g),
                 img : res.match(/(?<=\<img src=")(.*?)(?=" title="(.*)" ><\/a\>)/g),
-            }]
+            }
             this.setState({
-                data,
-                name,
-                chapter:{},
-                content:{},
-                novel:[]
+                classify,
+                i:1,
             })
         }).catch(err=>{
             console.log(err)
@@ -89,154 +88,148 @@ class Novel extends React.Component{
     getChapter=(url)=>{
         let newUrl =url.replace(/xz\//,'ml_')
         getFetch(API.zys+newUrl,{type:'text'}).then((res)=>{
+           
             let chapter ={
+                title : res.match(/(?<="og:novel:book_name" content=")(.*?)(?=" \/>)/g)[0],
                 url : res.match(/(?<=rel="nofollow" href=")(.*?html)(?=">)/g),
-                name : res.match(/(?<=html">)(.*?)(?=<\/a><\/li>)/g)
+                name : res.match(/(?<=html">)(.*?)(?=<\/a><\/li>)/g)[0]
             }
+            
             this.setState({
                 chapter,
-                content:{},
-                novel:[]
-
+                i:2,
             })
         })
     }
     getContent=(url)=>{
         getFetch(API.zys+url,{type:'text'}).then((res)=>{
             let content={
-                title :res.match(/(?<=<h1>)(.*?)(?=<\/h1>)/g)[0],
+                name :res.match(/(?<=<h1>)(.*?)(?=<\/h1>)/g)[0],
                 con :res.replace(/\n|\s|&nbsp;/g,'').match(/(?<=id="content">)(.*)(?=<divclass="con_l")/g)[0]
             }
             this.setState({
                 content,
-                chapter:{},
-                novel:[]
+                i:3
             })
         })
     }
+    
    
     render(){
-        const {nav,data,name,chapter,content} = this.state
-        const mainName =!!data.length?name:'推荐'
-        let novel = !!data.length ? data : nav.length?nav.slice(2,3):[]
-        if(chapter.name&&chapter.name.length||content.con){
-            novel=[]
+        const {nav,classify,chapter,content,i} = this.state
+        let novel = [],name="推荐"
+        switch(i){
+            case 1:
+            novel=[classify]
+            name=classify.name
+            break;
+            case 2:
+            novel=[null,chapter]
+            name=chapter.name
+            break;
+            case 3:
+            novel=[null,null,content]
+            name=content.name
+            break;
+            default:
+                novel= nav.length?[nav[2]]:[]
+            break;
         }
+        console.log(i,novel)
         return (
-            <div className="novel" style={{overflow:'auto'}}>
-                <div className="classify">
+            <div className="novel" style={{overflow:'hidden',overflowY:'auto'}}>
+
+                <div className="classify" style={styles.classify}>
+                    {
+                      !!nav.length &&
+                        nav.slice(0,2).map((res,i)=>(
+                            <div key={i} style={{display:'flex',alignItems:'center'}}>
+                                {
+                                    i==0
+                                    ? <div style={Object.assign({color:'#CDBE70'},styles.classifyBar)}>nan频：</div>:
+                                    i==1
+                                    ? <div style={Object.assign({color:'#FF8247'},styles.classifyBar)}>nv频：</div>
+
+                                    : <div style={Object.assign({color:'#CDAA7D'},styles.classifyBar)}>推荐：</div>
+                                }
+                                <ul key={i} style={{flex:10, margin:'10px 0'}}>
+                                    {
+                                        res.name.map((item,j)=>(
+                                            <li key={j} className="classify-item" style={styles.classifyItem} 
+                                                onClick={()=>this.getClassify(res.url[j],item)}>
+                                                <a>{item}</a>
+                                            </li>
+                                        ))
+                                    }
+                                </ul>
+                            </div>
+                        ))
+                    }
+                </div>
+
+                <div className="novel-main" style={{width:'100%',padding:'20px 0'}}>
+
+                    <h3 style={{textAlign:'center',marginBottom:'40px'}}>
+                           <span style={styles.novelTitle}> {name}</span>
+                    </h3>
+
                     <div>
                         {
-                            !!nav.length&&
-                            nav.slice(0,2).map((res,i)=>(
-                                <div key={i} style={{display:'flex',margin:'20px 0',alignItems:'center'}}>
-                                    {/* 频道 */}
+                          novel.length&&
+                            novel.map((res,i)=>(
+                                <div key={i} style={styles.novel[i]}>
                                     {
-                                        i==0
-                                        ?<div style={{flex:1,color:'#CDBE70'}}>男频：</div>:
-                                        i==1
-                                        ?<div style={{flex:1,color:'#FF8247'}}>nv频：</div>
-                                        :<div style={{flex:1,color:'#CDAA7D'}}>推荐：</div>
+                                      !!res.title&&
+                                        res.title.map((item,j)=>(
+                                            <div style={{margin:'10px 0'}}>
+                                                <i style={{color:'#EE7942',margin:'0 25px'}}>{j+1}.</i>
+                                                <a>{item}</a>
+                                            </div>
+                                        ))
                                     }
-                                    <ul key={i} style={{flex:10}}>
-                                        {
-                                            res.name.map((item,j)=>(
-                                                <li key={j} className={`p novel-classify-${i}`} style={{width:'20%',float:'left'}} onClick={()=>this.getNovel(res.url[j],item)}>
-                                                   <a>{item}</a>
-                                                </li>
-                                            ))
-                                        }
-                                    </ul>
                                 </div>
                             ))
                         }
                     </div>
-                </div>
-
-                <div className="novel-main" style={{width:'100%'}}>
-                    <h3 style={{textAlign:'center'}}>{mainName}</h3>
-                    {
-                        !!novel.length&&
-                        novel.map((res,i)=>(
-                            <ul key={i} style={{width:'100%',overflow:'hidden'}}>
-                                {
-                                    res.name.map((item,j)=>(
-                                        <li key={j} style={{margin:'10px 0',width:'100%',overflow:'hidden'}}>
-                                            {
-                                                !!data.length?
-                                                <div style={{display:'flex',width:'100%'}}>
-                                                    {/* 图片 */}
-                                                    <div style={{width:'100px',float:'left',padding:'0 10px'}}>
-                                                        <a href={res.url[j]} >
-                                                            <img style={{width:'100px',height:'120px'}} src={res.img[j]} />
-                                                        </a>
-                                                    </div>
-                                                    <div style={{overflow:'hidden'}}>
-                                                        {/* 标题作者 */}
-                                                        <span style={{display:'flex',alignItems:'center'}}>
-                                                            <h3><a style={{color:'#9BCD9B'}} href="javascript:;" onClick={()=>this.getChapter(res.url[j])}>{item}</a></h3> 
-                                                            <a style={{fontSize:'12px',margin:'0 20px',color:'#C67171'}}>{res.author[j]}</a>
-                                                            <a style={{fontSize:'12px',margin:'0 20px',color:'#C1CDC1'}}>{res.status[j]}</a>
-                                                        </span>
-                                                        {/* 内容简介 */}
-                                                        <span style={{display:'flex',margin:'10px 0'}}>
-                                                            <p style={{fontSize:'13px',color:'#C1C1C1'}}>
-                                                                {res.introduce[j]}
-                                                            </p>
-                                                        </span>
-
-                                                    </div>
-                                                </div>
-                                                :
-                                                <div style={{width:'100%'}}>
-                                                    <i style={{color:'#EE7942',margin:'0 25px'}}>{j+1}.</i>
-                                                    <span>{item}</span>
-                                                </div>
-                                            }
-                                        </li>
-                                    ))
-                                }
-                            </ul>
-                        ))
-                    }
-                    {
-                         !!novel.length&&data.length?
-                         <div style={{marginBottom:'40px',display:'flex',justifyContent:'center'}}>
-                             <button className="button" style={{margin:'10px'}}>
-                                 上一页
-                             </button>
-
-                             <button className="button" style={{margin:'10px'}}>
-                                 下一页
-                             </button>
-
-                         </div>
-                         :null
-                    }
-                    {
-                        chapter.name?
-                        <div>
-                            {
-                                chapter.name.map((res,i)=>(
-                                    <p style={{float:'left',width:'25%'}} key={i}>
-                                        <a href="javascript:;" onClick={()=>{this.getContent(chapter.url[i])}}>{res}</a>
-                                    </p>
-                                ))
-                            }
-                        </div>:
-                        <div>
-                            <article dangerouslySetInnerHTML={{ __html:content.con?content.con:'' }}>
-
-                            </article>
-                        </div>
-                    }
                 </div>
             </div>
         )
     }
 }
 const styles={
-    
+    classify:{
+        padding:'0 10px',
+        margin:'10px 20px',
+        borderRadius:'3px',
+        backgroundColor:'#fffbf3',
+        border:'1px solid #ffeabf',
+    },
+    classifyBar:{
+        flex:1,
+        textAlign:'center'
+    },
+    classifyItem:{
+        width:'20%',
+        float:'left',
+        color:'#666',
+        fontSize:'13px',
+        cursor:'pointer',
+        textAlign:'center',
+    },
+    novelTitle:{
+        color:'#2c3e50',
+        padding:'0 25px',
+        display:'inline-block',
+        borderRadius:'2px',
+        borderBottom:'1px solid #efefef'
+    },
+    novel:[
+        {
+            margin:'0 5%',
+        },{
+
+        }
+    ]
 }
 
 export default Novel

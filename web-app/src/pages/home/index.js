@@ -34,23 +34,24 @@ class Home extends React.Component{
               
                 {
                     !phone     //左侧
-                    ?<header style={styles.header}>
-                        <Menu />
-                    </header>
-                    :<header style={styles.header}>
-                        <Menu />
-                    </header>
+                    ?<div style={styles.leftBar}>
+                        <div style={styles.navBar}><Menu /></div>
+                    </div>
+                    :<div style={styles.leftBar}>
+                        <div style={styles.navBar}><Menu /></div>
+                    </div>
                 }
-                <main style={phone?styles.phoneM:styles.main}>
-                    <Route />
+                <main style={styles.main}>
+                    <div id="container" style={styles.container}>
+                        <Route />
+                    </div>
                 </main>
-
-                {
+                {/* {
                     !phone&&   //右侧
                     <footer style={styles.footer}>
-                       nothing
+                       <div style={styles.footerBar}>nothing</div>
                     </footer>
-                }
+                } */}
                
             </div>
         )
@@ -61,26 +62,50 @@ const styles ={
     home:{
         width:'100%',
         height:'100%',
-        display:'flex'
-    },
-    header:{
-        width:'20%',
-        height:'100%',
-        border:'1px solid #ccc'
+        display:'flex',
+        backgroundColor:'#e7ebee',
+        overflow:'hidden',
     },
     phoneM:{
         width:'90%',
         height:'100%',
         margin:'0 auto',
     },
-    main:{
-        width:'60%',
-        height:'100%',
-    },
-    footer:{
+    leftBar:{
         width:'20%',
         height:'100%',
-       
+        padding:'25px',
+    },
+    navBar:{
+        width:'90%',
+        float:'right',
+        height:'92%',
+        backgroundColor:'#fff',
+        borderRadius:'4px',
+    },
+    main:{
+        width:'80%',
+        height:'100%',
+        padding:'25px',
+        paddingLeft:'10px',
+        overflow:'hidden',
+    },
+    container:{
+        overflow:'auto',
+        height:'92%',
+        borderRadius:'6px',
+        backgroundColor:'#fff'
+    },
+    footer:{
+        width:'10%',
+        float:'right',
+        height:'92%',
+        padding:'25px 0',
+    },
+    footerBar:{
+        width:'100%',
+        height:'92%',
+        backgroundColor:'#fff'
     },
 }
 

@@ -19,6 +19,10 @@ class Home extends React.Component{
            {
                name:"小说",
                path:"/novel"
+           },
+           {
+               name:"电影",
+               path:"/movie"
            }
        ]
 
@@ -35,8 +39,7 @@ class Home extends React.Component{
             <div className="menu">
               {
                   menu.map((res,i)=>(
-
-                    <nav key={i} onClick={()=>this.handleClick(res.path)}>
+                    <nav className="nav-title" key={i} onClick={()=>this.handleClick(res.path)}>
                         {res.name}
                     </nav>
                   ))
