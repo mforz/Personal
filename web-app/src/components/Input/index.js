@@ -65,7 +65,6 @@ class Input extends React.Component{
                         <i className="fa fa-times-circle clear" onClick={this.onChange.bind(this,'clear')}></i>
                         :''
                     }
-                    
                 </div>
             </div>
         )

@@ -20,7 +20,7 @@ const setCookie =(name,value,day=0)=>{
 }
 //删除cookie
 const delCookie = (name)=> {
-    let keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+    let keys = document.cookie.match(/[^ =;]+(?==)/g);
     if(name)
         setCookie(name, ' ', -1);
     else
@@ -71,7 +71,7 @@ const tts= (tgt,url)=>{
     tgt = tgt.match(reg)?tgt.match(reg).join(""):'无法识别和读取';                       // 提取数字汉字字母
     escape(tgt).indexOf("%u")!==-1? lan='zh': lan='en'   // 判断是否为存在汉字
     //
-    audio.src=`https://fanyi.baidu.com/gettts?lan=${lan}&text=${tgt}&spd=${lan=='en'?3:5}&source=web`
+    audio.src=`https://fanyi.baidu.com/gettts?lan=${lan}&text=${tgt}&spd=${lan==='en'?3:5}&source=web`
     audio.play()
     //监听播放完
     // ev = audio.addEventListener('ended',()=>{
@@ -130,7 +130,82 @@ const getTime = () => {
     }
     return time
 }
+const fullScreen =()=>{
+    try{
+        let el = document.documentElement;
+        let rfs= el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+        if (typeof rfs != "undefined" && rfs) {
+            rfs.call(el);
+        };
+    }catch{
+        return false
+    }
+     
+}
+const getIP=()=> {
+    let RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
+    // let ip=null
+    if (RTCPeerConnection){
+        var rtc = new RTCPeerConnection({
+            iceServers: []
+        });
+        if (1 || window.mozRTCPeerConnection) {
+            rtc.createDataChannel('', {
+                reliable: false
+            });
+        };
 
+        rtc.onicecandidate = function (evt) {
+            if (evt.candidate) grepSDP("a=" + evt.candidate.candidate);
+        };
+        rtc.createOffer(function (offerDesc) {
+            grepSDP(offerDesc.sdp);
+            rtc.setLocalDescription(offerDesc);
+        }, function (e) {
+            console.warn("offer failed", e);
+        });
+        var addrs = Object.create(null);
+        addrs["0.0.0.0"] = false;
+
+        function updateDisplay(newAddr) {
+            if (newAddr in addrs) return;
+            else addrs[newAddr] = true;
+            var displayAddrs = Object.keys(addrs).filter(function (k) {
+                return addrs[k];
+            });
+            for (var i = 0; i < displayAddrs.length; i++) {
+                if (displayAddrs[i].length > 16) {
+                    displayAddrs.splice(i, 1);
+                    i--;
+                }
+            }
+            // document.getElementById('list').textContent = displayAddrs[0];
+            // console.log(displayAddrs)
+            // ip = displayAddrs[0]
+        }
+
+        function grepSDP(sdp) {
+            // var hosts = [];
+            sdp.split('\r\n').forEach(function (line, index, arr) {
+                if (~line.indexOf("a=candidate")) {
+                    let parts = line.split(' '),
+                        addr = parts[4],
+                        type = parts[7];
+                    if (type === 'host') updateDisplay(addr);
+                } else if (~line.indexOf("c=")) {
+                    let parts = line.split(' '),
+                        addr = parts[2];
+                    updateDisplay(addr);
+                }
+            });
+        }
+        return addrs
+    }else{
+         return {}
+    }
+    
+    
+}
 
 export {
     getCookie,
@@ -140,11 +215,12 @@ export {
     getStorage,
     setStorage,
     delStorage,
-    
+    getIP,
     goTo,
     tts,
     isPhone,
     getLocation,
     getTime,
+    fullScreen,
     // color
 }

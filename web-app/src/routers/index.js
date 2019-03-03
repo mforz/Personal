@@ -2,45 +2,27 @@ import React from 'react';
 import { BrowserRouter,HashRouter,Switch,Route } from 'react-router-dom';
 // import { Router,hashHistory } from 'react-router';
 
-// import Login from '@/pages/login/'
-import Home from '../pages/home/'
-// import Todo from '@/pages/todo/'
-// import Color from '@/pages/color/'
-// import HotWords from '@/pages/hotwords/'
-import Menu from '../pages/menu/'
-// import Essay from '@/pages/essay/'
-// import Picture from '@/pages/picture/'
+import Movie from '../pages/movie/'
 import Novel from '../pages/novel/'
-
+import Essay from '../pages/essay/'
+import Weather from '../pages/weather/'
 
 const routers = [
-    // {
-    //     path:'/login',
-    //     component:Login,
-    // },
-    // {
-    //     path:'/todo',
-    //     component:Todo,
-    // },
-    // {
-    //     path:'/color',
-    //     component:Color,
-    // },
-    // {
-    //     path:'/hotwords',
-    //     component:HotWords,
-    // },
-    // {
-    //     path:'/essay',
-    //     component:Essay,
-    // },
-    // {
-    //     path:'/picture',
-    //     component:Picture,
-    // },
+    {
+        path:'/weather',
+        component:Weather,
+    },
+    {
+        path:'/movie',
+        component:Movie,
+    },
     {
         path:'/novel',
         component:Novel,
+    },
+    {
+        path:'/essay',
+        component:Essay,
     }
 ]
 

@@ -11,12 +11,11 @@ class Novel extends React.Component{
     constructor(props){
         super(props);
         this.state={
-          ul:[],
           nav:[],
           classify:{},
           chapter:{},
           content:{},
-          i:0,
+          _i:0,
         }
     }
     componentDidMount(){
@@ -73,13 +72,13 @@ class Novel extends React.Component{
                 title : res.match(/(?<="\>)(.*?)(?=TXT下载<)/g),
                 introduce: res.match(/(?<=book_jj"\>\n)(.*)/g),
                 author: res.match(/(?<=author(.*)"\>)(.*?)(?=<\/a>)/g),
-                url : res.match(/(?<=\<a href=")(.*?html)(?="\><img src=")/g),
+                url : res.match(/(?<=<a href=")(.*?html)(?="\><img src=")/g),
                 status: res.match(/(?<=strong (green|blue)"\>)(.*?)(?=<\/span>)/g),
                 img : res.match(/(?<=\<img src=")(.*?)(?=" title="(.*)" ><\/a\>)/g),
             }
             this.setState({
                 classify,
-                i:1,
+                _i:1,
             })
         }).catch(err=>{
             console.log(err)
@@ -90,14 +89,14 @@ class Novel extends React.Component{
         getFetch(API.zys+newUrl,{type:'text'}).then((res)=>{
            
             let chapter ={
-                title : res.match(/(?<="og:novel:book_name" content=")(.*?)(?=" \/>)/g)[0],
+                name : res.match(/(?<="og:novel:book_name" content=")(.*?)(?=" \/>)/g)[0],
                 url : res.match(/(?<=rel="nofollow" href=")(.*?html)(?=">)/g),
-                name : res.match(/(?<=html">)(.*?)(?=<\/a><\/li>)/g)[0]
+                title : res.match(/(?<=html">)(.*?)(?=<\/a><\/li>)/g)
             }
             
             this.setState({
                 chapter,
-                i:2,
+                _i:2,
             })
         })
     }
@@ -105,37 +104,37 @@ class Novel extends React.Component{
         getFetch(API.zys+url,{type:'text'}).then((res)=>{
             let content={
                 name :res.match(/(?<=<h1>)(.*?)(?=<\/h1>)/g)[0],
+                title:[''],
                 con :res.replace(/\n|\s|&nbsp;/g,'').match(/(?<=id="content">)(.*)(?=<divclass="con_l")/g)[0]
             }
             this.setState({
                 content,
-                i:3
+                _i:3
             })
         })
     }
     
    
     render(){
-        const {nav,classify,chapter,content,i} = this.state
+        const {nav,classify,chapter,content,_i} = this.state
         let novel = [],name="推荐"
-        switch(i){
+        switch(_i){
             case 1:
             novel=[classify]
             name=classify.name
             break;
             case 2:
-            novel=[null,chapter]
+            novel=[chapter]
             name=chapter.name
             break;
             case 3:
-            novel=[null,null,content]
+            novel=[content]
             name=content.name
             break;
             default:
-                novel= nav.length?[nav[2]]:[]
+            novel= nav.length?[nav[2]]:[]
             break;
         }
-        console.log(i,novel)
         return (
             <div className="novel" style={{overflow:'hidden',overflowY:'auto'}}>
 
@@ -168,24 +167,55 @@ class Novel extends React.Component{
                 </div>
 
                 <div className="novel-main" style={{width:'100%',padding:'20px 0'}}>
-
                     <h3 style={{textAlign:'center',marginBottom:'40px'}}>
-                           <span style={styles.novelTitle}> {name}</span>
+                        <span style={styles.novelTitle}> {name}</span>
                     </h3>
-
                     <div>
                         {
                           novel.length&&
                             novel.map((res,i)=>(
-                                <div key={i} style={styles.novel[i]}>
+                                <div key={i} style={styles.novel}>
                                     {
-                                      !!res.title&&
-                                        res.title.map((item,j)=>(
-                                            <div style={{margin:'10px 0'}}>
-                                                <i style={{color:'#EE7942',margin:'0 25px'}}>{j+1}.</i>
-                                                <a>{item}</a>
+                                        (!!res&&!!res.title)?
+                                        res.title.slice(0,500).map((item,j)=>(
+                                            <div key={j} style={{margin:'20px 0'}}>
+                                               {
+                                                   _i===1?
+                                                   <div style={{display:'flex',}}>
+                                                       <span style={{flex:1,padding:'5px 10px'}}>
+                                                            <img style={styles.img} src={res.img[j]} 
+                                                                onError={(e)=>{e.target.src=_404}} />
+                                                        </span>
+                                                        <span style={{flex:9,cursor:'pointer'}}>
+                                                            <p style={{margin:'5px'}}>
+                                                                <span style={styles.novelTitle} 
+                                                                onClick={()=>{this.getChapter(res.url[j])}}>{item}</span>
+                                                                <span style={styles.author}>{res.author[j]}</span>
+                                                                <span style={styles.novelStatus}>{res.status[j]}</span>
+                                                            </p>
+                                                            <p style={styles.introduce}>
+                                                                {res.introduce[j]||'暂无简介'}
+                                                            </p>
+                                                        </span>
+                                                    </div>
+                                                    :_i==2?
+                                                    <div style={{width:'33%',float:'left',}}>
+                                                        <p className="p" style={{margin:'10px 0',padding:'0 10px'}}>
+                                                            <a className="chapter" onClick={()=>{this.getContent(res.url[j])}}>{item}</a>
+                                                        </p>
+                                                    </div>
+                                                    : _i==3?
+                                                    <div>
+                                                        <article dangerouslySetInnerHTML={{ __html:res.con }}>
+                                                         </article>
+                                                    </div>
+                                                   :<div>
+                                                        <i style={{color:'#EE7942',margin:'0 25px'}}>{j+1}.</i>
+                                                        {item}
+                                                    </div>
+                                               }
                                             </div>
-                                        ))
+                                        )):null
                                     }
                                 </div>
                             ))
@@ -219,17 +249,42 @@ const styles={
     novelTitle:{
         color:'#2c3e50',
         padding:'0 25px',
-        display:'inline-block',
         borderRadius:'2px',
+        display:'inline-block',
         borderBottom:'1px solid #efefef'
     },
-    novel:[
+    novel:
         {
             margin:'0 5%',
-        },{
-
-        }
-    ]
+            // textAlign:'center'
+        },
+    img:{
+        width: '90px', 
+        height: '120px',
+        border: '1px solid #ccc',
+        borderRadius: '4px'
+    },
+    novelTitle:{
+        textDecoration: 'underline',
+        fontSize: '17px'
+    },
+    author:{
+        margin: '0 20px',
+        fontSize: '13px',
+        color: '#521'
+    },
+    novelStatus:{
+        margin: '0 20px', 
+        fontSize: '12px', 
+        display: 'inline-block', 
+        transform: 'scale(0.85)'
+    },
+    introduce:{
+        color: '#444', 
+        fontSize: '13px', 
+        padding: '8px 0', 
+        textIndent: '13px'
+    }
 }
 
 export default Novel

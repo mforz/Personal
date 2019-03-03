@@ -15,6 +15,9 @@ div,header,main,footer,ul,li,h1,h2,h3,h4,h5,h6,p{
   text-overflow:ellipsis; 
   white-space:nowrap;
 }
+.fa{
+  cursor: pointer;
+}
 .button { /* 按钮美化 */
 	width: 170px; /* 宽度 */
 	height: 40px; /* 高度 */
@@ -36,12 +39,22 @@ div,header,main,footer,ul,li,h1,h2,h3,h4,h5,h6,p{
   height:100%;
 }
 
+#menu::-webkit-scrollbar,
 #container::-webkit-scrollbar {
   display: none;
 }
 .novel .classify-item:hover{
   opacity: .8;
   /* box-shadow: 0 3px 2px 0 #3C3C3D, 0 0 1px 0 #3C3C3D; */
+  transform: scale(1.1)
+}
+.novel .p .chapter{
+  color:#666;
+  display:inline-block;
+  cursor: pointer;
+}
+.novel .p .chapter:hover{
+  opacity: .8;
   transform: scale(1.1)
 }
 /* .novel [class*=novel-classify-0]{
@@ -62,13 +75,16 @@ div,header,main,footer,ul,li,h1,h2,h3,h4,h5,h6,p{
 
 .nav-title{
   /* display: inline-block; */
-  vertical-align: top;
+  /* vertical-align: top; */
   width: 80%;
   height: 25px;
   border-radius: 7px;
+  padding:3px 0;
   margin: 16px auto;
+  color:#444;
   box-shadow: 0 4px 3px 0 #ddd, 0 0 1px 0 #ddd;
   text-align: center;
+  overflow: hidden;
 }
 
 .nav-title:hover{
@@ -92,4 +108,16 @@ div,header,main,footer,ul,li,h1,h2,h3,h4,h5,h6,p{
   40%, 60% {
       transform: translate3d(4px, 0, 0);
   }
+}
+.essay p {
+  margin: 16;
+  margin-bottom: 30px;
+}
+
+.movie a:link {
+  color: #444;
+}
+
+.movie a:visited {
+  color: black;
 }

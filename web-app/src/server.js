@@ -7,23 +7,36 @@ let str = null
 app.all("*", function(req, res, next) {
   if (req.path !== "/" ) {
     // && !req.path.includes(".")
-    if(req.path.includes("/zys")){
-        let url=req.path.replace(/\/zys\//,'')
-        let origin = url.match(/(^http(s)?:\/\/)[a-zA-Z\.0-9]+(?=.*)/)[0]
-        app._router.stack.forEach((res,i)=>{
-            if(str==JSON.stringify(res)){
-                app._router.stack.splice(i,1)
-            }
-        })
-        app.use('/zys/'+origin,proxy({
-            target: origin,
-            changeOrigin: true,
-            pathRewrite : {'^/zys/':''}
-        }))
-        // console.log(app._router.stack)
-        str= JSON.stringify(app._router.stack[app._router.stack.length-1])
-
-    }
+     if (req.path.includes("/zys")) {
+        //  console.log('A---',req.path)
+         let url = req.path.replace(/\/zys\//, '')
+         let origin = url.match(/(^http(s)?:\/\/)[a-zA-Z\.0-9]+(?=.*)/)[0]
+         let skip= false
+         app._router.stack.forEach((res, i) => {
+            //   console.log('B---',res.path)
+            //  if (str === res.path) {
+             if ('/zys/'+origin === res.path) {
+                //  console.log('C---',app._router.stack.length)
+                //  app._router.stack.splice(i, 1)
+                skip=true
+             }
+         })
+         if (app._router.stack.length>50) {
+             skip=true
+         }
+         if(!skip){
+            app.use('/zys/' + origin, proxy({
+                target: origin,
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/zys/': ''
+                }
+            }))
+         }
+        //  console.log('D----',app._router.stack.length)
+        //  str = req.path
+        //   JSON.stringify(app._router.stack[app._router.stack.length - 1])
+     }
     res.header("Access-Control-Allow-Credentials", true);
     // 这里获取 origin 请求头 而不是用 *
     res.header("Access-Control-Allow-Origin", req.headers["origin"] || "*");
@@ -38,9 +51,21 @@ app.all("*", function(req, res, next) {
 let pathProxy = (arr)=>{
         let target,pathRewrite;
         switch(arr){
-            case '/80txt':
-                target = `https://www.80txt.com/`;
-                pathRewrite = {'^/80txt':''}
+           case '/bd-weather': // fetch('http://localhost:2233/bd-weather/city=上海')
+                target = 'https://www.baidu.com/home/other/data/weatherInfo';
+                pathRewrite = {'^/bd-weather/':'?'}
+            break
+            case '/douban-movie':
+                target = `https://api.douban.com/v2/movie/search`;
+                pathRewrite = {'^/douban-movie':''}
+            break
+            case '/article':
+                target = `https://interface.meiriyiwen.com/article`;
+                pathRewrite = {'^/article':''}
+            break
+            case '/movie-vip':
+                target = `http://jx.taoju.xin/api.php`;
+                pathRewrite = {'^/movie-vip':''}
             break
             default:
                 console.log(arr)
@@ -49,13 +74,15 @@ let pathProxy = (arr)=>{
         return proxy({
             target: target,
             changeOrigin: true,
-            pathRewrite: pathRewrite
+            pathRewrite: pathRewrite,
         })
 }
 
 let arr =[
-    '80txt',
-    // 'zys',
+    'bd-weather',
+    'douban-movie',
+    'article',
+    'movie-vip',
 ]
 
 arr.forEach(res=>{
@@ -65,7 +92,6 @@ arr.forEach(res=>{
 app.use(express.static("./"));
 
 // const port = process.env.PORT || 3000;
-
 
 app.listen(2233, () => {
   console.log(`server running @ http://localhost:2233  如果端口占用 lsof -i tcp:8080 && kill pid`);
