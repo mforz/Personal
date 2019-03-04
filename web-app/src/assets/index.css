@@ -3,6 +3,8 @@ html,body{
   padding:0;
   width:100%;
   height:100%;
+  /* font-size: 62.5%; */
+  color: #111111
 }
 div,header,main,footer,ul,li,h1,h2,h3,h4,h5,h6,p{
   margin:0;
@@ -78,9 +80,11 @@ div,header,main,footer,ul,li,h1,h2,h3,h4,h5,h6,p{
   /* vertical-align: top; */
   width: 80%;
   height: 25px;
+  line-height: 25px;
   border-radius: 7px;
   padding:3px 0;
   margin: 16px auto;
+  font-size: 13px;
   color:#444;
   box-shadow: 0 4px 3px 0 #ddd, 0 0 1px 0 #ddd;
   text-align: center;

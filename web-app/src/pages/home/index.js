@@ -49,20 +49,18 @@ class Home extends React.Component{
                         </div>
                     </div>
                 }
+                
                 <div style={!phone?styles.arrow:{display:'none'}}>
-                    <i className="fa fa-angle-double-left fa-2x" onClick={(e)=>{this.changeMenu(e)}}></i>
+                    <i className="fa fa-angle-double-left fa-2x" 
+                       onClick={(e)=>{this.changeMenu(e)}}></i>
                 </div>
+
                 <main style={!phone?styles.main:styles.main2}>
                     <div id="container" style={styles.container}>
                         <Route />
                     </div>
                 </main>
-                {/* {
-                    !phone&&   //右侧
-                    <footer style={styles.footer}>
-                       <div style={styles.footerBar}>nothing</div>
-                    </footer>
-                } */}
+
             </div>
         )
     }

@@ -1,24 +1,18 @@
-
-
 const getFetch =(url,obj)=>{
     try {
-      let result = fetch(url, {
-        // credentials: "omit",
-        // headers: {
-        //   "Access-Control-Allow-Origin": "*",
-        //   Accept: "application/json, text/plain, */*"
-        // },
-        // mode: "cors"    // 设置允许cors跨域
-      });
-  
-      return obj&&obj.type==='text'?result.then((res)=>res.text()):result.then((res)=>res.json())
-  
+      let result = fetch(url, {});
+      
+      if(obj&&obj.type==='text')
+        return result.then((res)=>res.text())
+      else
+        return result.then((res)=>res.json())
+      
     }catch(err){
       console.error(err)
     }
-  }
-  const postFetch =(url,data)=> {
-  
+}
+
+const postFetch =(url,data)=> {
     let obj2params = (obj) => {
       let item, result = '';
       for (item in obj) {
@@ -29,7 +23,6 @@ const getFetch =(url,obj)=>{
       }
       return result;
     }
-  
     try {
       let result = fetch(url, {
         method: 'POST',
@@ -44,9 +37,9 @@ const getFetch =(url,obj)=>{
     }catch(err) {
       console.error(err);
     }
-  }
+}
   
-  export{
-    getFetch,
-    postFetch
-  }
+export{
+  getFetch,
+  postFetch
+}

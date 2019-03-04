@@ -17,6 +17,8 @@ class Movie extends React.Component{
         }
     }
     componentDidMount(){}
+
+
     init=(url)=>{
        getFetch(API.movieVip + '?url=' + url).then((res) => {
         console.log(res)
@@ -27,26 +29,29 @@ class Movie extends React.Component{
          })
        })
     }
+
+
     getMovie=(q)=>{
-      this.setState({
-        tip:'正在搜索请稍等'
-      })
-     let reg =q.match(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/)
-     if (reg&&reg.length) {
-       this.init(reg[0])
-       return
-     }
-      getFetch(API.doubanMovie+'?q='+q).then((res)=>{
         this.setState({
-          data:res,
-          tip:res.total?'':'未找到资源'
+          tip:'正在搜索请稍等'
         })
-      }).catch(err=>{
-        // console.log(err)
-        this.setState({
-          tip:'未知错误'
+        // 输入url解析播放
+        let reg =q.match(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/)
+        if ( reg && reg.length ) {
+          this.init(reg[0])
+          return
+        }
+        //输入名字查找电影资源
+        getFetch(API.doubanMovie+'?q='+q).then((res)=>{
+          this.setState({
+            data:res,
+            tip:res.total?'':'未找到资源'
+          })
+        }).catch(err=>{
+          this.setState({
+            tip:'未知错误'
+          })
         })
-      })
     }
     
    
@@ -57,6 +62,7 @@ class Movie extends React.Component{
        return(
          <div className="movie">
            <meta name="referrer" content="no-referrer"/>
+
             <header style={{width:'100%',height:'100px',overflow:'hidden'}}>
               <Input clear={false} 
                 style={styles.inputBar}
@@ -124,7 +130,6 @@ const styles={
       maxWidth: '600px',
       height: '60px',
       margin: '0 auto',
-      // padding: '15px 10px',
   },
   card:{
     width: '90%', 
@@ -135,7 +140,6 @@ const styles={
     display:'flex',
     borderRadius: '6px',
     backgroundColor: '#fff',
-    // justifyContent:'center',
     alignItems:'center',
     boxShadow: '0 4px 15px 0 #ddd'
   },

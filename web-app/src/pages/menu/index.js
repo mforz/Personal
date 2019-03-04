@@ -38,7 +38,7 @@ class Menu extends React.Component{
     render(){
         const { menu } = this.state
         return (
-            <div className="menu">
+            <div className="menuBar">
               {
                   menu.map((res,i)=>(
                     <nav key={i} className="nav-title p" 

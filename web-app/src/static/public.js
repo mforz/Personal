@@ -7,7 +7,6 @@ const getCookie =(name)=>{
     else
         return null;
 }
-
 //设置cookie
 const setCookie =(name,value,day=0)=>{
     if (day !== 0) {  //当设置的时间等于0时，不设置expires属性，cookie在浏览器关闭后删除
@@ -29,7 +28,6 @@ const delCookie = (name)=> {
                 document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
         }
 };
-
 //设置localstorage
 const setStorage =(name,value)=>{
     if(window.localStorage)
@@ -38,7 +36,6 @@ const setStorage =(name,value)=>{
         setCookie(name,value)
     return true
 }
-
 //获取localstorage
 const getStorage =(name)=>{
     if (window.localStorage)
@@ -57,8 +54,7 @@ const delStorage = (name)=>{
 const goTo = (to,from) =>{
     window.location.href = 'http://'+ window.location.host +'#'+ to
 }
-
-//音频播放
+//音频/文字-播放
 let audio = new Audio()
 const tts= (tgt,url)=>{
     //  判断url非空
@@ -78,8 +74,7 @@ const tts= (tgt,url)=>{
     //     ev = null
     // })
 }
-
-//手机环境
+//浏览环境
 const isPhone = function(){
     if(/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
        return true
@@ -87,7 +82,6 @@ const isPhone = function(){
        return false
     }
 }
-
 //定位
 const getLocation =()=>{
      if (navigator.geolocation){
@@ -116,7 +110,6 @@ const getLocation =()=>{
         console.log("该浏览器不支持定位")
     }
 }
-
 //获取时间
 const getTime = () => {
     const date = new Date()
@@ -130,6 +123,7 @@ const getTime = () => {
     }
     return time
 }
+//全屏
 const fullScreen =()=>{
     try{
         let el = document.documentElement;
@@ -142,9 +136,9 @@ const fullScreen =()=>{
     }
      
 }
+//内网ip
 const getIP=()=> {
     let RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
-    // let ip=null
     if (RTCPeerConnection){
         var rtc = new RTCPeerConnection({
             iceServers: []
@@ -179,13 +173,8 @@ const getIP=()=> {
                     i--;
                 }
             }
-            // document.getElementById('list').textContent = displayAddrs[0];
-            // console.log(displayAddrs)
-            // ip = displayAddrs[0]
         }
-
         function grepSDP(sdp) {
-            // var hosts = [];
             sdp.split('\r\n').forEach(function (line, index, arr) {
                 if (~line.indexOf("a=candidate")) {
                     let parts = line.split(' '),
@@ -206,12 +195,43 @@ const getIP=()=> {
     
     
 }
+const scriptLoad=(id,src,callback)=>{
+    let dom = document.getElementById(id)
+    if(dom){return}
+    let script = document.createElement('script')
+    script.id = id
+    script.src = src
+    if(callback){
+         script.onload = script.onreadystatechange = callback
+    }
+    document.body.append(script)
+}
+const removeDom =(id)=>{
+    let dom = null
+    dom = document.getElementById(id)
+    if(dom){
+        dom.parentNode.removeChild(dom);
+        return true
+    }else{
+        dom = document.getElementsByClassName(id)
+        if(dom.length){
+            for(let i =0;i<dom.length;i++){
+                dom[i].parentNode.removeChild(dom[i]);
+            }
+            return true
+        }else{
+            return false
+        }
+    }
+}
+
+
+
 
 export {
     getCookie,
     setCookie,
     delCookie,
-
     getStorage,
     setStorage,
     delStorage,
@@ -222,5 +242,6 @@ export {
     getLocation,
     getTime,
     fullScreen,
-    // color
+    removeDom,
+    scriptLoad
 }

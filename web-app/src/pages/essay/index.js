@@ -7,6 +7,7 @@ import {getFetch} from '../../static/fetch.js'
 // import './index.css'
 /* eslint-disable */
 
+//这是第一版本。有时间要重构
 class Essay extends React.Component{
     constructor(props){
         super(props);
@@ -37,13 +38,12 @@ class Essay extends React.Component{
             txt
         })
     }
-    //menu
+    //自定义菜单
     opMenu=(f,v,param)=>{
         if(f=='menu') {
             const {txt,data} =this.state
             let { excerpt} = this.state
             const {year,month,day,hours,minutes,seconds} = getTime()
-
             switch(v){
                 case 1:
                     let json= {
@@ -88,6 +88,7 @@ class Essay extends React.Component{
             menu:[] //重置menu坐标
         })
     }
+    //设置（初始化）文章
     setArticle=(data)=>{
         let article = getStorage('article')||[]
        

@@ -7,6 +7,7 @@ let str = null
 app.all("*", function(req, res, next) {
   if (req.path !== "/" ) {
     // && !req.path.includes(".")
+
      if (req.path.includes("/zys")) {
         //  console.log('A---',req.path)
          let url = req.path.replace(/\/zys\//, '')
