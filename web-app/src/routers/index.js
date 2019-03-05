@@ -6,6 +6,7 @@ import Movie from '../pages/movie/'
 import Novel from '../pages/novel/'
 import Essay from '../pages/essay/'
 import Weather from '../pages/weather/'
+import Wallpaper from '../pages/wallpaper/'
 
 const routers = [
     {
@@ -23,7 +24,11 @@ const routers = [
     {
         path:'/essay',
         component:Essay,
-    }
+    },
+    {
+        path:'/wallpaper',
+        component:Wallpaper,
+    },
 ]
 
 const home =()=>(
@@ -39,15 +44,8 @@ const NotFound = () => (
     <div style={{textAlign:'center',marginTop:'100px'}}>
         <h1>404</h1>
         <h2>页面不存在</h2>
-        <p>
-            {/* <a href="/">回到首页</a> */}
-        </p>
     </div>
 )
-const rou=(path)=>{
-    console.log(path)
-    window.location.href = window.location.origin+'#'+path
-}
 
 const route = ()=> (
         <HashRouter>

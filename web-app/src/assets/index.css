@@ -1,3 +1,7 @@
+@import './css/novel.css';
+@import './css/wallpaper.css';
+
+
 html,body{
   margin:0;
   padding:0;
@@ -6,20 +10,27 @@ html,body{
   /* font-size: 62.5%; */
   color: #111111
 }
-div,header,main,footer,ul,li,h1,h2,h3,h4,h5,h6,p{
+#root,#app{
+  width:100%;
+  height:100%;
+}
+div,header,main,footer,
+ul,li,h1,h2,h3,h4,h5,h6,p{
   margin:0;
   padding:0;
   text-decoration: none;
   list-style: none;
+  box-sizing: border-box;
 }
 .p {
   overflow:hidden;
   text-overflow:ellipsis; 
   white-space:nowrap;
 }
-.fa{
+.fa,nav{
   cursor: pointer;
 }
+
 .button { /* 按钮美化 */
 	width: 170px; /* 宽度 */
 	height: 40px; /* 高度 */
@@ -36,48 +47,13 @@ div,header,main,footer,ul,li,h1,h2,h3,h4,h5,h6,p{
 	background: #5599FF;
 }
 
-#root,#app{
-  width:100%;
-  height:100%;
-}
-
 #menu::-webkit-scrollbar,
 #container::-webkit-scrollbar {
   display: none;
 }
-.novel .classify-item:hover{
-  opacity: .8;
-  /* box-shadow: 0 3px 2px 0 #3C3C3D, 0 0 1px 0 #3C3C3D; */
-  transform: scale(1.1)
-}
-.novel .p .chapter{
-  color:#666;
-  display:inline-block;
-  cursor: pointer;
-}
-.novel .p .chapter:hover{
-  opacity: .8;
-  transform: scale(1.1)
-}
-/* .novel [class*=novel-classify-0]{
-  color:#CDBE70
-}
-.novel [class*=novel-classify-1]{
-  color:#FF8247
-}
-.novel [class*=novel-classify-2]{
-  color:#CDAA7D
-}
-.novel .classify [class*=novel-classify-]{
-  cursor: pointer;
-}
-.novel .classify [class*=novel-classify-]:hover{
-  color:#B8860B;
-} */
+
 
 .nav-title{
-  /* display: inline-block; */
-  /* vertical-align: top; */
   width: 80%;
   height: 25px;
   line-height: 25px;

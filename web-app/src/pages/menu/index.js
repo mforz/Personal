@@ -21,7 +21,7 @@ class Menu extends React.Component{
            { name:"音乐", path:"/music"},
            { name:"天气", path:"/weather"},
            { name:"优惠", path:"/discount"},
-           { name:"工具", path:"/tool"},
+           { name:"壁纸", path:"/wallpaper"},
            { name:"工具", path:"/tool"},
            { name:"工具", path:"/tool"},
            { name:"工具", path:"/tool"},

@@ -7,6 +7,7 @@ const API = {
   article: `${host}/article/`,
   movieVip: `${host}/movie-vip`,
   weather: `${host}/bd-weather/`,
+  wallpaper:`${host}/wallpaper/`,
 }
 
 export default API

@@ -3,23 +3,15 @@ var proxy = require('http-proxy-middleware');
 var app = express();
 
 
-let str = null
 app.all("*", function(req, res, next) {
   if (req.path !== "/" ) {
-    // && !req.path.includes(".")
-
      if (req.path.includes("/zys")) {
-        //  console.log('A---',req.path)
          let url = req.path.replace(/\/zys\//, '')
          let origin = url.match(/(^http(s)?:\/\/)[a-zA-Z\.0-9]+(?=.*)/)[0]
          let skip= false
-         app._router.stack.forEach((res, i) => {
-            //   console.log('B---',res.path)
-            //  if (str === res.path) {
+         app._router.stack.forEach((res) => {
              if ('/zys/'+origin === res.path) {
-                //  console.log('C---',app._router.stack.length)
-                //  app._router.stack.splice(i, 1)
-                skip=true
+                skip= true
              }
          })
          if (app._router.stack.length>50) {
@@ -34,9 +26,6 @@ app.all("*", function(req, res, next) {
                 }
             }))
          }
-        //  console.log('D----',app._router.stack.length)
-        //  str = req.path
-        //   JSON.stringify(app._router.stack[app._router.stack.length - 1])
      }
     res.header("Access-Control-Allow-Credentials", true);
     // 这里获取 origin 请求头 而不是用 *
@@ -64,9 +53,9 @@ let pathProxy = (arr)=>{
                 target = `https://interface.meiriyiwen.com/article`;
                 pathRewrite = {'^/article':''}
             break
-            case '/movie-vip':
-                target = `http://jx.taoju.xin/api.php`;
-                pathRewrite = {'^/movie-vip':''}
+            case '/wallpaper':
+                target = `http://service.picasso.adesk.com/v1/vertical/vertical`;
+                pathRewrite = {'^/wallpaper/':'?'}
             break
             default:
                 console.log(arr)
@@ -83,7 +72,7 @@ let arr =[
     'bd-weather',
     'douban-movie',
     'article',
-    'movie-vip',
+    'wallpaper',
 ]
 
 arr.forEach(res=>{
