@@ -54,8 +54,8 @@ let pathProxy = (arr)=>{
                 pathRewrite = {'^/article':''}
             break
             case '/wallpaper':
-                target = `http://service.picasso.adesk.com/v1/vertical/vertical`;
-                pathRewrite = {'^/wallpaper/':'?'}
+                target = `http://service.picasso.adesk.com/v1/`;
+                pathRewrite = {'^/wallpaper/':''}
             break
             default:
                 console.log(arr)
