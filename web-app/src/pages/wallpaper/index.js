@@ -50,8 +50,8 @@ class Wallpaper extends React.Component{
            order:'hot',
            phone:'vertical/vertical?',
            pc:'wallpaper/',
-
-           category:'phone'
+           category:'phone',
+           bgImg:'',
         }
     }
     componentDidMount(){
@@ -63,7 +63,7 @@ class Wallpaper extends React.Component{
         }else{
             this.init()
         }
-        // this.init()
+        this.init()
     }
     init=()=>{
         const {limit,skip,order,category} =this.state
@@ -89,36 +89,82 @@ class Wallpaper extends React.Component{
             })
         })
     }
-    exchange=()=>{
+    exchange=(i,data)=>{
+        let { category,bgImg,order} =this.state
+        switch(i){
+            case 1:
+                sleep.wait(()=>{
+                    category=='phone'?category='pc':category='phone'
+                },3000)
+            break;
 
+            case 2:
+            sleep.wait(()=>{
+                let dom = document.getElementById('container')
+                dom.style.backgroundImage=`url(${data})`
+                dom.style.backgroundAttachment=`fixed`
+            },3000)
+            break;
+
+            case 3:
+            sleep.wait(()=>{
+               let dom = document.getElementsByClassName('home')[0]
+               dom.style.backgroundImage = `url(${data})`;
+            },3000)
+            break;
+
+            case 'hot':
+            case 'new':
+            i!==order&&
+            sleep.wait(()=>{
+                this.setState({
+                    order:i
+                },()=>{this.init()})
+            },3000)
+            break;
+
+            default:
+            break
+        }
+        this.setState({
+            category,
+            bgImg,
+        })
     }
     render(){
-        const { data } = this.state
+        const { data,category,bgImg } = this.state
         return (
-            <div className="wallpaper" style={{padding:'10px',overflow:'hidden'}}>
+            <div className="wallpaper" style={{padding:'10px',overflow:'hidden',}}>
                 <div style={{width:'90%',maxWidth:'450px',margin:'30px auto',display:'flex',textAlign:'left'}}>
                     
                     <nav style={{flex:1}}>
-                        <i class="fa fa-exchange" onClick={this.exchange.bind(this,1)}></i>
-                        <span style={{margin:'0 5px'}}>手机:</span>
+                        <i className="fa fa-exchange" onClick={()=>{this.exchange(1)}}></i>
+                        <span style={{margin:'0 8px'}}>
+                            {category}
+                        </span>
                     </nav>
-                    <nav style={{flex:1}}>热门</nav>
-                    <nav style={{flex:1}}>最新</nav>
-                    <nav style={{flex:1}}>分类</nav>
+                    <nav onClick={()=>{this.exchange('hot')}} style={{flex:1}}>热门</nav>
+                    <nav onClick={()=>{this.exchange('new')}} style={{flex:1}}>最新</nav>
+                    <nav onClick={()=>{this.exchange('category')}} style={{flex:1}}>分类</nav>
                 </div>
                 <div>
                     <div >
                         {
                             !!data.length&&
                             data.map((res,i)=>{
-                                let a = Math.ceil(Math.random()*10%3)
+                                // let a = Math.ceil(Math.random()*10%3)
                                 return(
                                     <div key={i} style={{width:'80%',margin:'20px auto',height:'482px',display:'flex',overflow:'hidden'}}>
                                     {
                                         !!res.length&&
                                         res.map((item,j)=>(
-                                        <div style={{flex:1,margin:'5px 10px'}}>
-                                            <img key={j} style={{width:'100%',height:'100%'}} src={item.img} />
+                                        <div key={j} className="wallpaper-item-img" style={{flex:1,margin:'5px 10px',position:'relative'}}>
+                                            <img style={{width:'100%',height:'100%'}} src={item.img} />
+                                            <span className="down">
+                                                <a style={{flex:0.5,fontSize:'13px'}} onClick={()=>{this.exchange(2,item.img)}}>应用当前</a>
+                                                <a style={{flex:0.5,fontSize:'13px'}} onClick={()=>{this.exchange(3,item.img)}}>应用全部</a>
+                                                <a style={{flex:1}}  href={item.img} target="_blank" download onClick={(e)=>{e.target.click()}} >下载</a>
+                                            </span>
                                          </div>
                                         ))
                                     }

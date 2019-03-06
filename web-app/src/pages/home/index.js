@@ -135,7 +135,8 @@ let styles ={
         overflow:'auto',
         height:'92%',
         borderRadius:'6px',
-        backgroundColor:'#fff'
+        backgroundColor:'#fff',
+        opacity:.9
     },
     footer:{
         width:'10%',

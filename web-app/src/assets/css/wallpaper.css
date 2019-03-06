@@ -2,3 +2,18 @@
 .wallpaper::-webkit-scrollbar {
   display: none;
 }
+.wallpaper .wallpaper-item-img>.down{
+  display:none;
+  height:35px;
+  line-height: 30px;
+  text-align:center;
+  color:#444;
+  background-color: #ccc;
+  opacity: .7;
+  cursor: pointer;
+  position:absolute;
+  left:0;right:0;bottom:0;
+}
+.wallpaper .wallpaper-item-img:hover .down{
+  display:flex;
+}
