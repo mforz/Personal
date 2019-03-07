@@ -42,14 +42,18 @@ class Home extends React.Component{
             e.target.className.indexOf('on')!==-1
             ?e.target.className = 'fa fa-toggle-off'
             :e.target.className = 'fa fa-toggle-on'
+
+            let dom1 = document.getElementById('container')
+            dom1.style.backgroundImage='none'
+
+            let dom = document.getElementsByClassName('home')[0]
+            dom.style.backgroundImage='none'
+
             break;
             default:
 
             break;
         }
-       
-
-        
 
        
     }
@@ -115,7 +119,7 @@ let styles ={
     navBar: {
         width: '90%',
         float: 'right',
-        height: '97%',
+        height: '100%',
         backgroundColor: '#fff',
         borderRadius: '4px',
         overflow: 'auto',
@@ -155,8 +159,8 @@ let styles ={
         opacity:.9
     },
     container:{
-        overflow:'auto',
-        height:'97%',
+        overflow:'hidden',
+        height:'100%',
         borderRadius:'6px',
         backgroundColor:'rgba(255,255,255,.9)',
         transition:'all ease .5s'

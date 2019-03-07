@@ -1,5 +1,5 @@
-.wallpaper::-webkit-scrollbar,
-.wallpaper::-webkit-scrollbar {
+.wallpaper-bar::-webkit-scrollbar,
+.wallpaper-bar::-webkit-scrollbar {
   display: none;
 }
 .wallpaper-item-phone{

@@ -31,11 +31,14 @@ class Weather extends React.Component{
         let city = ''
         if(returnCitySN){
             let name = returnCitySN.cname
-            city = name.slice(0, name.split('').length-1)
+            let cityArr = name.match(/(?<=市)(.*?)(?=县)/) 
+                || name.match(/(?<=省)(.*?)(?=市)/) 
+                || name.match(/(?<=市)(.*?)(?=$)/)
+                || []
+            city = cityArr.length&&cityArr[0]
         }
         getFetch(API.weather +'city='+city).then((res)=>{
             this.getData(res)
-
         }).catch(err=>{
             console.log(err)
         })

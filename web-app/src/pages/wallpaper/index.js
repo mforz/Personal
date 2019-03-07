@@ -29,6 +29,7 @@ class Wallpaper extends React.Component{
            category:'phone',
            isCategory:false,
            categoryId:'',
+
         }
     }
     componentDidMount(){
@@ -42,14 +43,15 @@ class Wallpaper extends React.Component{
         }
         this.init()
     }
+    //获取数据
     init=(url)=>{
-        const {limit,skip,order,category,isCategory,categoryId} =this.state
+        let {limit,skip,order,category,isCategory,categoryId,data} =this.state
 
         let param = url ? url :`${categoryId}${this.state[category]}?limit=${limit*30}&skip=${skip}&adult=false&first=0&order=${order}`
 
         getFetch(API.wallpaper+this.state[category]+'/'+param).then(res=>{
 
-            let data=[],item=[],arr=[]
+            let item=[],arr=[]
             if(!!res.res &&(!!res.res.vertical||!!res.res.category||!!res.res.wallpaper)){
                 arr = res.res.vertical || res.res.category || res.res.wallpaper||[]
             }
@@ -71,9 +73,11 @@ class Wallpaper extends React.Component{
             })
         })
     }
-    exchange=(i,data)=>{
-        let { category,bgImg,order,isCategory,categoryId} =this.state
+    //各种点击事件
+    exchange=(i,d)=>{
+        let { category,bgImg,order,isCategory,categoryId,data} =this.state
         categoryId = ''
+        
         switch(i){
             //手机pc类别转换
             case 1:
@@ -83,7 +87,7 @@ class Wallpaper extends React.Component{
             case 2:
             sleep.wait(()=>{
                 let dom = document.getElementById('container')
-                dom.style.backgroundImage=`url(${data})`
+                dom.style.backgroundImage=`url(${d})`
                 dom.style.backgroundAttachment=`fixed`
                 dom.style.backgroundSize = category=='pc'?'cover':'contain';
             },3000)
@@ -92,14 +96,14 @@ class Wallpaper extends React.Component{
             case 3:
             sleep.wait(()=>{
                let dom = document.getElementsByClassName('home')[0]
-               dom.style.backgroundImage = `url(${data})`;
+               dom.style.backgroundImage = `url(${d})`;
                dom.style.backgroundSize = category=='pc'?'cover':'contain';
             },3000)
             break;
             //下载
             case 4:
             sleep.wait(()=>{
-              imgdownLoad(data)
+              imgdownLoad(d)
             },3000)
             break;
             //点击类别
@@ -108,6 +112,7 @@ class Wallpaper extends React.Component{
             i!==order&&
             sleep.wait(()=>{
                 this.setState({
+                    data : [],
                     order:i,
                     isCategory:false
                 },()=>{this.init()})
@@ -117,6 +122,7 @@ class Wallpaper extends React.Component{
             case 'category':
             sleep.wait(()=>{
                 this.setState({
+                    data : [],
                     isCategory:true
                 },()=>{this.init(i)})
             },2000)
@@ -126,7 +132,8 @@ class Wallpaper extends React.Component{
             isCategory&&
             sleep.wait(()=>{
                 this.setState({
-                    categoryId:'category/'+data+'/',
+                    data : [],
+                    categoryId:'category/'+d+'/',
                     isCategory:false
                 },()=>{this.init()})
             },1000)
@@ -140,11 +147,25 @@ class Wallpaper extends React.Component{
             bgImg,
         })
     }
-
+    handleScroll=()=>{
+        if (this.scrollDom.clientHeight + this.scrollDom.scrollTop + 30 >= this.scrollDom.scrollHeight) {
+             let {skip,limit,data,isCategory}=this.state
+            ! isCategory&&
+            sleep.wait(()=>{
+                if(data.length < 100){
+                    skip += limit*30
+                    this.setState({
+                        skip,
+                        limit
+                    },()=>{ this.init() })
+                }
+            },2000)
+        }
+    }
     render(){
         const { data,category,isCategory } = this.state
         return (
-            <div className="wallpaper" style={{padding:'10px',overflow:'hidden',}}>
+            <div className="wallpaper" style={{padding:'10px',overflow:'hidden',height:'100%'}} >
 
                 {/* <div style={!phone?styles.arrow:{display:'none'}}>
                     <i className="fa fa-angle-double-left fa-2x" ></i>
@@ -162,10 +183,13 @@ class Wallpaper extends React.Component{
                     <nav onClick={()=>{this.exchange('category')}} style={{flex:1}}>分类</nav>
                 </div>
 
-                <div>
-                    <div >
+                <div style={{overflow:'hidden',height:'90%'}}>
+                    <div className="wallpaper-bar"
+                    ref={body=>this.scrollDom=body} 
+                    style={{overflow:'auto',height:'90%'}}
+                    onScroll={this.handleScroll.bind(this)}>
                         {
-                            !!data.length&&
+                            !!data.length?
                             data.map((res,i)=>{
                                 return(
                                     <div key={i} className={`wallpaper-item-${category}`} style={styles.wallpaperItem}>
@@ -173,7 +197,7 @@ class Wallpaper extends React.Component{
                                         !!res.length&&
                                         res.map((item,j)=>(
                                         <div key={j} className="wallpaper-item-img" style={styles.itemImg}>
-                                            <img style={{width:'100%',height:'100%'}} src={item.img||item.cover}  onError={(e)=>{e.target.src=_loading}} onClick={()=>{this.exchange('id',item.id)}} />
+                                            <img onScroll={this.handleScroll.bind(this)} style={{width:'100%',height:'100%'}} src={item.img||item.cover}  onError={(e)=>{e.target.src=_loading}} onClick={()=>{this.exchange('id',item.id)}} />
                                             {
                                             !isCategory?
                                             <span className="down">
@@ -190,7 +214,21 @@ class Wallpaper extends React.Component{
                                     }
                                     </div>
                                 )
-                            })
+                            }):
+                            <div style={{width:'100%',textAlign:'center'}}>
+                                <img style={{width:'80%',height:'100%'}} src={_loading} />
+                            </div>
+                        }
+                        {
+                            data.length==100&&
+                            <div style={{width:'90%',height:'45px',textAlign:'center',lineHeight:'45px',margin:'55px auto'}}>
+                                <span>
+                                    更多美图，请下载
+                                    <a target="_block" href="https://www.wandoujia.com/apps/com.androidesk">'安卓壁纸'</a>
+                                     app,或访问<a target="_block" href="http://www.androidesk.com/">官网</a>
+
+                                </span>
+                            </div>
                         }
                     </div>
                 </div>
