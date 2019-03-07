@@ -5,7 +5,7 @@ import {getFetch} from '../../static/fetch.js'
 import { setStorage,getStorage } from '../../static/public';
 
 /* eslint-disable */
-const _404 =require('../../assets/404.jpg')
+const _404 =require('../../assets/loading.gif')
 
 class Novel extends React.Component{
     constructor(props){

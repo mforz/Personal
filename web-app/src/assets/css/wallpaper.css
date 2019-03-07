@@ -2,18 +2,45 @@
 .wallpaper::-webkit-scrollbar {
   display: none;
 }
-.wallpaper .wallpaper-item-img>.down{
-  display:none;
-  height:35px;
-  line-height: 30px;
+.wallpaper-item-phone{
+  height:482px
+}
+.wallpaper-item-pc{
+  height:282px
+}
+
+.wallpaper-item-img{
+  overflow: hidden;
+  background-color: #000;
+  opacity: 1;
+  cursor: pointer;
+}
+
+.wallpaper-item-img img{
+  transition: all ease .5s;
+}
+.wallpaper-item-img:hover img{
+  transform: scale(1.1)
+}
+
+.wallpaper .wallpaper-item-img>span{
   text-align:center;
   color:#444;
   background-color: #ccc;
   opacity: .7;
-  cursor: pointer;
   position:absolute;
   left:0;right:0;bottom:0;
 }
+.wallpaper .wallpaper-item-img>.down{
+  display:none;
+  height:35px;
+  line-height: 30px;
+}
+.wallpaper .wallpaper-item-img > .category{
+  height:55px;
+  line-height: 55px;
+}
+
 .wallpaper .wallpaper-item-img:hover .down{
   display:flex;
 }

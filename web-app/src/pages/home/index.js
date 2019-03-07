@@ -21,20 +21,37 @@ class Home extends React.Component{
     init=()=>{
         
     }
-    changeMenu(e){
-        e.target.className.indexOf('left')!==-1
-        ?e.target.className = 'fa fa-angle-double-right fa-2x'
-        :e.target.className = 'fa fa-angle-double-left fa-2x'
+    changeMenu(e,i){
+        switch(i){
+            case 1:
+            e.target.className.indexOf('left')!==-1
+            ?e.target.className = 'fa fa-angle-double-right fa-2x'
+            :e.target.className = 'fa fa-angle-double-left fa-2x'
 
-        let leftBar = JSON.parse(JSON.stringify(styles.leftBar))
-        e.target.className.indexOf('left') == -1
-        ? (leftBar.width = 0 , leftBar.opacity = 0)
-        : (leftBar.width ='20%', leftBar.opacity = 1)
+            let leftBar = JSON.parse(JSON.stringify(styles.leftBar))
+            e.target.className.indexOf('left') == -1
+            ? (leftBar.width = 0 , leftBar.opacity = 0)
+            : (leftBar.width ='20%', leftBar.opacity = 1)
 
-        styles.leftBar = leftBar
-        this.setState({
-            word: e.target.className
-        })
+            styles.leftBar = leftBar
+            this.setState({
+                word: e.target.className
+            })
+            break;
+            case 2:
+            e.target.className.indexOf('on')!==-1
+            ?e.target.className = 'fa fa-toggle-off'
+            :e.target.className = 'fa fa-toggle-on'
+            break;
+            default:
+
+            break;
+        }
+       
+
+        
+
+       
     }
   
     render(){
@@ -51,8 +68,10 @@ class Home extends React.Component{
                 }
                 
                 <div style={!phone?styles.arrow:{display:'none'}}>
-                    <i className="fa fa-angle-double-left fa-2x" 
-                       onClick={(e)=>{this.changeMenu(e)}}></i>
+                    <i className="fa fa-angle-double-left fa-2x" onClick={(e)=>{this.changeMenu(e,1)}}></i>
+                    <br/>
+                    <br />
+                    <i className="fa fa-toggle-on" style={{fontSize:'20px'}} onClick={(e)=>{this.changeMenu(e,2)}}></i>
                 </div>
 
                 <main style={!phone?styles.main:styles.main2}>
@@ -91,15 +110,16 @@ let styles ={
         padding:'25px',
         overflow:'hidden',
         transition: 'all 0.3s',
-        opacity:1,
+        opacity:.9,
     },
     navBar: {
         width: '90%',
         float: 'right',
-        height: '92%',
+        height: '97%',
         backgroundColor: '#fff',
         borderRadius: '4px',
         overflow: 'auto',
+        opacity:.9
     },
     leftBar2:{
         width:'90%',
@@ -123,6 +143,8 @@ let styles ={
         paddingLeft:'10px',
         margin:'0 auto',
         overflow:'hidden',
+        backgroundColor:'rgba(255,255,244,0)',
+        transition:'all ease .5s'
     },
     main2:{
         width:'90%',
@@ -130,25 +152,26 @@ let styles ={
         padding:'10px',
         margin:'60px auto',
         overflow:'hidden',
+        opacity:.9
     },
     container:{
         overflow:'auto',
-        height:'92%',
+        height:'97%',
         borderRadius:'6px',
-        backgroundColor:'#fff',
-        opacity:.9
+        backgroundColor:'rgba(255,255,255,.9)',
+        transition:'all ease .5s'
     },
-    footer:{
-        width:'10%',
-        float:'right',
-        height:'92%',
-        padding:'25px 0',
-    },
-    footerBar:{
-        width:'100%',
-        height:'92%',
-        backgroundColor:'#fff'
-    },
+    // footer:{
+    //     width:'10%',
+    //     float:'right',
+    //     height:'92%',
+    //     padding:'25px 0',
+    // },
+    // footerBar:{
+    //     width:'100%',
+    //     height:'92%',
+    //     backgroundColor:'#fff'
+    // },
 }
 
 export default Home
