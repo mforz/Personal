@@ -16,17 +16,12 @@ class Menu extends React.Component{
     componentDidMount(){
        let menu =[
            { name:"小说", path:"/novel"},
-           { name:"豆瓣电影", path:"/movie"},
+           { name:"电影", path:"/movie"},
            { name:"每日一文", path:"/essay"},
-           { name:"音乐", path:"/music"},
            { name:"天气", path:"/weather"},
-           { name:"优惠", path:"/discount"},
            { name:"壁纸", path:"/wallpaper"},
-           { name:"工具", path:"/tool"},
-           { name:"工具", path:"/tool"},
-           { name:"工具", path:"/tool"},
-           { name:"工具", path:"/tool"},
-           { name:"工具", path:"/tool"},
+           { name:"优惠", path:"/discount"},
+           { name:"音乐", path:"/music"},
            { name:"工具", path:"/tool"},
        ]
        this.setState({menu})

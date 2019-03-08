@@ -5,7 +5,7 @@ var app = express();
 
 app.all("*", function(req, res, next) {
   if (req.path !== "/" ) {
-     if (req.path.includes("/zys")) {
+     if (req.path !== "/zys/" && req.path.includes("/zys/")) {
          let url = req.path.replace(/\/zys\//, '')
          let origin = url.match(/(^http(s)?:\/\/)[a-zA-Z\.0-9]+(?=.*)/)[0]
          let skip= false

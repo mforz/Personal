@@ -290,6 +290,45 @@ const  imgdownLoad=(imgsrc,name)=>{
         return new Blob([u8arr], { type: mime });
       }
 }
+//滚动到dom底部进行加载
+const Scroll=()=>{}
+Scroll.prototype={
+    to:(dom,fun,top=30)=>{
+        try{
+            let y1 = (dom.clientHeight + dom.scrollTop + top),
+            y2 = dom.scrollHeight
+            if( y1&&y2&& y1 >= y2){
+                fun()
+            }
+        }catch(e){
+            console.log(e)
+        }
+    }
+}
+//vip接口
+const vipAPI =(i)=>{
+    const api = [
+        'http://69p.top/?url=',
+        'http://74t.top/?url=',
+        'http://55jx.top/?url=',
+        'http://api.baiyug.vip/index.php?url=',
+        'http://playx.top/?url=',
+        'http://nitian9.com/?url=',
+        'http://19g.top/?url=',
+        'http://52088.online/?url=',
+        'http://play1.online/?url=',
+        'http://play1.online/?url=',
+        'http://ckplay.online/?url=',
+        'http://880kan.com/?url=',
+        'http://607p.com/?url='
+    ]
+    if( i || i==0){
+        return api[i]
+    }else{
+        return api
+    }
+   
+}
 
 export {
     isPhone,
@@ -307,4 +346,5 @@ export {
     removeDom,
     scriptLoad,
     imgdownLoad,
+    Scroll,vipAPI
 }

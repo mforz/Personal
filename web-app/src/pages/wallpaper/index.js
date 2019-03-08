@@ -1,12 +1,13 @@
 
 import React from 'react';
 // import Route from '../../routers/'
-import {imgdownLoad, setStorage, getStorage,Sleep} from '../../static/public.js'
+import {imgdownLoad, setStorage, getStorage,Sleep,Scroll} from '../../static/public.js'
 import { getFetch } from '../../static/fetch';
 import API from '../../static/api';
 
 const _loading = require('../../assets/loading.gif')
 const sleep = new Sleep()
+const scroll = new Scroll()
 
 // https://raw.githubusercontent.com/jokermonn/-Api/master/adesk.md
 // - `limit`：返回数量
@@ -148,20 +149,19 @@ class Wallpaper extends React.Component{
         })
     }
     handleScroll=()=>{
-        if (this.scrollDom.clientHeight + this.scrollDom.scrollTop + 30 >= this.scrollDom.scrollHeight) {
-             let {skip,limit,data,isCategory}=this.state
-            ! isCategory&&
-            sleep.wait(()=>{
-                if(data.length < 100){
-                    skip += limit*30
-                    this.setState({
-                        skip,
-                        limit
-                    },()=>{ this.init() })
-                }
-            },2000)
-        }
+        let {skip,limit,data,isCategory}=this.state
+        ! isCategory&&
+        sleep.wait(()=>{
+            if(data.length < 100){
+                skip += limit*30
+                this.setState({
+                    skip,
+                    limit
+                },()=>{ this.init() })
+            }
+        },2000)
     }
+    
     render(){
         const { data,category,isCategory } = this.state
         return (
@@ -185,9 +185,9 @@ class Wallpaper extends React.Component{
 
                 <div style={{overflow:'hidden',height:'90%'}}>
                     <div className="wallpaper-bar"
-                    ref={body=>this.scrollDom=body} 
+                    ref={body=>this.dom=body} 
                     style={{overflow:'auto',height:'90%'}}
-                    onScroll={this.handleScroll.bind(this)}>
+                    onScroll={()=>{scroll.to(this.dom,this.handleScroll)} }>
                         {
                             !!data.length?
                             data.map((res,i)=>{

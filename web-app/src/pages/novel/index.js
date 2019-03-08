@@ -32,7 +32,7 @@ class Novel extends React.Component{
                 return
             }
         }
-        let host ="https://www.80txt.com"
+        let host ="https://www.80txt.com/"
         getFetch(API.zys+host,{type:'text'}).then((res)=>{
             let ul = res.match(/<ul(([\s\S])*?)<\/ul>/g)
             let mNav ={
@@ -136,7 +136,7 @@ class Novel extends React.Component{
             break;
         }
         return (
-            <div className="novel" style={{overflow:'hidden',overflowY:'auto'}}>
+            <div className="novel" style={{height:'100%',overflow:'hidden'}}>
 
                 <div className="classify" style={styles.classify}>
                     {
@@ -166,13 +166,13 @@ class Novel extends React.Component{
                     }
                 </div>
 
-                <div className="novel-main" style={{width:'100%',padding:'20px 0'}}>
+                <div className="novel-main" style={styles.novelMain}>
                     <h3 style={{textAlign:'center',marginBottom:'40px'}}>
                         <span style={styles.novelTitle}> {name}</span>
                     </h3>
-                    <div>
+                    <div style={{paddingBottom:'20px'}}>
                         {
-                          novel.length&&
+                           !!novel.length&&
                             novel.map((res,i)=>(
                                 <div key={i} style={styles.novel}>
                                     {
@@ -205,7 +205,7 @@ class Novel extends React.Component{
                                                         </p>
                                                     </div>
                                                     : _i==3?
-                                                    <div>
+                                                    <div style={{paddingBottom:'30px'}}>
                                                         <article dangerouslySetInnerHTML={{ __html:res.con }}>
                                                          </article>
                                                     </div>
@@ -253,11 +253,15 @@ const styles={
         display:'inline-block',
         borderBottom:'1px solid #efefef'
     },
-    novel:
-        {
-            margin:'0 5%',
-            // textAlign:'center'
-        },
+    novel:{
+        margin:'0 5%',
+    },
+    novelMain:{
+        width:'100%',
+        height:'85%',
+        overflow:'auto',
+        padding:'20px 0',
+    },
     img:{
         width: '90px', 
         height: '120px',

@@ -48,10 +48,12 @@ ul,li,h1,h2,h3,h4,h5,h6,p{
 }
 
 #menu::-webkit-scrollbar,
-#container::-webkit-scrollbar {
+#container::-webkit-scrollbar,
+.essay-main::-webkit-scrollbar,
+.novel-main::-webkit-scrollbar,
+.movie-main::-webkit-scrollbar{
   display: none;
 }
-
 
 .nav-title{
   width: 80%;

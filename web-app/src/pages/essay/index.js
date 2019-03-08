@@ -170,8 +170,8 @@ class Essay extends React.Component{
     render(){
         const {data,date,list,menu,isExcerpt,excerpt} =this.state
         return (
-            <div className="essay" style={{padding:'10px',overflow:'hidden',}}>
-                <div style={styles.articleBar}>
+            <div className="essay" style={{padding:'10px',height:'100%',overflow:'hidden',}}>
+                <div className="essay-main" style={styles.articleBar}>
                     {//菜单
                         !!menu.length&&
                         <div style={styles.mask} onClick={this.opMenu.bind(this,'hidden')}>
