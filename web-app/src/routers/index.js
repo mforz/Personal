@@ -31,11 +31,22 @@ const routers = [
     },
 ]
 
+const a = ['#f5f4f6', '#e0e0e0', '#4285f4', '#5ab1fc', '#ff5e00', '#1685e5', '#d1462f', '#001d38', '#183850', '#199393', '#00FF7F', '#f23e3e', '#7eaaaf']
 const home =()=>(
-    <div style={{textAlign:'center'}}>
+    <div style={{textAlign:'center',}}>
         <p>
             欢迎
         </p>
+        <div style={{width:'100%',height:'450px'}}>
+            {
+                a.map((item,i)=>(
+                    <div key={i} style={{width:'200px',height:'30px',margin:'18px 0'}}>
+                        <div style={{float:'left',width:'30px',height:'30px',margin:0,backgroundColor:item}}></div>
+                        <span style={{overflow:'hidden'}}>{item}</span>
+                    </div>
+                ))
+            }
+        </div>
     </div>
 )
 

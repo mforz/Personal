@@ -3,10 +3,12 @@
   display: none;
 }
 .wallpaper-item-phone{
-  height:482px
+  /* max-height:350px;
+  min-height:300px */
 }
 .wallpaper-item-pc{
-  height:282px
+  /* max-height:200px;
+  min-height:150px */
 }
 
 .wallpaper-item-img{
@@ -32,15 +34,39 @@
   left:0;right:0;bottom:0;
 }
 .wallpaper .wallpaper-item-img>.down{
-  display:none;
   height:35px;
-  line-height: 30px;
+  line-height: 35px;
+  display:flex;
+  background-color: #000;
+  color:#fff;
+  margin-bottom:-40px;
+  transition: all ease .3s;
+  opacity: 0;
 }
 .wallpaper .wallpaper-item-img > .category{
-  height:55px;
-  line-height: 55px;
+  height:35%;
+  line-height: 50px;
+  background-color: #000;
+  opacity: .6;
+  color:#fff;
+}
+.wallpaper .wallpaper-item-img:hover .down{
+  background-color: #000;
+  opacity: .7;
+   margin-bottom:0px;
 }
 
-.wallpaper .wallpaper-item-img:hover .down{
-  display:flex;
+#qrcode{
+  display: none
+}
+.wall-show{
+  opacity: 1;
+}
+.qr-item{
+  width:100%;
+  background-size:100%;
+}
+.wallpaper .active{
+  text-decoration: underline;
+  border-bottom: 1px solid #ff5e00
 }

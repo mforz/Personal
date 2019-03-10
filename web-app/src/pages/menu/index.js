@@ -16,7 +16,7 @@ class Menu extends React.Component{
     componentDidMount(){
        let menu =[
            { name:"小说", path:"/novel"},
-           { name:"电影", path:"/movie"},
+           { name:"电影/解析", path:"/movie"},
            { name:"每日一文", path:"/essay"},
            { name:"天气", path:"/weather"},
            { name:"壁纸", path:"/wallpaper"},

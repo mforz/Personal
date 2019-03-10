@@ -6,7 +6,6 @@ const getFetch =(url,obj)=>{
         return result.then((res)=>res.text())
       else
         return result.then((res)=>res.json())
-      
     }catch(err){
       console.error(err)
     }

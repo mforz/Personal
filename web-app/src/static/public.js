@@ -280,7 +280,6 @@ const  imgdownLoad=(imgsrc,name)=>{
         }
     };
     image.src = imgsrc;
-
     function dataURLtoBlob(dataurl) {
         var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
             bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
@@ -322,7 +321,7 @@ const vipAPI =(i)=>{
         'http://880kan.com/?url=',
         'http://607p.com/?url='
     ]
-    if( i || i==0){
+    if( i || i===0){
         return api[i]
     }else{
         return api

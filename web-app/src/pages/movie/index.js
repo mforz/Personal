@@ -3,7 +3,7 @@ import React from 'react';
 import API from '../../static/api';
 import {getFetch} from '../../static/fetch.js'
 import Input from '../../components/Input'
-import { Sleep,Scroll,vipAPI} from '../../static/public';
+import { Sleep,Scroll,vipAPI,scriptLoad,removeDom} from '../../static/public';
 
 /* eslint-disable */
 const _404 =require('../../assets/loading.gif')
@@ -14,16 +14,31 @@ class Movie extends React.Component{
     constructor(props){
         super(props);
         this.state={
-          tip:'输入关键词搜索',
+          tip:'输入-URL-解析VIP电影',
           data:[],
           word:'',
           total:0,
           start:0,
           i:0,
+          qrcode:null,
         }
     }
-    componentDidMount(){}
-
+    componentDidMount() {
+        scriptLoad('qr', 'http://static.runoob.com/assets/qrcode/qrcode.min.js', () => {
+          let qrcode = new QRCode(document.getElementById('qrcode'), {
+            text: '',
+            width: 256,
+            height: 256,
+            colorDark: '#000000',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+          });
+          this.setState({qrcode})
+        })
+    }
+    componentWillUnmount() {
+      removeDom('qr')
+    }
 
     init=(url)=>{
        getFetch(API.movieVip + '?url=' + url).then((res) => {
@@ -37,7 +52,7 @@ class Movie extends React.Component{
     }
 
     setParma=( q )=>{
-      let { word,data,start,url}=this.state
+      let { word,data,start,url,qrcode,i}=this.state
       if(q.trim() && word !== q.trim() ){
         let reg = q.match(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/)
         this.setState({
@@ -48,6 +63,14 @@ class Movie extends React.Component{
         word = q.trim()
         if ( reg && reg.length ) {
           url = reg[0]
+          qrcode.makeCode(vipAPI(i)+url)
+          let y= setTimeout(()=>{
+            if (this.qrImg){
+              let qr = document.getElementById('qrcode').lastChild.src
+              this.qrImg.src = qr
+            }
+            clearTimeout(y)
+          },1000)
         }
         this.setState({
         word,data,start,url
@@ -81,7 +104,7 @@ class Movie extends React.Component{
       const {start,word,total} =this.state
       sleep.wait(()=>{
         if( word ){
-          if( start+20 <= total){
+          if( start+20 < total){
             this.setState ({
               start: start+ 20
             },()=>{this.getMovie()})
@@ -93,27 +116,31 @@ class Movie extends React.Component{
       sleep.wait(()=>{
           e.persist()
           e.target.className = "fa fa-refresh fa-spin"
+          const {qrcode}=this.state
           let i = this.state.i || 0
           let len = vipAPI().length-1
           i < len ? i = i+1 : i = 0
-          this.setState({
-            i
-          })
+          this.setState({ i })
+          qrcode.makeCode(vipAPI(i) + this.state.url)
           let x = setTimeout(()=>{
               e.target.className = "fa fa-refresh"
+               if (this.qrImg) {
+                 let qr = document.getElementById('qrcode').lastChild.src
+                 this.qrImg.src = qr
+               }
               clearTimeout(x)
           },2000)
       },2500)
-  }
+    }
+    
     render(){
       const path = "M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
       const {data,tip,url,i} =this.state
-      
        return(
          <div className="movie" style={{width:'100%',height:'100%'}}>
            <meta name="referrer" content="no-referrer"/>
-
-            <header style={{width:'100%',height:'100px',overflow:'hidden'}}>
+           <div id="qrcode"></div>
+            <header style={{width:'100%',height:'70px',overflow:'hidden'}}>
               <Input clear={false} 
                 style={styles.inputBar}
                 enter={this.setParma}
@@ -197,18 +224,19 @@ class Movie extends React.Component{
                   }
                 </div>
               </main>
-              :<div style={{width:'90%',margin:'0 auto'}}>
+              :<div style={{width:'90%',height:'80%',margin:'0 auto'}}>
                 <p style={{fontSize:'13px',color:'#444',margin:'10px 0'}}>
                   <span style={{margin:'0 10px'}}>不能播放？点我试试</span>
                   <i className="fa fa-refresh" onClick={(e)=>{this.refresh(e)}}></i>
+                  <span style={{margin:'0 40px'}}>
+                    <i className="fa fa-qrcode" aria-hidden="true" onMouseOver={this.qrPlay}></i>
+                    <img className="qr-item" ref={(body)=>{this.qrImg=body}} style={{position:'absolute',width:'200px',height:'200px',margin:'0 20px'}} src="" />
+                  </span>
                 </p>
-
-                <iframe id="player" width="100%" height="600" frameBorder="0" 
+                <iframe id="player" width="100%" height="100%" frameBorder="0" 
                   allowtransparency="true" allowFullScreen={true} scrolling="no"
                   src={vipAPI(i)+url} >
                 </iframe>
-                {/* <video autoPlay preload="metadata" playsInline src={url}>
-                </video> */}
               </div>
             }
          </div>

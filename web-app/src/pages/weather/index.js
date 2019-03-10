@@ -1,7 +1,7 @@
 
 import React from 'react';
 // import Route from '../../routers/'
-import {scriptLoad, setStorage, getStorage,Sleep} from '../../static/public.js'
+import {scriptLoad, setStorage, getStorage,Sleep,removeDom} from '../../static/public.js'
 import { getFetch } from '../../static/fetch';
 import API from '../../static/api';
 
@@ -76,6 +76,9 @@ class Weather extends React.Component{
             },2500)
 
         },2500)
+    }
+    componentWillUnmount(){
+        removeDom('pv')
     }
     render(){
         const { weather,today } = this.state
