@@ -63,7 +63,7 @@ let pathProxy = (arr)=>{
             break
             case '/novel':
                 target = `http://api.zhuishushenqi.com`;
-                pathRewrite = {'^/novel':'/'}
+                pathRewrite = {'^/novel':''}
             break
             default:
                 console.log(arr)

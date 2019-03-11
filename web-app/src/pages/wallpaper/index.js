@@ -226,19 +226,12 @@ class Wallpaper extends React.Component{
         return (
             <div className="wallpaper" style={{padding:'0 10px',overflow:'hidden',height:'100%'}} >
                 <div style={{width:'100%',overflow:'hidden'}}>
-                    <Input clear={false} 
+                    <Input clear={false} search
                         style={styles.inputBar}
                         enter={this.search}
                         placeholder = "输入关键词搜索 ..."
                         inputStyle={{border:'none',width:'85%',padding:0,}}
                     >
-                        {/* search icon */}
-                        <i style={styles.search}>
-                            <svg focusable="false" viewBox="0 0 24 24"
-                                xmlns = "http://www.w3.org/2000/svg">
-                                <path d={path} fill="#DB542F"></path>
-                            </svg>
-                        </i>
                     </Input>
                 </div>
 
