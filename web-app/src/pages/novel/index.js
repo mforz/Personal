@@ -166,7 +166,7 @@ class Novel extends React.Component{
                     }
                 </div>
 
-                <div className="novel-main" style={styles.novelMain}>
+                <div className="novel-main scroll" style={styles.novelMain}>
                     <h3 style={{textAlign:'center',marginBottom:'40px'}}>
                         <span style={styles.novelTitle}> {name}</span>
                     </h3>

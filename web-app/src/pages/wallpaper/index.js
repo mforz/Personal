@@ -47,7 +47,7 @@ class Wallpaper extends React.Component{
         this.init()
         scriptLoad('qr', 'http://static.runoob.com/assets/qrcode/qrcode.min.js',()=>{
             let qrcode = new QRCode(document.getElementById('qrcode'), {
-                text: 'heello',
+                text: '生成失败，请重新生成',
                 width: 256,
                 height: 256,
                 colorDark: '#000000',
@@ -67,10 +67,12 @@ class Wallpaper extends React.Component{
     init=(url,on)=>{
         let {limit,skip,order,category,isCategory,categoryId,data} =this.state
 
-        let param = url ? url :`${categoryId}${this.state[category]}?limit=${limit*30}&skip=${skip}&adult=false&first=0&order=${order}`
+        let param = !!url ? url :`${categoryId}${this.state[category]}?limit=${limit*30}&skip=${skip}&adult=false&first=0&order=${order}`
 
-        let wall = !! on ? url : API.wallpaper + this.state[category] + '/' + param
-        
+        let wall = !!on ? url : API.wallpaper + this.state[category] + '/' + param
+
+        console.log(categoryId)
+
         getFetch(wall).then(res=>{
             let item=[],arr=[]
             if(!!res.res &&(!!res.res.vertical||!!res.res.category||!!res.res.wallpaper)){
@@ -104,6 +106,10 @@ class Wallpaper extends React.Component{
             //手机pc类别转换
             case 1:
                 category=='phone'?category='pc':category='phone'
+                this.setState({
+                    data:[],
+                    category
+                },()=>{this.init()})
             break;
             //应用当前
             case 2:
@@ -111,7 +117,7 @@ class Wallpaper extends React.Component{
                 let dom = document.getElementById('container')
                 dom.style.backgroundImage=`url(${d})`
                 dom.style.backgroundAttachment=`fixed`
-                dom.style.backgroundSize = category=='pc'?'cover':'contain';
+                // dom.style.backgroundSize = category=='pc'?'cover':'contain';
             },3000)
             break;
             //应用全部
@@ -119,12 +125,13 @@ class Wallpaper extends React.Component{
             sleep.wait(()=>{
                let dom = document.getElementsByClassName('home')[0]
                dom.style.backgroundImage = `url(${d})`;
-               dom.style.backgroundSize = category=='pc'?'cover':'contain';
+            //    dom.style.backgroundSize = category=='pc'?'cover':'contain';
             },3000)
             break;
             //下载
             case 4:
             sleep.wait(()=>{
+                console.log(d)
               imgdownLoad(d)
             },3000)
             break;
@@ -162,11 +169,11 @@ class Wallpaper extends React.Component{
             break;
             //点击分类下类别
             case 'id':
-            isCategory&&
+            !!isCategory&&
             sleep.wait(()=>{
                 this.setState({
                     data : [],
-                    act: order=='hot'?0:1,
+                    act: order=='hot'? 0: 1,
                     categoryId:'category/'+d+'/',
                     isCategory:false
                 },()=>{this.init()})
@@ -177,8 +184,6 @@ class Wallpaper extends React.Component{
             break
         }
         this.setState({
-            category,
-            categoryId,
             word,
             bgImg,
         })
@@ -229,10 +234,10 @@ class Wallpaper extends React.Component{
                     >
                         {/* search icon */}
                         <i style={styles.search}>
-                        <svg focusable="false" viewBox="0 0 24 24"
-                            xmlns = "http://www.w3.org/2000/svg">
-                            <path d={path} fill="#DB542F"></path>
-                        </svg>
+                            <svg focusable="false" viewBox="0 0 24 24"
+                                xmlns = "http://www.w3.org/2000/svg">
+                                <path d={path} fill="#DB542F"></path>
+                            </svg>
                         </i>
                     </Input>
                 </div>
@@ -256,7 +261,7 @@ class Wallpaper extends React.Component{
                 </div>
 
                 <div style={{overflow:'hidden',height:'90%'}}>
-                    <div className="wallpaper-bar"
+                    <div className="wallpaper-bar scroll"
                     ref={body=>this.dom=body} 
                     style={{overflow:'auto',height:'90%'}}
                     onScroll={()=>{scroll.to(this.dom,this.handleScroll)} }>

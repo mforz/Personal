@@ -3,15 +3,21 @@ import { BrowserRouter,HashRouter,Switch,Route } from 'react-router-dom';
 // import { Router,hashHistory } from 'react-router';
 
 import Movie from '../pages/movie/'
-import Novel from '../pages/novel/'
+import Novel from '../pages/novel/novel.js'
+// import Novel from '../pages/novel/'
 import Essay from '../pages/essay/'
 import Weather from '../pages/weather/'
 import Wallpaper from '../pages/wallpaper/'
+import Tools from '../pages/tools/'
 
 const routers = [
     {
         path:'/weather',
         component:Weather,
+    },
+    {
+        path:'/tools',
+        component:Tools,
     },
     {
         path:'/movie',

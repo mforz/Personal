@@ -22,7 +22,7 @@ class Menu extends React.Component{
            { name:"壁纸", path:"/wallpaper"},
            { name:"优惠", path:"/discount"},
            { name:"音乐", path:"/music"},
-           { name:"工具", path:"/tool"},
+           { name:"工具", path:"/tools"},
        ]
        this.setState({menu})
     }

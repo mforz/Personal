@@ -61,6 +61,10 @@ let pathProxy = (arr)=>{
                 target = `http://so.picasso.adesk.com/v1/`;
                 pathRewrite = {'^/wallpaper-search/':''}
             break
+            case '/novel':
+                target = `http://api.zhuishushenqi.com`;
+                pathRewrite = {'^/novel':'/'}
+            break
             default:
                 console.log(arr)
             break
@@ -76,6 +80,7 @@ let arr =[
     'bd-weather',
     'douban-movie',
     'article',
+    'novel',
     'wallpaper',
     'wallpaper-search',
 ]

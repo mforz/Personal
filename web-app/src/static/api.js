@@ -9,6 +9,7 @@ const API = {
   weather: `${host}/bd-weather/`,
   wallpaper:`${host}/wallpaper/`,
   wallpaperSearch:`${host}/wallpaper-search/`,
+  novel:`${host}/novel/`,
 }
 
 export default API

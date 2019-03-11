@@ -3,7 +3,7 @@ import React from 'react';
 import API from '../../static/api';
 import {getFetch} from '../../static/fetch.js'
 import Input from '../../components/Input'
-import { Sleep,Scroll,vipAPI,scriptLoad,removeDom} from '../../static/public';
+import { Sleep,Scroll,apiData,scriptLoad,removeDom} from '../../static/public';
 
 /* eslint-disable */
 const _404 =require('../../assets/loading.gif')
@@ -63,7 +63,7 @@ class Movie extends React.Component{
         word = q.trim()
         if ( reg && reg.length ) {
           url = reg[0]
-          qrcode.makeCode(vipAPI(i)+url)
+          qrcode.makeCode(apiData('vip')[i]+url)
           let y= setTimeout(()=>{
             if (this.qrImg){
               let qr = document.getElementById('qrcode').lastChild.src
@@ -118,10 +118,10 @@ class Movie extends React.Component{
           e.target.className = "fa fa-refresh fa-spin"
           const {qrcode}=this.state
           let i = this.state.i || 0
-          let len = vipAPI().length-1
+          let len = apiData('vip').length-1
           i < len ? i = i+1 : i = 0
           this.setState({ i })
-          qrcode.makeCode(vipAPI(i) + this.state.url)
+          qrcode.makeCode(apiData('vip')[i] + this.state.url)
           let x = setTimeout(()=>{
               e.target.className = "fa fa-refresh"
                if (this.qrImg) {
@@ -162,7 +162,7 @@ class Movie extends React.Component{
                 <div style={styles.tip}>
                     <p className="p" style={{fontSize:'13px',color:'#444',margin:'0 12px'}}>{tip}</p>
                 </div>
-                <div className="movie-main" 
+                <div className="movie-main scroll" 
                   style={{overflow:'auto',height:'90%'}}
                   ref={body=>this.dom=body} 
                   onScroll={()=>{scroll.to(this.dom,this.handleScroll)}}
@@ -235,7 +235,7 @@ class Movie extends React.Component{
                 </p>
                 <iframe id="player" width="100%" height="100%" frameBorder="0" 
                   allowtransparency="true" allowFullScreen={true} scrolling="no"
-                  src={vipAPI(i)+url} >
+                  src={vipAPI('vip')[i]+url} >
                 </iframe>
               </div>
             }
