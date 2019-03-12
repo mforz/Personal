@@ -24,47 +24,35 @@ class Movie extends React.Component{
         }
     }
     componentDidMount() {
-        scriptLoad('qr', 'http://static.runoob.com/assets/qrcode/qrcode.min.js', () => {
-          let qrcode = new QRCode(document.getElementById('qrcode'), {
+      //加载二维码js，初始化二维码
+      scriptLoad('qr', 'http://static.runoob.com/assets/qrcode/qrcode.min.js', () => {
+        let qrcode = new QRCode(document.getElementById('qrcode'), {
             text: '',
             width: 256,
             height: 256,
             colorDark: '#000000',
             colorLight: '#ffffff',
             correctLevel: QRCode.CorrectLevel.H
-          });
-          this.setState({qrcode})
-        })
+        });
+        this.setState({qrcode})
+      })
     }
+    //卸载页面，移除二维码js
     componentWillUnmount() {
       removeDom('qr')
     }
-
-    init=(url)=>{
-       getFetch(API.movieVip + '?url=' + url).then((res) => {
-        console.log(res)
-       }).catch(err => {
-         // console.log(err)
-         this.setState({
-           tip: '未知错误'
-         })
-       })
-    }
-
+    //enter准备搜索
     setParma=( q )=>{
-      let { word,data,start,url,qrcode,i}=this.state
+    const { qrcode,i,word } = this.state
+    let url = ''
       if(q.trim() && word !== q.trim() ){
         let reg = q.match(/(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/)
-        this.setState({
-          tip:'正在搜索请稍等'
-        })
-        data = [],
-        url='',start = 0
-        word = q.trim()
+        this.setState({tip:'正在搜索请稍等'})
+
         if ( reg && reg.length ) {
           url = reg[0]
-          qrcode.makeCode(apiData('vip')[i]+url)
-          let y= setTimeout(()=>{
+          qrcode.makeCode(apiData('vip')[i]+ url)
+          let y = setTimeout(()=>{
             if (this.qrImg){
               let qr = document.getElementById('qrcode').lastChild.src
               this.qrImg.src = qr
@@ -72,39 +60,47 @@ class Movie extends React.Component{
             clearTimeout(y)
           },1000)
         }
+        
         this.setState({
-        word,data,start,url
-        },()=>{
-          url==''? this.getMovie() :''
-        })
+          url,
+          start:0,
+          word:q,
+          data:[],
+        },()=>{ url==''  ? this.getMovie() : '' })
+
       }
     }
-    getMovie=() =>{
-        // 输入url解析播放
-        const {word,start} =this.state
+    // 搜索电影
+    getMovie =() =>{
+        const { word,start } =this.state
         //输入名字查找电影资源
         getFetch(API.doubanMovie+`?q=${word}&start=${start}`).then((res)=>{
-          let { data,tip } =this.state
+          const { data } =this.state
+          let tip = '',d = []
 
-          res&&res.subjects&&res.total
-          ?(data = data.concat(res.subjects),tip=`关键词${word} 查找到 ${res.total} 条记录`)
+          res && res.subjects && res.total
+          ?(d = data.concat(res.subjects), tip=`关键词${word} 查找到 ${res.total} 条记录`)
           :tip='未找到资源'
+
           this.setState({
-            data,tip,
+            tip,
+            data:d,
             total:res.total
           })
 
         }).catch(err=>{
           this.setState({
-            tip:'未知错误'
+            tip:'未知错误',
+            data:[]
           })
         })
     }
+    //滚动事件
     handleScroll=()=>{
-      const {start,word,total} =this.state
+    const { start, word, total} = this.state
       sleep.wait(()=>{
         if( word ){
-          if( start+20 < total){
+          if( start + 20 < total){
             this.setState ({
               start: start+ 20
             },()=>{this.getMovie()})
@@ -112,23 +108,28 @@ class Movie extends React.Component{
         }
       },2000)
     }
+    //刷新，换源
     refresh= (e)=>{
       sleep.wait(()=>{
+      const { qrcode } = this.state
+      let i = this.state.i || 0
+      let len = apiData('vip').length - 1
+
           e.persist()
           e.target.className = "fa fa-refresh fa-spin"
-          const {qrcode}=this.state
-          let i = this.state.i || 0
-          let len = apiData('vip').length-1
+          //改变源
           i < len ? i = i+1 : i = 0
           this.setState({ i })
+          //生成二维码
           qrcode.makeCode(apiData('vip')[i] + this.state.url)
+          //改变二维码
           let x = setTimeout(()=>{
-              e.target.className = "fa fa-refresh"
+          e.target.className = "fa fa-refresh"
                if (this.qrImg) {
                  let qr = document.getElementById('qrcode').lastChild.src
                  this.qrImg.src = qr
                }
-              clearTimeout(x)
+          clearTimeout(x)
           },2000)
       },2500)
     }
@@ -139,21 +140,24 @@ class Movie extends React.Component{
          <div className="movie" style={{width:'100%',height:'100%'}}>
            <meta name="referrer" content="no-referrer"/>
            <div id="qrcode"></div>
+
             <header style={{width:'100%',height:'70px',overflow:'hidden'}}>
               <Input clear={false} search
                 style={styles.inputBar}
                 enter={this.setParma}
                 placeholder = "URL地址、电影、剧集、动漫、节目 ..."
-                inputStyle={{border:'none',width:'85%',padding:0,}}
-              >
-               </Input>
+                inputStyle={{border:'none',width:'85%',padding:0,}} 
+              />
             </header>
+
             {
-              !url?
+              //非url搜索电影
+              !url ?
               <main style={{padding:'0 30px',height:'88%',overflow:'hidden'}}>
                 <div style={styles.tip}>
                     <p className="p" style={{fontSize:'13px',color:'#444',margin:'0 12px'}}>{tip}</p>
                 </div>
+
                 <div className="movie-main scroll" 
                   style={{overflow:'auto',height:'90%'}}
                   ref={body=>this.dom=body} 
@@ -164,24 +168,28 @@ class Movie extends React.Component{
                     data.map((res,i)=>(
                       <div key={i} style={styles.card}>
                         {/* left */}
-                        <div style={{flex:0.3,marginLeft:'-5px',justifyContent:'center',color:'#f4b58e',alignItems:'center'}}>
+                        <div style={{flex:0.3,display:'flex',color:'#f4b58e',alignItems:'center'}}>
                           <span style={{textDecoration:'underline',fontSize:'13px'}}>
                             {i+1}
                           </span>
                         </div>
-                        <div style={{flex:2,}}>
+
+                        <div style={{flex:2}}>
                           <img style={{width:'100%',height:'100%'}} 
-                            src={res.images&&res.images.small}
+                            src={!!res.images && res.images.small}
                             onError={(e)=>{e.target.src=_404}} />
                         </div>
+
                         {/* right */}
+
                         <div style={{flex:9,padding:'0 20px',overflow:'hidden'}}>
                             <p className="p" style={{textDecoration:'underline'}}>
                                 <a target="_block" href={res.alt}>
                                 {`${res.title} (${res.original_title})`}
                                 </a>
+
                                 <span style={{margin:'0 15px',color:'#55f6f7'}}>
-                                  {`${res.year}`}
+                                {`${res.year}`}
                                 </span>
                             </p>
                             <p style={{margin:'10px 0',fontSize:'12px'}}>
@@ -189,6 +197,7 @@ class Movie extends React.Component{
                                 {!!res.genres.length&&'类型：'}
                                 {res.genres.join('、')}
                               </span>
+
                               <br/>
                               <span>
                                 {!!res.directors.length&&'导演：'}
@@ -199,6 +208,7 @@ class Movie extends React.Component{
                                   ))
                                 }
                               </span>
+
                               <br/>
                               <span>
                                 {!!res.casts.length&&'主演：'}
@@ -215,20 +225,25 @@ class Movie extends React.Component{
                     ))
                   }
                 </div>
-              </main>
-              :<div style={{width:'90%',height:'80%',margin:'0 auto'}}>
+              </main>:
+              //url播放解析视频
+              <div style={{width:'90%',height:'80%',margin:'0 auto'}}>
                 <p style={{fontSize:'13px',color:'#444',margin:'10px 0'}}>
+
                   <span style={{margin:'0 10px'}}>不能播放？点我试试</span>
                   <i className="fa fa-refresh" onClick={(e)=>{this.refresh(e)}}></i>
+
                   <span style={{margin:'0 40px'}}>
                     <i className="fa fa-qrcode" aria-hidden="true" onMouseOver={this.qrPlay}></i>
                     <img className="qr-item" ref={(body)=>{this.qrImg=body}} style={{position:'absolute',width:'200px',height:'200px',margin:'0 20px'}} src="" />
                   </span>
                 </p>
+
                 <iframe id="player" width="100%" height="100%" frameBorder="0" 
                   allowtransparency="true" allowFullScreen={true} scrolling="no"
                   src={vipAPI('vip')[i]+url} >
                 </iframe>
+
               </div>
             }
          </div>

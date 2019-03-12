@@ -10,6 +10,7 @@ const API = {
   wallpaper:`${host}/wallpaper/`,
   wallpaperSearch:`${host}/wallpaper-search/`,
   novel:`${host}/novel/`,
+  chapter:`${host}/chapter/`,
 }
 
 export default API

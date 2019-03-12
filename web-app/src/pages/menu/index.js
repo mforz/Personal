@@ -26,18 +26,14 @@ class Menu extends React.Component{
        ]
        this.setState({menu})
     }
-    handleClick=(path)=>{
-        // console.log(path)
-        goTo(path)
-    }
     render(){
         const { menu } = this.state
         return (
             <div className="menuBar">
               {
                   menu.map((res,i)=>(
-                    <nav key={i} className="nav-title p" 
-                        onClick={()=>this.handleClick(res.path)}>
+                    <nav key={i} className="menu p" 
+                        onClick={()=>{goTo(res.path)}}>
                         {res.name}
                     </nav>
                   ))

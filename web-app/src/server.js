@@ -65,6 +65,10 @@ let pathProxy = (arr)=>{
                 target = `http://api.zhuishushenqi.com`;
                 pathRewrite = {'^/novel':''}
             break
+            case '/chapter':
+                target = `http://chapter2.zhuishushenqi.com`;
+                pathRewrite = {'^/chapter':''}
+            break
             default:
                 console.log(arr)
             break
@@ -81,6 +85,7 @@ let arr =[
     'douban-movie',
     'article',
     'novel',
+    'chapter',
     'wallpaper',
     'wallpaper-search',
 ]
