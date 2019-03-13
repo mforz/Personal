@@ -1,6 +1,5 @@
 
 import React from 'react';
-// import Route from '../../routers/'
 import {goTo} from '../../static/public.js'
 
 
@@ -10,14 +9,14 @@ class Menu extends React.Component{
         super(props);
         this.state={
             word:'人生百态',
-            menu:[],
+            menu: [],
         }
     }
     componentDidMount(){
        let menu =[
            { name:"小说", path:"/novel"},
            { name:"电影/解析", path:"/movie"},
-           { name:"每日一文", path:"/essay"},
+           { name:"每日散文", path:"/essay"},
            { name:"天气", path:"/weather"},
            { name:"壁纸", path:"/wallpaper"},
            { name:"优惠", path:"/discount"},
@@ -30,25 +29,25 @@ class Menu extends React.Component{
         const { menu } = this.state
         return (
             <div className="menuBar">
-              {
-                  menu.map((res,i)=>(
-                    <nav key={i} className="menu p" 
-                        onClick={()=>{goTo(res.path)}}>
-                        {res.name}
-                    </nav>
-                  ))
-              }
+            {
+                menu.map((res,i)=>(
+                <nav key={i} className="menu p" 
+                    onClick={()=>{goTo(res.path)}}>
+                    {res.name}
+                </nav>
+                ))
+            }
             </div>
         )
     }
-
 }
 const styles ={
     home:{
         width:'100%',
         height:'100%',
-        display:'flex'
+        display:'flex',
     },
+   
 }
 
 export default Menu

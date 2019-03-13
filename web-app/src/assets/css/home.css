@@ -1,0 +1,95 @@
+
+.menu{
+    width: 80%;
+    height: 25px;
+    line-height: 25px;
+    border-radius: 7px;
+    padding:3px 0;
+    margin: 16px auto;
+    font-size: 13px;
+    color:#444;
+    box-shadow: 0 4px 3px 0 #ddd, 0 0 1px 0 #ddd;
+    text-align: center;
+    overflow: hidden;
+    transition: all ease .5s;
+}
+  
+.menu:hover{
+    cursor: pointer;
+    animation: shake 0.82s cubic-bezier(.36, .07, .19, .97) both;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+  
+  @keyframes shake{
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
+  }
+  
+
+
+
+.menu-button {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    margin: 8px 0;
+    border: 0;
+    outline: 0;
+    padding: 6px 0;
+    cursor: pointer;
+    -webkit-transition: all 0.4s ease;
+    -o-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+.menu-button span{
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #000000;
+    float: left;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    -webkit-transform-origin: center center;
+    -ms-transform-origin: center center;
+    transform-origin: center center;
+}
+.menu-button span + span{
+    margin-top:5px;
+}
+.menu-button span:last-child{
+    width:75%;
+}
+.menu-button:hover span{
+    width:100%;
+}
+.is-active{
+    -webkit-transform: rotate(225deg);
+    -ms-transform: rotate(225deg);
+    transform: rotate(225deg);
+}
+.is-active span:first-child {
+    -webkit-transform: rotate(90deg) translateX(7px);
+    -ms-transform: rotate(90deg) translateX(7px);
+    transform: rotate(90deg) translateX(7px);
+}
+.is-active  span:last-child {
+    width: 100%;
+    -webkit-transform: rotate(90deg) translateX(-7px);
+    -ms-transform: rotate(90deg) translateX(-7px);
+    transform: rotate(90deg) translateX(-7px);
+}
+  

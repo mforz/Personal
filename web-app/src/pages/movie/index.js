@@ -241,7 +241,7 @@ class Movie extends React.Component{
 
                 <iframe id="player" width="100%" height="100%" frameBorder="0" 
                   allowtransparency="true" allowFullScreen={true} scrolling="no"
-                  src={vipAPI('vip')[i]+url} >
+                  src={apiData('vip')[i]+url} >
                 </iframe>
 
               </div>

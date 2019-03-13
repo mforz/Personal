@@ -10,79 +10,59 @@ class Home extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            random:null,
-            styles:{}
+            styles:{},
         }
     }
     componentDidMount(){
-
+        //判断样式
        let styles = {}
-
-       isPhone() ? styles = phone : styles = pc
-
+       isPhone() 
+       ? styles = JSON.parse(JSON.stringify(phone)) 
+       : styles = JSON.parse(JSON.stringify(pc))
        this.setState({styles})
-
-       history.pushState(null, null, document.URL);
+      //禁用后退
+        history.pushState(null, null, document.URL);
         window.addEventListener('popstate', function () {
             history.pushState(null, null, document.URL);
         });
     }
-    changeMenu(e,i){
-        // switch(i){
-        //     case 1:
-        //     e.target.className.indexOf('left')!==-1
-        //     ?e.target.className = 'fa fa-angle-double-right fa-2x'
-        //     :e.target.className = 'fa fa-angle-double-left fa-2x'
-
-        //     let leftBar = JSON.parse(JSON.stringify(styles.leftBar))
-        //     e.target.className.indexOf('left') == -1
-        //     ? (leftBar.width = 0 , leftBar.opacity = 0)
-        //     : (leftBar.width ='20%', leftBar.opacity = 1)
-
-        //     styles.leftBar = leftBar
-        //     this.setState({
-        //         word: e.target.className
-        //     })
-        //     break;
-
-        //     case 2:
-        //     e.target.className.indexOf('on')!==-1
-        //     ?e.target.className = 'fa fa-toggle-off'
-        //     :e.target.className = 'fa fa-toggle-on'
-
-        //     let dom1 = document.getElementById('container')
-        //     dom1.style.backgroundImage='none'
-
-        //     let dom = document.getElementsByClassName('home')[0]
-        //     dom.style.backgroundImage='none'
-
-        //     break;
-        //     default:
-        //     break;
-        // }
+    changeMenu=(e)=> {
+        let dom = document.getElementById('menuBar')
+        e.currentTarget.className.indexOf('active')!==-1?
+        (
+            e.currentTarget.className = 'menu-button',
+            dom.style.width=0,dom.style.opacity = 0 
+        ):(
+            e.currentTarget.className = 'menu-button is-active',
+            dom.style.width='20%',dom.style.opacity = 1
+        )
     }
-  
+
     render(){
         const { styles } = this.state
         return (
             <div className="home" style={styles.home}>
-                {
-                    <div style={styles.leftBar}>
-                        <div id="menu" style={styles.navBar}>
-                            <Menu />
-                        </div>
+
+                <div style={styles.header}>
+
+                    <div style={{width:'50px',margin:'0 62px',textAlign:'center',fontSize:'0.16rem'}}>
+                       <button className="menu-button is-active" 
+                        onClick={(e)=>{this.changeMenu(e)}}>
+                           <span></span>
+                           <span></span>
+                           <span></span>
+                       </button>
                     </div>
-                }
-                
-                {/* <div style={styles.arrow}>
-                    <i className="fa fa-angle-double-left fa-2x" onClick={(e)=>{this.changeMenu(e,1)}}></i>
-                    <br/>
-                    <br />
-                    <i className="fa fa-toggle-on" style={{fontSize:'20px'}} onClick={(e)=>{this.changeMenu(e,2)}}></i>
-                </div> */}
+                </div>
+
+                <div id="menuBar" style={styles.leftBar}>
+                    <div id="menu" className="scroll" style={styles.navBar}>
+                        <Menu arrow={this.changeMenu} />
+                    </div>
+                </div>
 
                 <main style={styles.main}>
-                    <div id="container" style={styles.container}>
+                    <div id="container" className="scroll" style={styles.container}>
                         <Route />
                     </div>
                 </main>
@@ -92,30 +72,41 @@ class Home extends React.Component{
     }
 
 }
-const pc ={
+const pc = {
     home:{
-        width:'100%',
-        height:'100%',
-        display:'flex',
-        backgroundColor:'#e7ebee',
-        overflow:'hidden',
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        overflow: 'hidden',
+        position: 'relative',
+        backgroundColor: '#e7ebee',
     },
-    arrow:{
+    header:{
+        width: '100%',
+        height:'60px',
+        minWidth:'580px',
+        top: 0,
         position: 'fixed', 
-        top: '25px', left: '1%',
-        color:'#ff7f2c',
-        opacity:'.5',
+        display:'flex',
+        color:'#000',
+        zIndex:'100',
+        overflow:'hidden',
+        backgroundColor: '#fff',
     },
     leftBar:{
-        width:'20%',
-        height:'100%',
-        padding:'25px',
-        overflow:'hidden',
-        transition: 'all 0.3s',
+        width: '20%',
+        height: '100%',
+        minWidth: '90px',
+        padding: '25px',
+        paddingTop:'70px',
+        paddingBottom:'10px',
+        overflow: 'hidden',
+        transition: 'all ease-in-out 0.5s',
         opacity:.9,
     },
     navBar: {
-        width: '90%',
+        width: '85%',
+        minWidth: '70px',
         float: 'right',
         height: '100%',
         backgroundColor: '#fff',
@@ -124,22 +115,24 @@ const pc ={
         opacity:.9
     },
     main:{
-        width:'80%',
-        height:'100%',
-        padding:'25px',
-        paddingLeft:'10px',
-        margin:'0 auto',
-        overflow:'hidden',
-        backgroundColor:'rgba(255,255,244,0)',
-        transition:'all ease .5s'
+        width: '80%',
+        minWidth: '490px',
+        height: '100%',
+        paddingRight: '25px',
+        paddingTop:'70px',
+        paddingBottom:'10px',
+        margin: '0 auto',
+        overflow: 'hidden',
+        backgroundColor: 'rgba(255,255,244,0)',
+        transition: 'all ease .5s'
     },
     container:{
-        overflow:'hidden',
-        height:'100%',
-        borderRadius:'6px',
-        backgroundColor:'rgba(255,255,255,.9)',
-        transition:'all ease .5s',
-        fontSize:'0.16rem'
+        overflow: 'hidden',
+        height: '100%',
+        borderRadius: '6px',
+        backgroundColor: 'rgba(255,255,255,.9)',
+        transition: 'all ease .5s',
+        fontSize: '0.16rem'
     },
 }
 

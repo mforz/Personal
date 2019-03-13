@@ -72,7 +72,12 @@ class Novel extends React.Component{
         if(id && word){
             let url = `toc?view=summary&book=${id}`
             getFetch(API.novel+ url).then(res=>{
-                let  novelArr = res||[]
+                let  novelArr = res || []
+                novelArr.forEach((element,i) => {
+                    if(element.source=='zhuishuvip'){
+                        novelArr.splice(i,1)
+                    }
+                });
                 this.setState({
                     novelArr,
                     cover,
@@ -93,6 +98,7 @@ class Novel extends React.Component{
     //获取章节
     getChapter =(id)=>{
         if(id){
+            this.dom.scrollTop=0
             let url = `toc/${id}?view=chapters`
             getFetch(API.novel+ url).then(res=>{
                 //最开始截取100章
@@ -120,11 +126,10 @@ class Novel extends React.Component{
     }
     //获取小说内容
     getContent =(link)=>{
+        this.dom.scrollTop=0
         let url= `chapter/${escape(link)}?k=2124b73d7e2e1945&t=1468223717`
         getFetch(API.chapter + url).then(res=>{
-            console.log(res.chapter.body)
             let d = JSON.stringify(res.chapter.body).replace(/\n/g, <br />)
-            console.log(res.chapter.body.toString())
             this.setState({
                 book:res.chapter.body.replace(/\n/g, '<br />')
             })
@@ -156,24 +161,29 @@ class Novel extends React.Component{
 
     render(){
         const {novelArr,tip,cover,chapterArr,book}= this.state
+        const isArrowShow= book? true: false
+
         return (
-            <div className="novel" style={{width:'100%',backgroundColor:!!book?'#e9e6d0':'#fff',padding:'10px',height:'100%',overflow:'hidden'}}>
+            <div className="novel" style={{backgroundColor:!!book?'#e9e6d0':'#fff',}}>
+                {
+                    isArrowShow&&
+                    <div>
+                        <i className="fa fa-angle-double-left" ></i>
+                    </div>
+                }
                 <header style={{visibility:book?'hidden':'visible'}}>
-                   
-                        <div style={styles.inputBar}>
-                            <Input clear={false} search
-                                style={styles.input}
-                                enter={this.getSearch}
-                                placeholder = "输入小说搜索..."
-                                inputStyle={{border:'none',width:'85%',padding:0,}}
-                            />
-                            <p className="p" style={{padding:'15px 0',fontSize:'12px'}}>
-                                {tip}
-                            </p>
-                        </div>
-
+                    <div style={styles.inputBar}>
+                        <Input clear={false} search
+                            style={styles.input}
+                            enter={this.getSearch}
+                            placeholder = "输入小说搜索..."
+                            inputStyle={{border:'none',width:'85%',padding:0,}}
+                        />
+                        <p className="p" style={{padding:'15px 0',fontSize:'12px'}}>
+                            {tip}
+                        </p>
+                    </div>
                 </header>
-
                 <div style={{width:'100%',height:'95%',overflow:'hidden'}}>
                     <ul className="scroll" 
                         ref={body=>this.dom=body}
@@ -182,47 +192,47 @@ class Novel extends React.Component{
                     >
                         {
                             novelArr.map((res,i)=>(
-                                <li key={i} style={styles.card}>
-
-                                    <div style={{flex:2,padding:'2px 0',}}>
-                                        <img style={styles.novelCover} 
-                                        src={unescape(!!res.cover&&res.cover.split('/agent/')[1]||cover||'')}
-                                        onClick={(e)=>{this.getSummary(res._id,res.title ,e.target.src)}} />
-                                    </div>
-                                    {/* right */}
-                                    <div style={{flex:8,height:'100%',padding:'0 10px',color:'#999'}}>
-                                        <h4 className="p-1" style={{marginBottom:'5px',WebkitBoxOrient:'vertical',cursor:'pointer'}}>
-                                            <span style={styles.novelTitle} 
-                                             onClick={()=>{this.getSummary(res._id,res.title,unescape(!!res.cover&&res.cover.split('/agent/')[1]||cover||''))}}>
-                                                {res.title||res.name}
+                            <li key={i} style={styles.card}>
+                            
+                                <div style={{flex:2,padding:'2px 0',}}>
+                                    <img style={styles.novelCover} 
+                                    src={unescape(!!res.cover&&res.cover.split('/agent/')[1]||cover||'')}
+                                    onClick={(e)=>{this.getSummary(res._id,res.title ,e.target.src)}} />
+                                </div>
+                                {/* right */}
+                                <div style={styles.content}>
+                                    <h4 className="p-1" style={{WebkitBoxOrient:'vertical',cursor:'pointer'}}>
+                                        <span style={styles.novelTitle} 
+                                            onClick={()=>{this.getSummary(res._id,res.title,unescape(!!res.cover&&res.cover.split('/agent/')[1]||cover||''))}}>
+                                            {res.title||res.name}
+                                        </span>
+                                    </h4>
+                                    
+                                    <div style= {{fontSize:'12px'}}>
+                                        <p className="p-1" style={{WebkitBoxOrient:'vertical'}}>
+                                            <span style={{fontSize:'12px',color:'#f4b58e',marginRight:'10px'}}>
+                                                {res.author}
                                             </span>
-                                        </h4>
-                                        <div style= {{fontSize:'12px'}}>
-                                            <p className="p-1" style={{WebkitBoxOrient:'vertical'}}>
-                                                <span style={{fontSize:'12px',color:'#f4b58e',marginRight:'10px'}}>
-                                                    {res.author}
-                                                </span>
-                                                <span>{res.cat}</span>
-                                            </p>
-                                            <p className="p-1" style={{WebkitBoxOrient:'vertical',margin:'7px 0'}}>
-                                                <span style={{textDecoration:'underline'}}>
-                                                    {res.lastChapter&&'最新：'+res.lastChapter}
-                                                </span>
-                                            </p>
-
-                                            <p className="p-3" style={{WebkitBoxOrient:'vertical',marginTop:'5px'}}>
-                                                <span >{res.shortIntro&&'简介：'+res.shortIntro}</span>
-                                            </p>
-                                        </div>
+                                            <span>{res.cat}</span>
+                                        </p>
+                                        <p className="p-1" style={{WebkitBoxOrient:'vertical',margin:'7px 0'}}>
+                                            <span style={{textDecoration:'underline'}}>
+                                                {res.lastChapter&&'最新：'+ res.lastChapter}
+                                            </span>
+                                        </p>
+                                        <p className="p-3" style={{WebkitBoxOrient:'vertical',marginTop:'5px'}}>
+                                            <span >{res.shortIntro&&'简介：'+ res.shortIntro}</span>
+                                        </p>
                                     </div>
-                                </li>
+                                </div>
+                            </li>
                             ))
                         }
                         {
                             !book&&
                             chapterArr.map((res,i)=>(
                                 <li key={i}>
-                                 <p className="chapter" style={{width:'80%',margin:'10px auto',cursor:'pointer'}}>
+                                 <p className="chapter">
                                      <span onClick={()=>{this.getContent(res.link)}}>
                                          {res.title}
                                      </span>
@@ -242,7 +252,7 @@ class Novel extends React.Component{
                                     {
                                         !!book&&
                                         book.split(/\<br \/\>/).map((res,i)=>(
-                                            <p key={i} style={{textIndent:'2em',margin:'10px 0',padding:'6px 0',color: '#755927'}}>
+                                            <p key={i} style={styles.book}>
                                                 {res}
                                             </p>
                                         ))
@@ -269,17 +279,14 @@ const styles={
         margin: '20px auto',
         padding: '0 10px',
         display:'flex',
-        // borderRadius: '6px',
-       
         backgroundColor: '#fff',
         alignItems:'center',
         overflow:'hidden',
-        // boxShadow: '0 4px 15px 0 #ddd'
-        // borderBottom:'1px solid #ddd'
     },
     inputBar:{
         width: '50%',
         margin: '15px auto',
+        marginBottom:0,
     },
     input:{
         width:'100%',
@@ -304,6 +311,18 @@ const styles={
         height:'90%',
         margin:'0 auto',
         overflow:'auto'
+    },
+    content:{
+        flex:8,
+        height:'130px',
+        padding:'0 10px',
+        color:'#999'
+    },
+    book:{
+        textIndent:'2em',
+        margin:'10px 0',
+        padding:'6px 0',
+        color: '#755927'
     }
   
 }

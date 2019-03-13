@@ -1,6 +1,15 @@
 
 
+ .novel {
+   width:100%;
+   height:100%;
+   padding:10px;
+   overflow: hidden;
+ }
  .novel .chapter{
+    width:60%;
+    margin:10px auto;
+    cursor:pointer;
     color:#444;
   }
  .novel .chapter:hover{
