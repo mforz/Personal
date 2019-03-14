@@ -15,9 +15,10 @@ class Novel extends React.Component{
         super(props);
         this.state={
             data:[],
+            history:[],
             novelArr:[],
             chapterArr:[],
-            
+           
             total:0,
             start:0,
             limit:20,
@@ -27,15 +28,16 @@ class Novel extends React.Component{
             word:'',
             cover:'',
             book:'',
+           
         }
     }
     componentDidMount(){
         
     }
     //enter事件准备搜索
-    getSearch=(w)=>{
+    getSearch=(w,onoff)=>{
         const {word} =this.state
-        if(w && w.trim()&& w!==word){
+        if((w && w.trim()&& w!==word) || onoff){
             this.setState({
                 novelArr:[],
             },()=>{this.searchN(w)})
@@ -45,7 +47,8 @@ class Novel extends React.Component{
     //搜索小说
     searchN=(word)=>{
         if (word && word.trim()) {
-            const { start,novelArr,limit } = this.state
+            const { start,novelArr,limit,history } = this.state
+            history.length>8?history.pop():history.unshift(word)
             let url = `book/fuzzy-search?query=${word}&start=${start}&limit=${limit}`
             getFetch(API.novel+ url).then(res=>{
                 let arr = novelArr.concat(res.books),
@@ -54,6 +57,7 @@ class Novel extends React.Component{
                     novelArr:arr,
                     total,
                     word,
+                    history,
                     book:'',
                     tip:`${word} 共搜索到 ${total} 条数据,已过滤收费`
                 })
@@ -82,7 +86,8 @@ class Novel extends React.Component{
                     novelArr,
                     cover,
                     total:0,
-                    tip:`${word} 共搜索到 ${novelArr.length||0} 条书源`
+                    tip:`${word} 共搜索到 ${novelArr.length||0} 条书源`,
+                    word,
                 })
             }).catch(err=>{
                 this.setState({
@@ -104,7 +109,7 @@ class Novel extends React.Component{
                 //最开始截取100章
                 let data = res.chapters || []
                 let chapterArr = data.slice(0,100)
-
+               
                 this.setState({
                     data,
                     chapterArr,
@@ -125,14 +130,16 @@ class Novel extends React.Component{
         }
     }
     //获取小说内容
-    getContent =(link)=>{
-        this.dom.scrollTop=0
+    getContent =(link,chapterName)=>{
         let url= `chapter/${escape(link)}?k=2124b73d7e2e1945&t=1468223717`
         getFetch(API.chapter + url).then(res=>{
-            let d = JSON.stringify(res.chapter.body).replace(/\n/g, <br />)
             this.setState({
-                book:res.chapter.body.replace(/\n/g, '<br />')
-            })
+                chapterName,
+                book: res.chapter.body.replace(/\n/g, '<br />'),
+                top:this.dom.scrollTop
+            },()=>{ this.dom.scrollTop = 0 })
+
+            
         }).catch(err=>{
             this.setState({
                 book:'获取内容出错'
@@ -158,27 +165,59 @@ class Novel extends React.Component{
             }
         },2000)
     }
+    //返回🔙
+    arrowBack = ()=>{
+        const { book,top,} = this.state
+
+        if(!!book){
+            this.setState({
+                book:''
+            },()=>{
+                //返回章节之前的位置
+                this.dom.scrollTop = top
+            })
+        }else{
+            this.setState({
+                chapterArr:[],
+                word:''
+            })
+        }
+    }
 
     render(){
-        const {novelArr,tip,cover,chapterArr,book}= this.state
-        const isArrowShow= book? true: false
+        const {novelArr,tip,cover,chapterArr,book,word,history}= this.state
+        const isArrowShow = book || chapterArr.length ? true : false
 
         return (
-            <div className="novel" style={{backgroundColor:!!book?'#e9e6d0':'#fff',}}>
+            <div className="novel" style={{backgroundColor:!!book?'#e9e6d0':'#fff',position:'relative'}}>
                 {
                     isArrowShow&&
-                    <div>
-                        <i className="fa fa-angle-double-left" ></i>
+                    <div style={styles.arrow}>
+                        <div style={{flex:1,textAlign:'center'}}>
+                            <i className="fa fa-angle-double-left fa-2x" onClick={this.arrowBack}></i>
+                        </div>
+                        <h4 style={{flex:5,textAlign:'center'}}>{word} </h4>
                     </div>
                 }
-                <header style={{visibility:book?'hidden':'visible'}}>
+                <header style={{visibility: isArrowShow?'hidden':'visible' }}>
                     <div style={styles.inputBar}>
                         <Input clear={false} search
-                            style={styles.input}
-                            enter={this.getSearch}
+                            style={ styles.input }
+                            enter={ this.getSearch }
                             placeholder = "输入小说搜索..."
                             inputStyle={{border:'none',width:'85%',padding:0,}}
                         />
+                        {
+                            !novelArr.length&&!isArrowShow&&!word&&
+                             <p style={{fontSize:'12px',display:'flex',margin:'5px 0',color:'#ff5e00',opacity:0.8}}>
+                                {
+                                    history.map((res,i)=>(
+                                        <span key={i} className="p" style={{transform:'scale(0.7)',maxWidth:'50px',border:'1px solid #ddd',display:'inline-block',borderRadius:'3px',padding:'4px',margin:'0 3px'}}>{res}</span>
+                                    ))
+                                }
+                            </p>
+                        }
+                       
                         <p className="p" style={{padding:'15px 0',fontSize:'12px'}}>
                             {tip}
                         </p>
@@ -233,7 +272,7 @@ class Novel extends React.Component{
                             chapterArr.map((res,i)=>(
                                 <li key={i}>
                                  <p className="chapter">
-                                     <span onClick={()=>{this.getContent(res.link)}}>
+                                     <span onClick={()=>{this.getContent(res.link,res.title)}}>
                                          {res.title}
                                      </span>
                                  </p>
@@ -241,16 +280,12 @@ class Novel extends React.Component{
                             ))
                         }
                         {
-                            
+                            !!book&&
                             <li style={{width:'80%',margin:'0 auto'}}>
-                                {/* 返回 */}
-                                <div style={{}}>
-
-                                </div>
                                 {/* 内容 */}
+                                {/* {chapterName} */}
                                 <div style={{backgroundColor:'#e9e6d0'}}>
                                     {
-                                        !!book&&
                                         book.split(/\<br \/\>/).map((res,i)=>(
                                             <p key={i} style={styles.book}>
                                                 {res}
@@ -259,8 +294,9 @@ class Novel extends React.Component{
                                     }
                                 </div>
                                 {/* 上下章 */}
-                                <div>
-
+                                <div style={{display:'flex',width:'100%',margin:'30px 0',justifyContent:'space-around'}}>
+                                    <button className="button">上一章</button>
+                                    <button className="button">下一章</button>
                                 </div>
                             </li>
                         }
@@ -323,6 +359,14 @@ const styles={
         margin:'10px 0',
         padding:'6px 0',
         color: '#755927'
+    },
+    arrow:{
+        width:'100%',
+        height:'80px',
+        display:'flex',
+        alignItems:'center',
+        position:'absolute',
+        top:'10px',left:'20px'
     }
   
 }

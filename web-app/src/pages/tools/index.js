@@ -1,7 +1,10 @@
 
 import React from 'react';
 // import Route from '../../routers/'
-import {apiData, scriptLoad, imgBase64, removeDom} from '../../static/public.js'
+import {apiData, scriptLoad, removeDom} from '../../static/public.js'
+
+import State from '../../static/static'
+
 
 
 /* eslint-disable */
@@ -17,15 +20,15 @@ class Tools extends React.Component{
     }
     fontLoad=(i)=>{
         if(i){
-            let key =apiData('font')[i]
-            scriptLoad('font','http://cdn.webfont.youziku.com/wwwroot/js/wf/youziku.api.min.js',()=>{
+            let key = State.font[i]
+            scriptLoad('font',State.fontLint[0],()=>{
                 $youziku.load("div",key,'');
                 $youziku.draw();
             })
         }
     }
     qrLoad =()=>{
-        scriptLoad('qr',apiData['qr'][0],()=>{
+        scriptLoad('qr',State.qr[0],()=>{
             let qrcode = new QRCode(document.getElementById('qrcode'), {
                 text: '',
                 width: 256,
@@ -50,7 +53,7 @@ class Tools extends React.Component{
               <div style={{overflow:'hidden',height:'90%'}}>
                 <div className="scroll" style={{overflow:'auto',height:'100%'}}>
                     {
-                        imgBase64.map((res,i)=>(
+                        State.imgBase64.map((res,i)=>(
                             <div key={i} onClick={()=>{this.fontLoad(i)}} style={{margin:'10px 0',width:'250px',height:'50px'}}>
                                 <img src={res} style={{width:'100%',height:'100%'}} />
                             </div>

@@ -3,7 +3,8 @@ import React from 'react';
 import API from '../../static/api';
 import {getFetch} from '../../static/fetch.js'
 import Input from '../../components/Input'
-import { Sleep,Scroll,apiData,scriptLoad,removeDom} from '../../static/public';
+import { Sleep,Scroll,scriptLoad,removeDom} from '../../static/public';
+import State from '../../static/static';
 
 /* eslint-disable */
 const _404 =require('../../assets/loading.gif')
@@ -25,7 +26,7 @@ class Movie extends React.Component{
     }
     componentDidMount() {
       //加载二维码js，初始化二维码
-      scriptLoad('qr', 'http://static.runoob.com/assets/qrcode/qrcode.min.js', () => {
+      scriptLoad('qr', State.qr[0], () => {
         let qrcode = new QRCode(document.getElementById('qrcode'), {
             text: '',
             width: 256,
@@ -51,7 +52,7 @@ class Movie extends React.Component{
 
         if ( reg && reg.length ) {
           url = reg[0]
-          qrcode.makeCode(apiData('vip')[i]+ url)
+          qrcode.makeCode(State.vip[i]+ url)
           let y = setTimeout(()=>{
             if (this.qrImg){
               let qr = document.getElementById('qrcode').lastChild.src
@@ -113,7 +114,7 @@ class Movie extends React.Component{
       sleep.wait(()=>{
       const { qrcode } = this.state
       let i = this.state.i || 0
-      let len = apiData('vip').length - 1
+      let len = State.vip.length - 1
 
           e.persist()
           e.target.className = "fa fa-refresh fa-spin"
@@ -121,7 +122,7 @@ class Movie extends React.Component{
           i < len ? i = i+1 : i = 0
           this.setState({ i })
           //生成二维码
-          qrcode.makeCode(apiData('vip')[i] + this.state.url)
+          qrcode.makeCode(State.vip[i] + this.state.url)
           //改变二维码
           let x = setTimeout(()=>{
           e.target.className = "fa fa-refresh"
@@ -241,7 +242,7 @@ class Movie extends React.Component{
 
                 <iframe id="player" width="100%" height="100%" frameBorder="0" 
                   allowtransparency="true" allowFullScreen={true} scrolling="no"
-                  src={apiData('vip')[i]+url} >
+                  src={State.vip[i]+url} >
                 </iframe>
 
               </div>

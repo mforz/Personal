@@ -24,6 +24,7 @@ ul,li,h1,h2,h3,h4,h5,h6,p{
   text-decoration: none;
   list-style: none;
   box-sizing: border-box;
+  font-size: 0.16rem;
 }
 .p {
   overflow:hidden;
@@ -39,7 +40,6 @@ ul,li,h1,h2,h3,h4,h5,h6,p{
 }
 .fa,nav{
   cursor: pointer;
-  font-size: 0.16rem;
 }
 
 .button { /* 按钮美化 */
