@@ -44,6 +44,17 @@ const State = {
         '8bd54b36c905401eab173c54399b4988',
     ],
     vip : [
+        'https://jx.lache.me/cc/?url=',
+        'https://api.lequgirl.com/?url=',
+        'https://api.653520.top/vip/?url=',
+        'https://api.bbbbbb.me/jx/?url=',
+        'https://jx.ab33.top/vip/?url=',
+        'https://vip.mpos.ren/v/?url=',
+        'https://jx.000180.top/jx/?url=',
+        'https://jx.km58.top/jx/?url=',
+        'https://www.1717yun.com/jx/ty.php?url=',
+        'https://cdn.yangju.vip/k/?url=',
+        
         'http://69p.top/?url=',
         'http://74t.top/?url=',
         'http://55jx.top/?url=',
@@ -56,7 +67,7 @@ const State = {
         'http://play1.online/?url=',
         'http://ckplay.online/?url=',
         'http://880kan.com/?url=',
-        'http://607p.com/?url='
+        'http://607p.com/?url=',
     ],
     qr:[
         'http://static.runoob.com/assets/qrcode/qrcode.min.js'

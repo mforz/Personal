@@ -232,21 +232,33 @@ const removeDom =(id)=>{
         }
     }
 }
-//节流，防止多次点击
+
 const Sleep = () =>{}
 Sleep.prototype={
     ti: true,
-    wait: function(res,t){
-        if( t && this.ti ){
-            res()
+    timer: null,
+    //节流，指定时间间隔内只会执行一次任务。
+    wait: function(res,t){ 
+        if( this.ti ){
+            res.call(this,arguments)
             this.ti = false
             let x = setTimeout(()=>{
                 this.ti = true
                 clearTimeout(x)
-            },t)
+            },t||2000)
         }
+    },
+    //防抖 任务触发的间隔超过指定间隔的时候，才会执行
+    debonce: function(res,t){  
+        clearTimeout(this.timer);
+        this.timer = setTimeout(() => {
+            res.call(this,arguments)
+            clearTimeout(this.timer);
+          },t || 2000);
     }
 }
+
+
 //跨域下载图片
 const  imgdownLoad=(imgsrc,name)=>{
     //下载图片地址和图片名

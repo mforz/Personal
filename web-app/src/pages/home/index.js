@@ -21,7 +21,7 @@ class Home extends React.Component{
         //判断样式
        let styles = {}
        isPhone() 
-       ? styles = JSON.parse(JSON.stringify(pc)) 
+       ? styles = JSON.parse(JSON.stringify(pc))
        : styles = JSON.parse(JSON.stringify(pc))
        this.setState({styles})
       //禁用后退
